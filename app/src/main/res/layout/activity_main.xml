@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorFondo"
+    tools:context="com.example.caxidy.tourishare.MainActivity">
+
+    <Button
+        android:id="@+id/bEntrar"
+        android:layout_width="194dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="85dp"
+        android:layout_marginRight="85dp"
+        android:layout_marginTop="100dp"
+        android:background="@color/colorBoton"
+        android:text="@string/entrar"
+        android:textColor="@color/colorBlanco"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/bRegistrarse"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="85dp"
+        android:layout_marginRight="85dp"
+        android:background="@color/colorBoton"
+        android:text="@string/registrarse"
+        android:textColor="@color/colorBlanco"
+        android:textStyle="bold"
+        android:layout_below="@id/bEntrar"/>
+
+    <Button
+        android:id="@+id/bAcercade"
+        android:layout_width="315dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:text="@string/acercade"
+        android:background="@color/colorOtroBoton"
+        android:textColor="@color/colorBlanco"
+        android:textStyle="bold"
+        android:layout_below="@id/bRegistrarse"/>
+
+</RelativeLayout>

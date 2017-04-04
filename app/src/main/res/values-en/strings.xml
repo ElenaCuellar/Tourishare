@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tourishare</string>
+    <string name="acercade">About</string>
+    <string name="entrar">Login</string>
+    <string name="registrarse">Sign up</string>
+</resources>
