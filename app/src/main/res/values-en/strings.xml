@@ -4,4 +4,14 @@
     <string name="acercade">About</string>
     <string name="entrar">Login</string>
     <string name="registrarse">Sign up</string>
+    <string name="hintpass">Enter pass...</string>
+    <string name="hintuser">Enter user...</string>
+    <string name="pass">Password</string>
+    <string name="tuciudad">Your city</string>
+    <string name="tufoto">Your pic</string>
+    <string name="tunombre">Your name</string>
+    <string name="tupass">Your pass</string>
+    <string name="usuario">User</string>
+    <string name="hintciudad">Enter city...</string>
+    <string name="aceptar">OK</string>
 </resources>

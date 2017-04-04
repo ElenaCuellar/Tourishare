@@ -1,6 +1,18 @@
 <resources>
     <string name="app_name">Tourishare</string>
+
+    <!--cadenas basicas -->
     <string name="entrar">Entrar</string>
     <string name="registrarse">Registrarse</string>
+    <string name="aceptar">Aceptar</string>
     <string name="acercade">Acerca de </string>
+    <string name="usuario">Usuario</string>
+    <string name="pass">Contraseña</string>
+    <string name="tunombre">Tu nombre</string>
+    <string name="tupass">Tu contraseña</string>
+    <string name="tuciudad">Tu ciudad</string>
+    <string name="tufoto">Tu foto</string>
+    <string name="hintuser">Introduce usuario...</string>
+    <string name="hintpass">Introduce pass...</string>
+    <string name="hintciudad">Introduce ciudad...</string>
 </resources>
