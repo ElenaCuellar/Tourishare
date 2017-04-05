@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp">
+
+
+            <ImageView
+                android:id="@+id/tuperfilFoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                app:srcCompat="@mipmap/ic_launcher" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@id/tuperfilFoto"
+                android:text="@string/tunombre" />
+
+            <EditText
+                android:id="@+id/tuperfilNombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/textView6"
+                android:layout_toRightOf="@id/tuperfilFoto"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_below="@id/tuperfilFoto"
+                android:text="@string/tuciudad" />
+
+            <EditText
+                android:id="@+id/tuperfilCiudad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/tuperfilNombre"
+                android:layout_toRightOf="@id/textView7"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_below="@id/tuperfilCiudad"
+                android:text="@string/turango" />
+
+            <TextView
+                android:id="@+id/tuperfilRango"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tuperfilCiudad"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="50dp"
+                android:layout_toRightOf="@id/textView8"
+                android:text="@string/novato"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/tuperfilConfirmar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorBoton"
+                android:layout_below="@id/tuperfilRango"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/miconfirmar" />
+
+            <Button
+                android:id="@+id/tuperfilPass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorBoton"
+                android:layout_below="@id/tuperfilRango"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@id/tuperfilConfirmar"
+                android:text="@string/mipass" />
+
+            <Button
+                android:id="@+id/tuperfilBorrar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorBoton"
+                android:layout_below="@id/tuperfilConfirmar"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/miborrar" />
+
+            <Button
+                android:id="@+id/tuperfilSalir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorBoton"
+                android:layout_below="@id/tuperfilPass"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@id/tuperfilConfirmar"
+                android:text="@string/misalir" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</ScrollView>

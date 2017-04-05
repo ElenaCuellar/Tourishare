@@ -14,4 +14,20 @@
     <string name="usuario">User</string>
     <string name="hintciudad">Enter city...</string>
     <string name="aceptar">OK</string>
+    <string name="ciudadnav">User city</string>
+    <string name="nombrenav">USER NAME</string>
+    <string name="opamigos">Friends</string>
+    <string name="opciudades">My cities</string>
+    <string name="oplogout">Logout</string>
+    <string name="opmensajes">Mails</string>
+    <string name="opmiperfil">My profile</string>
+    <string name="mactu">Refresh</string>
+    <string name="mnueva">Add city</string>
+    <string name="mpref">Preferences</string>
+    <string name="turango">your level</string>
+    <string name="miborrar">Delete account</string>
+    <string name="miconfirmar">Confirm changes</string>
+    <string name="mipass">Change password</string>
+    <string name="misalir">Exit</string>
+    <string name="novato">Newcomer</string>
 </resources>

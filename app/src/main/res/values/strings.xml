@@ -12,7 +12,29 @@
     <string name="tupass">Tu contraseña</string>
     <string name="tuciudad">Tu ciudad</string>
     <string name="tufoto">Tu foto</string>
+    <string name="turango">Tu rango</string>
     <string name="hintuser">Introduce usuario...</string>
     <string name="hintpass">Introduce pass...</string>
     <string name="hintciudad">Introduce ciudad...</string>
+
+    <!--cadenas del menu lateral -->
+    <string name="nombrenav">NOMBRE DEL USUARIO</string>
+    <string name="ciudadnav">Ciudad del usuario</string>
+    <string name="opmiperfil">Mi perfil</string>
+    <string name="opciudades">Mis ciudades</string>
+    <string name="opamigos">Amigos</string>
+    <string name="opmensajes">Mensajes</string>
+    <string name="oplogout">Cerrar sesión</string>
+
+    <!--cadenas del menu principal -->
+    <string name="mnueva">Nueva ciudad</string>
+    <string name="mactu">Refrescar</string>
+    <string name="mpref">Preferencias</string>
+
+    <!--cadenas de Mi perfil -->
+    <string name="mipass">Cambiar contraseña</string>
+    <string name="miconfirmar">Confirmar cambios</string>
+    <string name="miborrar">Borrar cuenta</string>
+    <string name="misalir">Salir</string>
+    <string name="novato">Novato</string>
 </resources>

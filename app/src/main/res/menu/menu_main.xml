@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".PrincipalActivity">
+    <item
+        android:id="@+id/menuactu"
+        android:icon="@android:drawable/ic_popup_sync"
+        android:orderInCategory="100"
+        android:title="@string/mactu"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menunueva"
+        android:icon="@android:drawable/ic_input_add"
+        android:orderInCategory="100"
+        android:title="@string/mnueva"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menuprefs"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:orderInCategory="100"
+        android:title="@string/mpref"
+        app:showAsAction="ifRoom" />
+</menu>
