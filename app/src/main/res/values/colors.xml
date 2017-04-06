@@ -3,8 +3,15 @@
     <color name="colorPrimary">#64b5f6</color>
     <color name="colorPrimaryDark">#0d47a1</color>
     <color name="colorAccent">#ffa726</color>
+
     <color name="colorFondo">#bbdefb</color>
     <color name="colorBoton">#90caf9</color>
     <color name="colorOtroBoton">#1e88e5</color>
     <color name="colorBlanco">#ffffff</color>
+    <color name="colorDrawer">#a1887f</color>
+    <color name="colorNaranjaDark">#ff5722</color>
+
+    <!-- colores para temas de mensaje -->
+    <color name="colortitulobandejaentrada">#9c27b0</color>
+    <color name="coloritembandejaentrada">#ba68c8</color>
 </resources>

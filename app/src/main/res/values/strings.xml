@@ -16,6 +16,7 @@
     <string name="hintuser">Introduce usuario...</string>
     <string name="hintpass">Introduce pass...</string>
     <string name="hintciudad">Introduce ciudad...</string>
+    <string name="salir">Salir</string>
 
     <!--cadenas del menu lateral -->
     <string name="nombrenav">NOMBRE DEL USUARIO</string>
@@ -37,4 +38,17 @@
     <string name="miborrar">Borrar cuenta</string>
     <string name="misalir">Salir</string>
     <string name="novato">Novato</string>
+
+    <!--cadenas de lista de ciudades favoritas y de amigos -->
+    <string name="titulolistacfav">TUS CIUDADES</string>
+    <string name="titulolistaamigos">TUS AMIGOS</string>
+
+    <!-- cadenas de apartado de mensajes -->
+    <string name="titulobandejaentrada">BANDEJA DE ENTRADA</string>
+    <string name="emisorbandejaentrada">Emisor</string>
+    <string name="asuntobandejaentrada">Asunto</string>
+    <string name="emisorejbandeja">Nombre emisor...</string>
+    <string name="asuntoejbandeja">Asunto del mensaje...</string>
+    <string name="cuerpoejbandeja">Cuerpo del mensaje...</string>
+    <string name="botonborrarbandejaentrada">Eliminar mensaje</string>
 </resources>

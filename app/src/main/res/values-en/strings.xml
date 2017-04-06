@@ -30,4 +30,14 @@
     <string name="mipass">Change password</string>
     <string name="misalir">Exit</string>
     <string name="novato">Newcomer</string>
+    <string name="titulolistaamigos">YOUR FRIENDS</string>
+    <string name="titulolistacfav">YOUR CITIES</string>
+    <string name="asuntobandejaentrada">Subject</string>
+    <string name="asuntoejbandeja">Message subject...</string>
+    <string name="botonborrarbandejaentrada">Delete message</string>
+    <string name="cuerpoejbandeja">Message body...</string>
+    <string name="emisorbandejaentrada">Sender</string>
+    <string name="emisorejbandeja">Sender name...</string>
+    <string name="salir">Exit</string>
+    <string name="titulobandejaentrada">MAILBOX</string>
 </resources>
