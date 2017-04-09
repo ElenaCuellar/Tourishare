@@ -8,10 +8,17 @@
     <color name="colorBoton">#90caf9</color>
     <color name="colorOtroBoton">#1e88e5</color>
     <color name="colorBlanco">#ffffff</color>
+    <color name="colorNegro">#212121</color>
     <color name="colorDrawer">#a1887f</color>
     <color name="colorNaranjaDark">#ff5722</color>
+    <color name="colorNaranjaLight">#ffecb3</color>
+    <color name="colorBotonSubcategoria">#fdd835</color>
 
     <!-- colores para temas de mensaje -->
     <color name="colortitulobandejaentrada">#9c27b0</color>
     <color name="coloritembandejaentrada">#ba68c8</color>
+
+    <!--colores para temas subcategoria -->
+    <color name="colorsubcatfondo">#43a047</color>
+    <color name="colorsubcatItem">#afb42b</color>
 </resources>

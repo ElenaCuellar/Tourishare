@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorsubcatfondo">
+
+            <ImageView
+                android:id="@+id/subcatfoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="15dp"
+                app:srcCompat="@mipmap/ic_launcher" />
+
+            <TextView
+                android:id="@+id/textonombresubcat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@id/subcatfoto"
+                android:text="@string/nombre"
+                android:textColor="@color/colorBlanco"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/bsubcateditar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:background="@color/colorsubcatItem"
+                android:text="@string/editar"
+                android:textColor="@color/colorBlanco"
+                android:textStyle="bold"
+                android:layout_toRightOf="@id/subcatfoto"
+                android:layout_below="@id/textonombresubcat"/>
+
+            <Button
+                android:id="@+id/bsubcateliminar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="15dp"
+                android:background="@color/colorsubcatItem"
+                android:text="@string/borrarsubcat"
+                android:textColor="@color/colorBlanco"
+                android:textStyle="bold"
+                android:layout_toRightOf="@id/bsubcateditar"
+                android:layout_below="@id/textonombresubcat"/>
+
+            <RatingBar
+                android:id="@+id/ratingbSubcat"
+                style="@style/Widget.AppCompat.RatingBar.Indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/bsubcateliminar"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@id/subcatfoto"
+                android:isIndicator="false"
+                android:numStars="5"
+                android:rating="0"
+                android:stepSize="1"
+                android:visibility="visible"
+                android:focusable="false"/>
+
+            <EditText
+                android:id="@+id/txdescrpsubcat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/colorBlanco"
+                android:textStyle="bold"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:focusable="false"
+                android:layout_toRightOf="@id/subcatfoto"
+                android:layout_below="@id/ratingbSubcat"/>
+
+            <LinearLayout
+                android:id="@+id/mapasubcat"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_below="@id/txdescrpsubcat"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp">
+
+                <fragment
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:context=".MapaFragmentSubcategoria"/>
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>

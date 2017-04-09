@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorAccent">
+
+            <ImageView
+                android:id="@+id/edciudadfoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="15dp"
+                app:srcCompat="@mipmap/ic_launcher" />
+
+            <TextView
+                android:id="@+id/edtextonombreciudad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/edciudadfoto"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/ednombre"
+                android:textColor="@color/colorBlanco"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtxnombreciudad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:textColor="@color/colorBlanco"
+                android:textStyle="bold"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:hint="@string/edhintnombre"
+                android:layout_toRightOf="@id/edciudadfoto"
+                android:layout_below="@id/edtextonombreciudad"/>
+
+            <TextView
+                android:id="@+id/edtextodescrpciudad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/edciudadfoto"
+                android:layout_below="@id/edtxnombreciudad"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/eddescripcion"
+                android:textColor="@color/colorBlanco"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtxdescrpciudad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:textColor="@color/colorBlanco"
+                android:textStyle="bold"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:hint="@string/edhintdescripcion"
+                android:layout_toRightOf="@id/edciudadfoto"
+                android:layout_below="@id/edtextodescrpciudad"/>
+
+            <TextView
+                android:id="@+id/edtextomapaciudad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/edciudadfoto"
+                android:layout_below="@id/edtxdescrpciudad"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/edsituacionmapa"
+                android:textColor="@color/colorBlanco"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/edmapaciudad"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_below="@id/edtextomapaciudad"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp">
+
+                <fragment
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:context=".MapaFragmentEdCiudad"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/edbotonessubcat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_below="@id/edmapaciudad">
+
+                <Button
+                    android:id="@+id/edbotonciudadRest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorBotonSubcategoria"
+                    android:layout_marginBottom="15dp"
+                    android:text="@string/edrestaurantes"
+                    android:textColor="@color/colorBlanco"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/edbotonciudadMonum"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:background="@color/colorBotonSubcategoria"
+                    android:text="@string/edmonumentos"
+                    android:textColor="@color/colorBlanco"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/edbotonciudadMuseos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:background="@color/colorBotonSubcategoria"
+                    android:text="@string/edmuseos"
+                    android:textColor="@color/colorBlanco"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/edbotonciudadTransp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:background="@color/colorBotonSubcategoria"
+                    android:text="@string/edtransporte"
+                    android:textColor="@color/colorBlanco"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/edbotonciudadLugaresInter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:background="@color/colorBotonSubcategoria"
+                    android:text="@string/edlugaresinteres"
+                    android:textColor="@color/colorBlanco"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/edbotonciudadAceptar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="25dp"
+                android:background="@color/colorNaranjaDark"
+                android:text="@string/aceptar"
+                android:textColor="@color/colorBlanco"
+                android:textStyle="bold"
+                android:layout_below="@id/edbotonessubcat"/>
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>

@@ -40,4 +40,25 @@
     <string name="emisorejbandeja">Sender name...</string>
     <string name="salir">Exit</string>
     <string name="titulobandejaentrada">MAILBOX</string>
+    <string name="botonenviarbandejaentrada">Send message</string>
+    <string name="nombre">NAME</string>
+    <string name="prefGrupo">SERVER PREFERENCES</string>
+    <string name="tituloprefip">Server IP</string>
+    <string name="eddescripcion">Description</string>
+    <string name="edhintdescripcion">Write a description...</string>
+    <string name="edhintnombre">Write a name...</string>
+    <string name="ednombre">Name</string>
+    <string name="edpuntuacion">Score</string>
+    <string name="edsituacionmapa">Map location</string>
+    <string name="edlugaresinteres">Places of interest</string>
+    <string name="edmonumentos">Monuments</string>
+    <string name="edmuseos">Museums</string>
+    <string name="edrestaurantes">Restaurants</string>
+    <string name="edtransporte">Transport</string>
+    <string name="editar">Edit</string>
+    <string name="seguir">Follow</string>
+    <string name="borrarciudad">Eliminar ciudad</string>
+    <string name="dejarseguir">Unfollow</string>
+    <string name="titulolistasubcat">SUBCATEGORY</string>
+    <string name="borrarsubcat">Delete</string>
 </resources>

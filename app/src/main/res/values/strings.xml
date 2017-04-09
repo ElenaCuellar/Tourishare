@@ -17,6 +17,14 @@
     <string name="hintpass">Introduce pass...</string>
     <string name="hintciudad">Introduce ciudad...</string>
     <string name="salir">Salir</string>
+    <string name="nombre">NOMBRE</string>
+    <string name="editar">Editar</string>
+    <string name="seguir">Seguir</string>
+    <string name="dejarseguir">No seguir</string>
+    <string name="borrarciudad">Eliminar ciudad</string>
+    <string name="borrarsubcat">Eliminar</string>
+    <string name="ciudad">Ciudad</string>
+    <string name="rango">Rango</string>
 
     <!--cadenas del menu lateral -->
     <string name="nombrenav">NOMBRE DEL USUARIO</string>
@@ -39,9 +47,10 @@
     <string name="misalir">Salir</string>
     <string name="novato">Novato</string>
 
-    <!--cadenas de lista de ciudades favoritas y de amigos -->
+    <!--cadenas de lista de ciudades favoritas, de amigos y subcategorias -->
     <string name="titulolistacfav">TUS CIUDADES</string>
     <string name="titulolistaamigos">TUS AMIGOS</string>
+    <string name="titulolistasubcat">SUBCATEGORIA</string>
 
     <!-- cadenas de apartado de mensajes -->
     <string name="titulobandejaentrada">BANDEJA DE ENTRADA</string>
@@ -51,4 +60,22 @@
     <string name="asuntoejbandeja">Asunto del mensaje...</string>
     <string name="cuerpoejbandeja">Cuerpo del mensaje...</string>
     <string name="botonborrarbandejaentrada">Eliminar mensaje</string>
+    <string name="botonenviarbandejaentrada">Enviar mensaje</string>
+
+    <!--cadenas de Preferencias -->
+    <string name="prefGrupo">PREFERENCIAS DE SERVIDOR</string>
+    <string name="tituloprefip">IP del servidor</string>
+
+    <!--cadenas editar ciudad o subcategoria -->
+    <string name="ednombre">Nombre</string>
+    <string name="eddescripcion">Descripcion</string>
+    <string name="edsituacionmapa">Situacion en el mapa</string>
+    <string name="edpuntuacion">Puntuacion</string>
+    <string name="edhintnombre">Escriba nombre...</string>
+    <string name="edhintdescripcion">Escriba descripcion...</string>
+    <string name="edrestaurantes">Restaurantes</string>
+    <string name="edmonumentos">Monumentos</string>
+    <string name="edmuseos">Museos</string>
+    <string name="edtransporte">Transporte</string>
+    <string name="edlugaresinteres">Lugares de interes</string>
 </resources>
