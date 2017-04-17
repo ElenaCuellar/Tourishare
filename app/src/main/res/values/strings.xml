@@ -78,4 +78,8 @@
     <string name="edmuseos">Museos</string>
     <string name="edtransporte">Transporte</string>
     <string name="edlugaresinteres">Lugares de interes</string>
+
+    <!--titulos y textos de dialogs -->
+    <string name="titulodiagsignup">Faltan datos</string>
+    <string name="textodiagsignup">Seleccione una foto y escriba un nombre y contraseña</string>
 </resources>

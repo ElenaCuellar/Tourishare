@@ -61,4 +61,8 @@
     <string name="dejarseguir">Unfollow</string>
     <string name="titulolistasubcat">SUBCATEGORY</string>
     <string name="borrarsubcat">Delete</string>
+    <string name="ciudad">City</string>
+    <string name="rango">Level</string>
+    <string name="textodiagsignup">Choose a pic and write an username and a password</string>
+    <string name="titulodiagsignup">Not enough data</string>
 </resources>
