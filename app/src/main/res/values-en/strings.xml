@@ -65,4 +65,6 @@
     <string name="rango">Level</string>
     <string name="textodiagsignup">Choose a pic and write an username and a password</string>
     <string name="titulodiagsignup">Not enough data</string>
+    <string name="insertexito">Row added</string>
+    <string name="espere">Please wait...</string>
 </resources>

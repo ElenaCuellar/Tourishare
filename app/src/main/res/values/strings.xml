@@ -82,4 +82,8 @@
     <!--titulos y textos de dialogs -->
     <string name="titulodiagsignup">Faltan datos</string>
     <string name="textodiagsignup">Seleccione una foto y escriba un nombre y contraseña</string>
+
+    <!--otras -->
+    <string name="espere">Espere, por favor...</string>
+    <string name="insertexito">La fila se ha agregado</string>
 </resources>
