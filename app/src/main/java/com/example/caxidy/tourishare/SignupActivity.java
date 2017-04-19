@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class SignupActivity extends AppCompatActivity {
@@ -36,15 +37,19 @@ public class SignupActivity extends AppCompatActivity {
     Uri fotoGaleria;
     EditText tuuser, tupass, tuciudad;
     Usuario usuario;
+    Calendar calendario;
+    String nomFoto; //nombre de la nueva foto de usuario
 
     //Variables que requieren del servidor o lo invocan
     private ProgressDialog pDialog;
     private JSONObject json;
     private int exito=0;
     private ConexionHttp conexion;
+    private ConexionFtp conexionftp;
     private String ip_server;
     private String url_insert;
-    InsertarUsuarioAsyncTask nuevoUserTask;
+    private String url_ftp_upload, url_ftp_filepath;
+    protected InsertarUsuarioAsyncTask nuevoUserTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +72,9 @@ public class SignupActivity extends AppCompatActivity {
 
         conexion = new ConexionHttp();
 
-        nuevoUserTask = new InsertarUsuarioAsyncTask();
+        conexionftp = new ConexionFtp();
 
+        nuevoUserTask = new InsertarUsuarioAsyncTask();
 
         bCrearUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,10 +83,24 @@ public class SignupActivity extends AppCompatActivity {
                 //Si hemos seleccionado una foto y hemos escrito un nombre y una contraseña, subimos los datos al servidor
                 if(fotoGaleria != null && !tuuser.getText().toString().equals("") && !tupass.getText().toString().equals("")){
                     //sube el registro a la BD y la foto a Filezilla
+
+                    //Nombre de la foto (su nombre en galeria + la fecha actual + extension)
+                    calendario = Calendar.getInstance();
+                    nomFoto = "F" + calendario.get(Calendar.YEAR)+calendario.get(Calendar.MONTH)+
+                            calendario.get(Calendar.DAY_OF_MONTH)+ calendario.get(Calendar.HOUR_OF_DAY)+
+                            calendario.get(Calendar.MINUTE)+ calendario.get(Calendar.SECOND)+
+                            calendario.get(Calendar.MILLISECOND) + "F" + fotoGaleria.getLastPathSegment() + ".jpg";
+
+                    //urls para subir la foto al servidor Filezilla y para localizar la foto a subir de la galeria del dispositivo
+                    url_ftp_upload = "archivosFilezilla/" + nomFoto;
+                    url_ftp_filepath = fotoGaleria.getPath(); //!! + ".jpg"
+
+                    System.out.println(nomFoto + " --- " + url_ftp_upload + " --- " + url_ftp_filepath);
+
                     usuario = new Usuario(tuuser.getText().toString(),tupass.getText().toString(),
-                            "!!!!!!!!!urlfoto - ruta + fecha actual con milisecs...",tuciudad.getText().toString());
+                            nomFoto,tuciudad.getText().toString());
                     insertarUsuario();
-                    //!!subir foto a Filezilla
+                    //!!tiene que terminar de funcionar lo de Filezilla + arreglar layout signup --foto muy pegada
                     //!!desaparece este intent y nos logea con el usuario creado y accedemos al programa
                 }
                 else{
@@ -142,19 +162,20 @@ public class SignupActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    //Tarea asincrona para insertar un nuevo usuario
+    //Tarea asincrona para insertar un nuevo usuario y subir su foto
     class InsertarUsuarioAsyncTask extends AsyncTask<Void, Void, Void> {
 
         String response = "";
-        //Crear hashmap para mandar los parametros al servidor
+        //Crear hashmaps para mandar los parametros al servidor http y ftp
         HashMap<String, String> postDataParams;
+        HashMap<String, String> params;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
             pDialog = new ProgressDialog(SignupActivity.this);
-            pDialog.setMessage(getString(R.string.espere));
+            pDialog.setMessage(getString(R.string.espereNuevoUser));
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -162,6 +183,7 @@ public class SignupActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... arg0) {
 
+            //parametros del insert
             postDataParams=new HashMap<String, String>();
             postDataParams.put("Nombre", usuario.getNombre());
             postDataParams.put("Password", usuario.getPass());
@@ -169,8 +191,17 @@ public class SignupActivity extends AppCompatActivity {
             postDataParams.put("IdRango", Integer.toString(usuario.getIdRango()));
             postDataParams.put("ciudad", usuario.getCiudad());
 
+            //parametros del FTP
+            params=new HashMap<String, String>();
+            params.put("host", ip_server);
+            params.put("uploadpath", url_ftp_upload);
+            params.put("filepath", url_ftp_filepath);
+
             //Llamamos a ServerData() para almacenar el resultado en response
             response= conexion.ServerData(url_insert,postDataParams);
+
+            //Llamamos a SubirDatos() para subir la foto a Filezilla Server
+            conexionftp.SubirDatos(params);
 
             try {
 
@@ -198,4 +229,5 @@ public class SignupActivity extends AppCompatActivity {
             }
         }
     }
+
 }

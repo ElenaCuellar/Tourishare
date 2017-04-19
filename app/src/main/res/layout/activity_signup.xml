@@ -77,14 +77,14 @@
                 android:id="@+id/txtupass"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/textView2"
                 android:layout_marginLeft="85dp"
                 android:layout_marginRight="85dp"
-                android:textColor="@color/colorBlanco"
-                android:textStyle="bold"
                 android:ems="10"
-                android:inputType="textPersonName"
                 android:hint="@string/hintpass"
-                android:layout_below="@id/textView2"/>
+                android:inputType="textPassword"
+                android:textColor="@color/colorBlanco"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView3"
