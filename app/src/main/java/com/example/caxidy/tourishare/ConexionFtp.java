@@ -24,22 +24,23 @@ public class ConexionFtp {
 
         try {
             url = new URL(urlFtp);
-            URLConnection conn = url.openConnection(); //Proxy.NO_PROXY
+            URLConnection conn = url.openConnection(); //Si hay problemas para conectar usar Proxy.NO_PROXY
             conn.setReadTimeout(60000);
             conn.setConnectTimeout(15000);
             conn.setDoInput(true);
             conn.setDoOutput(true);
+            conn.setUseCaches(false);
             //Nos conectamos al servidor FTP y abrimos su tuberia de escritura
             OutputStream outputStream = conn.getOutputStream();
             //Abrimos la tuberia de lectura en nuestro dispositivo
             FileInputStream inputStream = new FileInputStream(params.get("filepath"));
 
             //Leemos y escribimos la informacion (subimos el archivo al servidor)
-            //!!es mejor con FileOutputStream, sin trocear los bytes de la foto...o usando hhtpurl y php...ultimo tuto
             byte[] buffer = new byte[BUFFER_SIZE];
             int bytesRead = -1;
             while ((bytesRead = inputStream.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, bytesRead);
+                System.out.println(bytesRead + " bytes");
             }
 
             inputStream.close();

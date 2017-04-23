@@ -1,15 +1,20 @@
 package com.example.caxidy.tourishare;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -39,6 +44,13 @@ public class SignupActivity extends AppCompatActivity {
     Usuario usuario;
     Calendar calendario;
     String nomFoto; //nombre de la nueva foto de usuario
+
+    //Variables y constantes para pedir permisos de almacenamiento de imagenes
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] permisosAlmacenamiento = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     //Variables que requieren del servidor o lo invocan
     private ProgressDialog pDialog;
@@ -93,14 +105,19 @@ public class SignupActivity extends AppCompatActivity {
 
                     //urls para subir la foto al servidor Filezilla y para localizar la foto a subir de la galeria del dispositivo
                     url_ftp_upload = "archivosFilezilla/" + nomFoto;
-                    url_ftp_filepath = fotoGaleria.getPath(); //!! + ".jpg"
-
+                    url_ftp_filepath = getPathAbsolutoUri(getApplicationContext(),fotoGaleria);
                     System.out.println(nomFoto + " --- " + url_ftp_upload + " --- " + url_ftp_filepath);
 
                     usuario = new Usuario(tuuser.getText().toString(),tupass.getText().toString(),
                             nomFoto,tuciudad.getText().toString());
+
+                    //Antes de insertar nada, verificamos los permisos de acceso a media, fotos... (necesario para versiones mayores a la 23)
+                    boolean verificado = false;
+                    while(!verificado){
+                        verificado = verificarPermisosAlmacenamiento(SignupActivity.this);
+                    }
+                    //insertamos...
                     insertarUsuario();
-                    //!!tiene que terminar de funcionar lo de Filezilla + arreglar layout signup --foto muy pegada
                     //!!desaparece este intent y nos logea con el usuario creado y accedemos al programa
                 }
                 else{
@@ -160,6 +177,38 @@ public class SignupActivity extends AppCompatActivity {
         AlertDialog alertDialog = alertDialogBu.create();
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
+    }
+
+    //metodo para obtener la ruta absoluta de la variable fotoGaleria
+    public String getPathAbsolutoUri(Context contexto, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = contexto.getContentResolver().query(contentUri,  proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    public static boolean verificarPermisosAlmacenamiento(Activity activity) {
+        // Comprobamos si tenemos permisos de escritura
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            //Si no tenemos permisos, le pedimos al usuario que los habilite
+            ActivityCompat.requestPermissions(
+                    activity,
+                    permisosAlmacenamiento,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
+
+        return true;
     }
 
     //Tarea asincrona para insertar un nuevo usuario y subir su foto
