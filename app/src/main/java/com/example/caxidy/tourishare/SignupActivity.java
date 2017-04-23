@@ -44,6 +44,7 @@ public class SignupActivity extends AppCompatActivity {
     Usuario usuario;
     Calendar calendario;
     String nomFoto; //nombre de la nueva foto de usuario
+    OperacionesBD opBd;
 
     //Variables y constantes para pedir permisos de almacenamiento de imagenes
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -56,10 +57,11 @@ public class SignupActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
     private JSONObject json;
     private int exito=0;
-    private ConexionHttp conexion;
+    private ConexionHttpInsert conexion;
     private ConexionFtp conexionftp;
     private String ip_server;
     private String url_insert;
+    private String url_select;
     private String url_ftp_upload, url_ftp_filepath;
     protected InsertarUsuarioAsyncTask nuevoUserTask;
 
@@ -82,7 +84,11 @@ public class SignupActivity extends AppCompatActivity {
 
         url_insert = "http://" + ip_server + "/archivosphp/insert_user.php";
 
-        conexion = new ConexionHttp();
+        url_select = "http://" + ip_server + "/archivosphp/consulta.php";
+
+        opBd = new OperacionesBD(getApplicationContext());
+
+        conexion = new ConexionHttpInsert();
 
         conexionftp = new ConexionFtp();
 
@@ -94,31 +100,43 @@ public class SignupActivity extends AppCompatActivity {
 
                 //Si hemos seleccionado una foto y hemos escrito un nombre y una contraseña, subimos los datos al servidor
                 if(fotoGaleria != null && !tuuser.getText().toString().equals("") && !tupass.getText().toString().equals("")){
-                    //sube el registro a la BD y la foto a Filezilla
+                    //debemos comprobar que el usuario no existe
+                    //if(opBd.comprobarUsuarioUnico(url_select,getString(R.string.esperecomprobaruser),tuuser.getText().toString())) {
+                        //si es asi, sube el registro a la BD y la foto a Filezilla
 
-                    //Nombre de la foto (su nombre en galeria + la fecha actual + extension)
-                    calendario = Calendar.getInstance();
-                    nomFoto = "F" + calendario.get(Calendar.YEAR)+calendario.get(Calendar.MONTH)+
-                            calendario.get(Calendar.DAY_OF_MONTH)+ calendario.get(Calendar.HOUR_OF_DAY)+
-                            calendario.get(Calendar.MINUTE)+ calendario.get(Calendar.SECOND)+
-                            calendario.get(Calendar.MILLISECOND) + "F" + fotoGaleria.getLastPathSegment() + ".jpg";
+                        //Nombre de la foto (su nombre en galeria + la fecha actual + extension)
+                        calendario = Calendar.getInstance();
+                        nomFoto = "F" + calendario.get(Calendar.YEAR) + calendario.get(Calendar.MONTH) +
+                                calendario.get(Calendar.DAY_OF_MONTH) + calendario.get(Calendar.HOUR_OF_DAY) +
+                                calendario.get(Calendar.MINUTE) + calendario.get(Calendar.SECOND) +
+                                calendario.get(Calendar.MILLISECOND) + "F" + fotoGaleria.getLastPathSegment() + ".jpg";
 
-                    //urls para subir la foto al servidor Filezilla y para localizar la foto a subir de la galeria del dispositivo
-                    url_ftp_upload = "archivosFilezilla/" + nomFoto;
-                    url_ftp_filepath = getPathAbsolutoUri(getApplicationContext(),fotoGaleria);
-                    System.out.println(nomFoto + " --- " + url_ftp_upload + " --- " + url_ftp_filepath);
+                        //urls para subir la foto al servidor Filezilla y para localizar la foto a subir de la galeria del dispositivo
+                        url_ftp_upload = "archivosFilezilla/" + nomFoto;
+                        url_ftp_filepath = getPathAbsolutoUri(getApplicationContext(), fotoGaleria);
+                        System.out.println(nomFoto + " --- " + url_ftp_upload + " --- " + url_ftp_filepath);
 
-                    usuario = new Usuario(tuuser.getText().toString(),tupass.getText().toString(),
-                            nomFoto,tuciudad.getText().toString());
+                        usuario = new Usuario(tuuser.getText().toString(), tupass.getText().toString(),
+                                nomFoto, tuciudad.getText().toString());
 
-                    //Antes de insertar nada, verificamos los permisos de acceso a media, fotos... (necesario para versiones mayores a la 23)
-                    boolean verificado = false;
-                    while(!verificado){
-                        verificado = verificarPermisosAlmacenamiento(SignupActivity.this);
-                    }
-                    //insertamos...
-                    insertarUsuario();
-                    //!!desaparece este intent y nos logea con el usuario creado y accedemos al programa
+                        //Antes de insertar nada, verificamos los permisos de acceso a media, fotos... (necesario para versiones mayores a la 23)
+                        boolean verificado = false;
+                        while (!verificado) {
+                            verificado = verificarPermisosAlmacenamiento(SignupActivity.this);
+                        }
+                        //insertamos...
+                        insertarUsuario();
+
+                        //Volvemos a la pantalla anterior y se abre el activity de Login
+                        //!!finish(); --> pero controlar que antes se han añadido el registro y la imagen completos
+                        //!!desaparece este intent y aparece el intent de "registrarse", como si pulsasemos su boton, relleno
+                        //!!con los datos de usuario y pass que acabamos de crear (se pasan los datos al ActivityResult)
+                   /* }
+                    else{
+                        //Avisa de que el usuario ya existe
+                        mostrarDialog(getString(R.string.titulodiaguserexiste),getString(R.string.useryaexiste));
+                    }*/
+
                 }
                 else{
                     //Si no, muestra un mensaje avisandonos
@@ -232,38 +250,41 @@ public class SignupActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... arg0) {
 
-            //parametros del insert
-            postDataParams=new HashMap<String, String>();
-            postDataParams.put("Nombre", usuario.getNombre());
-            postDataParams.put("Password", usuario.getPass());
-            postDataParams.put("UrlFoto", usuario.getUrlfoto());
-            postDataParams.put("IdRango", Integer.toString(usuario.getIdRango()));
-            postDataParams.put("ciudad", usuario.getCiudad());
+            if(opBd.comprobarUsuarioUnico(url_select,getString(R.string.esperecomprobaruser),"Yu")) {
+                System.out.println("DONINBACKGROUNDD 222222222222222222");
+                //parametros del insert
+                postDataParams = new HashMap<String, String>();
+                postDataParams.put("Nombre", usuario.getNombre());
+                postDataParams.put("Password", usuario.getPass());
+                postDataParams.put("UrlFoto", usuario.getUrlfoto());
+                postDataParams.put("IdRango", Integer.toString(usuario.getIdRango()));
+                postDataParams.put("ciudad", usuario.getCiudad());
 
-            //parametros del FTP
-            params=new HashMap<String, String>();
-            params.put("host", ip_server);
-            params.put("uploadpath", url_ftp_upload);
-            params.put("filepath", url_ftp_filepath);
+                //parametros del FTP
+                params = new HashMap<String, String>();
+                params.put("host", ip_server);
+                params.put("uploadpath", url_ftp_upload);
+                params.put("filepath", url_ftp_filepath);
 
-            //Llamamos a ServerData() para almacenar el resultado en response
-            response= conexion.ServerData(url_insert,postDataParams);
+                //Llamamos a serverData() para almacenar el resultado en response
+                response = conexion.serverData(url_insert, postDataParams);
 
-            //Llamamos a SubirDatos() para subir la foto a Filezilla Server
-            conexionftp.SubirDatos(params);
+                //Llamamos a SubirDatos() para subir la foto a Filezilla Server
+                conexionftp.SubirDatos(params);
 
-            try {
+                try {
 
-                json = new JSONObject(response);
+                    json = new JSONObject(response);
 
-                //Obtenemos los valores del json
-                System.out.println(json.get("success"));
-                exito = json.getInt("success");
+                    //Obtenemos los valores del json
+                    System.out.println(json.get("success"));
+                    exito = json.getInt("success");
 
-            } catch (JSONException e) {
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-            return null;
+        return null;
         }
 
         @Override

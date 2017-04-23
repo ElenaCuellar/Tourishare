@@ -14,12 +14,12 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ConexionHttp {
+public class ConexionHttpInsert {
 
     String response="";
     URL url;
 
-    public String ServerData(String path,HashMap<String, String> params) {
+    public String serverData(String path, HashMap<String, String> params) {
         try {
             url = new URL(path);
 

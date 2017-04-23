@@ -67,4 +67,8 @@
     <string name="titulodiagsignup">Not enough data</string>
     <string name="insertexito">Row added</string>
     <string name="espereNuevoUser">Adding row and uploading new photo. Please wait...</string>
+    <string name="useryaexiste">Username in use. Write a different name.</string>
+    <string name="titulodiaguserexiste">User in use</string>
+    <string name="esperecomprobaruser">Checking username availability. Please, wait ...</string>
+    <string name="arraynulo">No usernames to check</string>
 </resources>

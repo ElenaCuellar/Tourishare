@@ -25,8 +25,8 @@ public class ConexionFtp {
         try {
             url = new URL(urlFtp);
             URLConnection conn = url.openConnection(); //Si hay problemas para conectar usar Proxy.NO_PROXY
-            conn.setReadTimeout(60000);
-            conn.setConnectTimeout(15000);
+            conn.setReadTimeout(300000);
+            conn.setConnectTimeout(300000);
             conn.setDoInput(true);
             conn.setDoOutput(true);
             conn.setUseCaches(false);

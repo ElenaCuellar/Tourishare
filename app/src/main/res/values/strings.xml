@@ -82,8 +82,13 @@
     <!--titulos y textos de dialogs -->
     <string name="titulodiagsignup">Faltan datos</string>
     <string name="textodiagsignup">Seleccione una foto y escriba un nombre y contraseña</string>
+    <string name="useryaexiste">El nombre de usuario ya existe. Introduzca un nombre diferente.</string>
+    <string name="titulodiaguserexiste">El usuario ya existe</string>
 
     <!--otras -->
     <string name="espereNuevoUser">Insertando registro y subiendo foto. Espere, por favor...</string>
     <string name="insertexito">La fila se ha agregado</string>
+    <string name="esperecomprobaruser">Comprobando disponibilidad de nombre de usuario. Espere, por favor...</string>
+    <string name="arraynulo">No hay nombres de usuario que comprobar</string>
+
 </resources>
