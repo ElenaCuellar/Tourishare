@@ -69,6 +69,12 @@
     <string name="espereNuevoUser">Adding row and uploading new photo. Please wait...</string>
     <string name="useryaexiste">Username in use. Write a different name.</string>
     <string name="titulodiaguserexiste">User in use</string>
-    <string name="esperecomprobaruser">Checking username availability. Please, wait ...</string>
-    <string name="arraynulo">No usernames to check</string>
+    <string name="textoacercade"> TOURISHARE. Version 1.0.
+        \n2017
+        \nThis software is a Higher Degree in Development of Multiplatform Applications final project,
+        which is intended to set up a contact network in which users can share useful information about cities. It is a tourist app.
+        \nNo sale or distribution allowed.
+    \nIt saves data on an Apache server (XAMPP).
+    \nServer data will not be published.
+    \nCoding, interface design and localization by Elena Cuéllar </string>
 </resources>

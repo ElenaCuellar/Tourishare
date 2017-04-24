@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -15,7 +14,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
@@ -45,6 +43,7 @@ public class SignupActivity extends AppCompatActivity {
     Calendar calendario;
     String nomFoto; //nombre de la nueva foto de usuario
     OperacionesBD opBd;
+    String nomUser; //nombre del nuevo user, para comprobar si esta disponible
 
     //Variables y constantes para pedir permisos de almacenamiento de imagenes
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -86,13 +85,11 @@ public class SignupActivity extends AppCompatActivity {
 
         url_select = "http://" + ip_server + "/archivosphp/consulta.php";
 
-        opBd = new OperacionesBD(getApplicationContext());
+        opBd = new OperacionesBD();
 
         conexion = new ConexionHttpInsert();
 
         conexionftp = new ConexionFtp();
-
-        nuevoUserTask = new InsertarUsuarioAsyncTask();
 
         bCrearUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,47 +97,41 @@ public class SignupActivity extends AppCompatActivity {
 
                 //Si hemos seleccionado una foto y hemos escrito un nombre y una contraseña, subimos los datos al servidor
                 if(fotoGaleria != null && !tuuser.getText().toString().equals("") && !tupass.getText().toString().equals("")){
-                    //debemos comprobar que el usuario no existe
-                    //if(opBd.comprobarUsuarioUnico(url_select,getString(R.string.esperecomprobaruser),tuuser.getText().toString())) {
-                        //si es asi, sube el registro a la BD y la foto a Filezilla
+                    //Sube el registro a la BD y la foto a Filezilla
 
-                        //Nombre de la foto (su nombre en galeria + la fecha actual + extension)
-                        calendario = Calendar.getInstance();
-                        nomFoto = "F" + calendario.get(Calendar.YEAR) + calendario.get(Calendar.MONTH) +
-                                calendario.get(Calendar.DAY_OF_MONTH) + calendario.get(Calendar.HOUR_OF_DAY) +
-                                calendario.get(Calendar.MINUTE) + calendario.get(Calendar.SECOND) +
-                                calendario.get(Calendar.MILLISECOND) + "F" + fotoGaleria.getLastPathSegment() + ".jpg";
+                    nomUser = tuuser.getText().toString();
 
-                        //urls para subir la foto al servidor Filezilla y para localizar la foto a subir de la galeria del dispositivo
-                        url_ftp_upload = "archivosFilezilla/" + nomFoto;
-                        url_ftp_filepath = getPathAbsolutoUri(getApplicationContext(), fotoGaleria);
-                        System.out.println(nomFoto + " --- " + url_ftp_upload + " --- " + url_ftp_filepath);
+                    //Nombre de la foto (su nombre en galeria + la fecha actual + extension)
+                    calendario = Calendar.getInstance();
+                    nomFoto = "F" + calendario.get(Calendar.YEAR) + calendario.get(Calendar.MONTH) +
+                            calendario.get(Calendar.DAY_OF_MONTH) + calendario.get(Calendar.HOUR_OF_DAY) +
+                            calendario.get(Calendar.MINUTE) + calendario.get(Calendar.SECOND) +
+                            calendario.get(Calendar.MILLISECOND) + "F" + fotoGaleria.getLastPathSegment() + ".jpg";
 
-                        usuario = new Usuario(tuuser.getText().toString(), tupass.getText().toString(),
-                                nomFoto, tuciudad.getText().toString());
+                    //urls para subir la foto al servidor Filezilla y para localizar la foto a subir de la galeria del dispositivo
+                    url_ftp_upload = "archivosFilezilla/" + nomFoto;
+                    url_ftp_filepath = getPathAbsolutoUri(getApplicationContext(), fotoGaleria);
+                    System.out.println(nomFoto + " --- " + url_ftp_upload + " --- " + url_ftp_filepath);
 
-                        //Antes de insertar nada, verificamos los permisos de acceso a media, fotos... (necesario para versiones mayores a la 23)
-                        boolean verificado = false;
-                        while (!verificado) {
-                            verificado = verificarPermisosAlmacenamiento(SignupActivity.this);
-                        }
-                        //insertamos...
-                        insertarUsuario();
+                    usuario = new Usuario(tuuser.getText().toString(), tupass.getText().toString(),
+                            nomFoto, tuciudad.getText().toString());
 
-                        //Volvemos a la pantalla anterior y se abre el activity de Login
-                        //!!finish(); --> pero controlar que antes se han añadido el registro y la imagen completos
-                        //!!desaparece este intent y aparece el intent de "registrarse", como si pulsasemos su boton, relleno
-                        //!!con los datos de usuario y pass que acabamos de crear (se pasan los datos al ActivityResult)
-                   /* }
-                    else{
-                        //Avisa de que el usuario ya existe
-                        mostrarDialog(getString(R.string.titulodiaguserexiste),getString(R.string.useryaexiste));
-                    }*/
+                    //Antes de insertar nada, verificamos los permisos de acceso a media, fotos... (necesario para versiones mayores a la 23)
+                    boolean verificado = false;
+                    while (!verificado) {
+                        verificado = verificarPermisosAlmacenamiento(SignupActivity.this);
+                    }
+                    //insertamos...
+                    insertarUsuario();
 
+                    //Volvemos a la pantalla anterior y se abre el activity de Login
+                    //!!desaparece este intent y aparece el intent de "registrarse", como si pulsasemos su boton, relleno
+                    //!!con los datos de usuario y pass que acabamos de crear (se pasan los datos al ActivityResult)
                 }
                 else{
                     //Si no, muestra un mensaje avisandonos
-                    mostrarDialog(getString(R.string.titulodiagsignup),getString(R.string.textodiagsignup));
+                    new MostrarMensaje(SignupActivity.this).mostrarMensaje(getString(R.string.titulodiagsignup),getString(R.string.textodiagsignup),
+                            getString(R.string.aceptar));
                 }
             }
         });
@@ -162,6 +153,7 @@ public class SignupActivity extends AppCompatActivity {
 
     protected void insertarUsuario(){
         //ejecutar la tarea asincrona para agregar al nuevo usuario
+        nuevoUserTask = new InsertarUsuarioAsyncTask();
         nuevoUserTask.execute();
     }
 
@@ -180,21 +172,6 @@ public class SignupActivity extends AppCompatActivity {
                 tuFoto.setAdjustViewBounds(true);
             } catch (IOException e) {}
         }
-    }
-
-    //metodo que muestra un dialog en la actividad actual
-    public void mostrarDialog(String titulo,String mensaje){
-        AlertDialog.Builder alertDialogBu = new AlertDialog.Builder(this);
-        alertDialogBu.setTitle(titulo);
-        alertDialogBu.setMessage(mensaje);
-        alertDialogBu.setIcon(R.mipmap.ic_launcher);
-        alertDialogBu.setPositiveButton(getString(R.string.aceptar), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-        AlertDialog alertDialog = alertDialogBu.create();
-        alertDialog.setCanceledOnTouchOutside(false);
-        alertDialog.show();
     }
 
     //metodo para obtener la ruta absoluta de la variable fotoGaleria
@@ -229,9 +206,16 @@ public class SignupActivity extends AppCompatActivity {
         return true;
     }
 
+    public void focalizaNombre(){
+        tuuser.setText("");
+        tuuser.requestFocus();
+    }
+
     //Tarea asincrona para insertar un nuevo usuario y subir su foto
     class InsertarUsuarioAsyncTask extends AsyncTask<Void, Void, Void> {
 
+        MostrarMensaje msg;
+        boolean mostrarMsg;
         String response = "";
         //Crear hashmaps para mandar los parametros al servidor http y ftp
         HashMap<String, String> postDataParams;
@@ -240,6 +224,9 @@ public class SignupActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
+            mostrarMsg = false;
+            msg = new MostrarMensaje(SignupActivity.this);
 
             pDialog = new ProgressDialog(SignupActivity.this);
             pDialog.setMessage(getString(R.string.espereNuevoUser));
@@ -250,8 +237,7 @@ public class SignupActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... arg0) {
 
-            if(opBd.comprobarUsuarioUnico(url_select,getString(R.string.esperecomprobaruser),"Yu")) {
-                System.out.println("DONINBACKGROUNDD 222222222222222222");
+            if(opBd.comprobarUsuarioUnico(url_select,nomUser)) {
                 //parametros del insert
                 postDataParams = new HashMap<String, String>();
                 postDataParams.put("Nombre", usuario.getNombre());
@@ -284,7 +270,10 @@ public class SignupActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        return null;
+            else{
+                mostrarMsg = true;
+            }
+            return null;
         }
 
         @Override
@@ -294,8 +283,17 @@ public class SignupActivity extends AppCompatActivity {
             if (pDialog.isShowing())
                 pDialog.dismiss();
 
+            //Si muestra el mensaje: avisa de que el usuario ya existe
+            if(mostrarMsg) {
+                msg.mostrarMensaje(getString(R.string.titulodiaguserexiste), getString(R.string.useryaexiste),
+                        getString(R.string.aceptar));
+                focalizaNombre();
+            }
+
             if(exito==1) {
                 Toast.makeText(getApplicationContext(), getString(R.string.insertexito), Toast.LENGTH_SHORT).show();
+                //El registro se ha insertado al completo y la imagen se ha subido al servidor FTP
+                finish();
             }
         }
     }

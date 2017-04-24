@@ -26,6 +26,10 @@
 
         <activity android:name=".SignupActivity"/>
 
+        <activity android:name=".LoginActivity"/>
+
+        <activity android:name=".Preferencias"/>
+
         <activity
             android:name=".PrincipalActivity"
             android:theme="@style/AppTheme.NoActionBar"/>

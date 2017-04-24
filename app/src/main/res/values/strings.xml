@@ -84,11 +84,17 @@
     <string name="textodiagsignup">Seleccione una foto y escriba un nombre y contraseña</string>
     <string name="useryaexiste">El nombre de usuario ya existe. Introduzca un nombre diferente.</string>
     <string name="titulodiaguserexiste">El usuario ya existe</string>
+    <string name="textoacercade"> TOURISHARE. Versión 1.0.
+        \n2017
+        \nEsta aplicación es un proyecto final de Grado Superior en Desarrollo de Aplicaciones Multiplataforma,
+        que pretende crear una red de contactos que compartan información útil de ciudades. Es una aplicación turística.
+        \nNo se permite su venta o distribución.
+    \nLa aplicación guarda los datos en un servidor basado en Apache (XAMPP).
+    \nLos datos introducidos en el servidor no serán publicados.
+    \nProgramación, diseño de interfaces y localización: Elena Cuéllar </string>
 
     <!--otras -->
     <string name="espereNuevoUser">Insertando registro y subiendo foto. Espere, por favor...</string>
     <string name="insertexito">La fila se ha agregado</string>
-    <string name="esperecomprobaruser">Comprobando disponibilidad de nombre de usuario. Espere, por favor...</string>
-    <string name="arraynulo">No hay nombres de usuario que comprobar</string>
 
 </resources>
