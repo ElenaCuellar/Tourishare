@@ -65,7 +65,6 @@
     <string name="rango">Level</string>
     <string name="textodiagsignup">Choose a pic and write an username and a password</string>
     <string name="titulodiagsignup">Not enough data</string>
-    <string name="insertexito">Row added</string>
     <string name="espereNuevoUser">Adding row and uploading new photo. Please wait...</string>
     <string name="useryaexiste">Username in use. Write a different name.</string>
     <string name="titulodiaguserexiste">User in use</string>
@@ -77,4 +76,9 @@
     \nIt saves data on an Apache server (XAMPP).
     \nServer data will not be published.
     \nCoding, interface design and localization by Elena Cuéllar </string>
+    <string name="textodiagEntrar">Wrong username or password</string>
+    <string name="titulodiagEntrar">Wrong name or pass</string>
+    <string name="espereLogin">Accessing the app. Please wait ...</string>
+    <string name="textodiagusercreado">Your profile has been created. Login window will open.</string>
+    <string name="titulodiagusercreado">Profile created</string>
 </resources>

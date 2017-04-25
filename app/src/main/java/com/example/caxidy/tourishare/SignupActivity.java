@@ -20,7 +20,6 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -123,10 +122,6 @@ public class SignupActivity extends AppCompatActivity {
                     }
                     //insertamos...
                     insertarUsuario();
-
-                    //Volvemos a la pantalla anterior y se abre el activity de Login
-                    //!!desaparece este intent y aparece el intent de "registrarse", como si pulsasemos su boton, relleno
-                    //!!con los datos de usuario y pass que acabamos de crear (se pasan los datos al ActivityResult)
                 }
                 else{
                     //Si no, muestra un mensaje avisandonos
@@ -291,9 +286,10 @@ public class SignupActivity extends AppCompatActivity {
             }
 
             if(exito==1) {
-                Toast.makeText(getApplicationContext(), getString(R.string.insertexito), Toast.LENGTH_SHORT).show();
-                //El registro se ha insertado al completo y la imagen se ha subido al servidor FTP
-                finish();
+                //El registro se ha insertado al completo y la imagen se ha subido al servidor FTP.
+                //Volvemos a la pantalla anterior y se abre el activity de Login...
+                msg.mostrarMensajeAbreIntent(LoginActivity.class, getString(R.string.titulodiagusercreado),
+                        getString(R.string.textodiagusercreado), getString(R.string.aceptar));
             }
         }
     }
