@@ -102,5 +102,7 @@
 
     <!--otras -->
     <string name="espereNuevoUser">Insertando registro y subiendo foto. Espere, por favor...</string>
+    <string name="navOpen">Abrir Navigation Drawer </string>
+    <string name="navClos">Cerrar Navigation Drawer </string>
 
 </resources>

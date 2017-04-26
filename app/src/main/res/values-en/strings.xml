@@ -81,4 +81,6 @@
     <string name="espereLogin">Accessing the app. Please wait ...</string>
     <string name="textodiagusercreado">Your profile has been created. Login window will open.</string>
     <string name="titulodiagusercreado">Profile created</string>
+    <string name="navClos">Close Navigation Drawer</string>
+    <string name="navOpen">Open Navigation Drawer</string>
 </resources>

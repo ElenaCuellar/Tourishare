@@ -103,11 +103,11 @@
                 android:layout_marginTop="15dp">
 
                 <fragment
-                    xmlns:tools="http://schemas.android.com/tools"
                     android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:id = "@+id/edcfragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:context=".MapaFragmentEdCiudad"/>
+                    tools:context="com.example.caxidy.ejemplomapas.EditarCiudad"/>
             </LinearLayout>
 
             <LinearLayout
@@ -179,6 +179,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
                 android:background="@color/colorNaranjaDark"
                 android:text="@string/aceptar"
                 android:textColor="@color/colorBlanco"
