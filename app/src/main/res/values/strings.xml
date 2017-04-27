@@ -25,6 +25,7 @@
     <string name="borrarsubcat">Eliminar</string>
     <string name="ciudad">Ciudad</string>
     <string name="rango">Rango</string>
+    <string name="error">Error</string>
 
     <!--cadenas del menu lateral -->
     <string name="nombrenav">NOMBRE DEL USUARIO</string>
@@ -78,6 +79,7 @@
     <string name="edmuseos">Museos</string>
     <string name="edtransporte">Transporte</string>
     <string name="edlugaresinteres">Lugares de interes</string>
+    <string name="edciudadsearchmapa">Búsqueda de Google</string>
 
     <!--titulos y textos de dialogs -->
     <string name="titulodiagsignup">Faltan datos</string>

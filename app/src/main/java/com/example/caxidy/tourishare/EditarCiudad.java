@@ -4,6 +4,9 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -16,6 +19,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -29,13 +37,19 @@ import java.io.IOException;
 public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final int TU_FOTO = 1;
+    private static final int PLACE_AUTOCOMPLETE = 2;
+
 
     ImageView imgCiudad;
     EditText txNombre, txDescr;
-    Button bRest, bMonum, bMus, bTrans, bLug, bAceptar;
+    Button bRest, bMonum, bMus, bTrans, bLug, bAceptar, bSearchM;
     Uri fotoGaleria;
 
-    private SupportMapFragment mapa;
+    //Latitud y longitud que se guardan en el registro de ciudad
+    double lat, longi;
+
+    private SupportMapFragment mapaFragment;
+    private GoogleMap gMap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,10 +67,11 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
         bTrans = (Button) findViewById(R.id.edbotonciudadTransp);
         bLug = (Button) findViewById(R.id.edbotonciudadLugaresInter);
         bAceptar = (Button) findViewById(R.id.edbotonciudadAceptar);
+        bSearchM = (Button) findViewById(R.id.edbotonciudadSearchmapa);
 
         //Fragmento con el mapa
-        mapa = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.edcfragment);
-        mapa.getMapAsync(this);
+        mapaFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.edcfragment);
+        mapaFragment.getMapAsync(this);
 
         imgCiudad.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,12 +123,31 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+        bSearchM.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Aparece el intent para la busqueda de Google
+                mostrarBusquedaGoogle();
+            }
+        });
+
     }
 
     protected void escogerFoto() {
         //Seleccionamos una foto de la galeria para la ciudad
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(intent, TU_FOTO);
+    }
+
+    protected void mostrarBusquedaGoogle(){
+        try {
+            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                    .build(this);
+            startActivityForResult(intent, PLACE_AUTOCOMPLETE);
+        } catch (GooglePlayServicesRepairableException e) {
+
+        } catch (GooglePlayServicesNotAvailableException e) {
+        }
     }
 
     protected void abrirNuevaSubcat(int tipoC) {
@@ -139,18 +173,71 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
             } catch (IOException e) {
             }
         }
+        else if(requestCode == PLACE_AUTOCOMPLETE && resultCode == RESULT_OK){
+            //Guardamos el sitio y lo situamos con un marcador en el mapa - borramos el marcador anterior, si lo hay
+            Place place = PlaceAutocomplete.getPlace(this, data);
+            ponerMarcador(place);
+        }
+        else if(requestCode == PLACE_AUTOCOMPLETE && resultCode == PlaceAutocomplete.RESULT_ERROR){
+            Status status = PlaceAutocomplete.getStatus(this, data);
+            new MostrarMensaje(this).mostrarMensaje(getString(R.string.error),
+                    getString(R.string.error) + ": " + status.getStatusMessage() ,getString(R.string.aceptar));
+        }
+    }
+
+    //poner marcador en la ciudad
+    private void ponerMarcador(Place pl){
+
+        //borrar el marcador anterior, si lo hay
+        gMap.clear();
+
+        LatLng latlng = pl.getLatLng();
+
+        lat = latlng.latitude;
+        longi = latlng.longitude;
+
+        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                new LatLng(lat, longi), 16));
+
+        //poner la imagen en la posic de la ciudad
+        Bitmap bitmap = ((BitmapDrawable) imgCiudad.getDrawable()).getBitmap();
+        Bitmap bmResized = Bitmap.createScaledBitmap(ponerBordeImg(bitmap,15), 120, 120, true);
+
+        gMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(bmResized))
+                .anchor(0.0f, 1.0f)
+                .position(new LatLng(lat, longi))
+                .title(pl.getName().toString())
+                .snippet(pl.getAddress().toString())
+                .flat(true));
+    }
+
+    private Bitmap ponerBordeImg(Bitmap bm, int borderSize){
+        Bitmap bmpWithBorder = Bitmap.createBitmap(bm.getWidth() + borderSize * 2, bm.getHeight() + borderSize * 2,
+                bm.getConfig());
+        Canvas canvas = new Canvas(bmpWithBorder);
+        canvas.drawColor(Color.WHITE);
+        canvas.drawBitmap(bm, borderSize, borderSize, null);
+        return bmpWithBorder;
     }
 
     //Acciones del mapa
     @Override
     public void onMapReady(GoogleMap mapa) {
-        //!!este codigo es de ejemplo, hay q hacer otra cosa
-        mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(
+        //Config. mapa y situacion por defecto
+        gMap = mapa;
+
+        //Le ponemos zoom
+        gMap.getUiSettings().setZoomControlsEnabled(true);
+
+        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(47.17, 27.5699), 16));
-        mapa.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher)).anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
-                .position(new LatLng(47.17, 27.5699))); //Iasi, Romania
+
+        gMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher))
+                .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
+                .position(new LatLng(47.17, 27.5699))
+                .flat(true)); //Iasi, Romania
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -159,6 +246,5 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        mapa.setMyLocationEnabled(true);
     }
 }

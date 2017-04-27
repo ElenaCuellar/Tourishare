@@ -124,11 +124,25 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
+            <Button
+                android:id="@+id/edbotonsubcatSearchM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edtextomapasubcat"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:background="@color/colorsubcatItem"
+                android:text="@string/edciudadsearchmapa"
+                android:textColor="@color/colorBlanco"
+                android:textStyle="bold" />
+
             <LinearLayout
                 android:id="@+id/edmapasubcat"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_below="@id/edtextomapasubcat"
+                android:layout_below="@id/edbotonsubcatSearchM"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="15dp">

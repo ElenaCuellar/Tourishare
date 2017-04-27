@@ -20,18 +20,18 @@
                 android:id="@+id/edciudadfoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
                 app:srcCompat="@mipmap/ic_launcher" />
 
             <TextView
                 android:id="@+id/edtextonombreciudad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/edciudadfoto"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="15dp"
+                android:layout_toRightOf="@id/edciudadfoto"
                 android:text="@string/ednombre"
                 android:textColor="@color/colorBlanco"
                 android:textSize="18sp"
@@ -41,25 +41,25 @@
                 android:id="@+id/edtxnombreciudad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/edtextonombreciudad"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:textColor="@color/colorBlanco"
-                android:textStyle="bold"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:hint="@string/edhintnombre"
                 android:layout_toRightOf="@id/edciudadfoto"
-                android:layout_below="@id/edtextonombreciudad"/>
+                android:ems="10"
+                android:hint="@string/edhintnombre"
+                android:inputType="textPersonName"
+                android:textColor="@color/colorBlanco"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/edtextodescrpciudad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/edciudadfoto"
                 android:layout_below="@id/edtxnombreciudad"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="15dp"
+                android:layout_toRightOf="@id/edciudadfoto"
                 android:text="@string/eddescripcion"
                 android:textColor="@color/colorBlanco"
                 android:textSize="18sp"
@@ -69,63 +69,77 @@
                 android:id="@+id/edtxdescrpciudad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/edtextodescrpciudad"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:textColor="@color/colorBlanco"
-                android:textStyle="bold"
-                android:ems="10"
-                android:inputType="textMultiLine"
-                android:hint="@string/edhintdescripcion"
                 android:layout_toRightOf="@id/edciudadfoto"
-                android:layout_below="@id/edtextodescrpciudad"/>
+                android:ems="10"
+                android:hint="@string/edhintdescripcion"
+                android:inputType="textMultiLine"
+                android:textColor="@color/colorBlanco"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/edtextomapaciudad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/edciudadfoto"
                 android:layout_below="@id/edtxdescrpciudad"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="15dp"
+                android:layout_toRightOf="@id/edciudadfoto"
                 android:text="@string/edsituacionmapa"
                 android:textColor="@color/colorBlanco"
                 android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/edbotonciudadSearchmapa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edtextomapaciudad"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/colorNaranjaDark"
+                android:text="@string/edciudadsearchmapa"
+                android:textColor="@color/colorBlanco"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/edmapaciudad"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_below="@id/edtextomapaciudad"
+                android:layout_below="@id/edbotonciudadSearchmapa"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="15dp">
 
                 <fragment
+                    android:id="@+id/edcfragment"
                     android:name="com.google.android.gms.maps.SupportMapFragment"
-                    android:id = "@+id/edcfragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:context="com.example.caxidy.ejemplomapas.EditarCiudad"/>
+                    tools:context="com.example.caxidy.ejemplomapas.EditarCiudad" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/edbotonessubcat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_below="@id/edmapaciudad"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="15dp"
-                android:layout_below="@id/edmapaciudad">
+                android:orientation="vertical">
 
                 <Button
                     android:id="@+id/edbotonciudadRest"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorBotonSubcategoria"
                     android:layout_marginBottom="15dp"
+                    android:background="@color/colorBotonSubcategoria"
                     android:text="@string/edrestaurantes"
                     android:textColor="@color/colorBlanco"
                     android:textStyle="bold" />
@@ -176,15 +190,15 @@
                 android:id="@+id/edbotonciudadAceptar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/edbotonessubcat"
+                android:layout_marginBottom="25dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="25dp"
-                android:layout_marginBottom="25dp"
                 android:background="@color/colorNaranjaDark"
                 android:text="@string/aceptar"
                 android:textColor="@color/colorBlanco"
-                android:textStyle="bold"
-                android:layout_below="@id/edbotonessubcat"/>
+                android:textStyle="bold" />
         </RelativeLayout>
     </LinearLayout>
 </ScrollView>

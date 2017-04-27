@@ -83,4 +83,6 @@
     <string name="titulodiagusercreado">Profile created</string>
     <string name="navClos">Close Navigation Drawer</string>
     <string name="navOpen">Open Navigation Drawer</string>
+    <string name="edciudadsearchmapa">Google search</string>
+    <string name="error">Error</string>
 </resources>
