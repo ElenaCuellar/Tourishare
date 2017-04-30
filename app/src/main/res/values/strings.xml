@@ -98,9 +98,21 @@
     \nLa aplicación guarda los datos en un servidor basado en Apache (XAMPP).
     \nLos datos introducidos en el servidor no serán publicados.
     \nProgramación, diseño de interfaces y localización: Elena Cuéllar </string>
+    <string name="tituloidsubcatultima">No se encontró ID</string>
+    <string name="textoidsubcatultima">No se encontró el último ID de Subcategorias</string>
+    <string name="textodiaginsertsubcat">Seleccione una foto y escriba un nombre</string>
+    <string name="titulodiagsubcatcreada">Subcategoria añadida</string>
+    <string name="textodiagsubcatcreada">Se ha creado la subcategoria</string>
+    <string name="tituloidciudadsubcats">Error al actualizar</string>
+    <string name="textoidciudadsubcats">Error al actualizar los datos de las subcategorías de esta ciudad</string>
+    <string name="tituloproblemaactulistaprincipal">Problema al actualizar</string>
+    <string name="textoproblemaactulistaprincipal">Problema al actualizar la lista principal de ciudades.</string>
 
     <!--Login-->
     <string name="espereLogin">Entrando en la app. Espere, por favor ...</string>
+    <string name="espereAddSubcat">Insertando subcategoria. Espere, por favor ...</string>
+    <string name="espereAddCiudad">Insertando ciudad. Espere, por favor ...</string>
+    <string name="esperellenarlistaprincipal">Actualizando la lista principal. Espere, por favor ...</string>
 
     <!--otras -->
     <string name="espereNuevoUser">Insertando registro y subiendo foto. Espere, por favor...</string>

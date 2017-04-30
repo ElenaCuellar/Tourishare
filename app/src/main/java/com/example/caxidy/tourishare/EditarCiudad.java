@@ -1,13 +1,19 @@
 package com.example.caxidy.tourishare;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -32,18 +38,48 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 
 public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final int TU_FOTO = 1;
     private static final int PLACE_AUTOCOMPLETE = 2;
+    private static final int SUBCATEGORIA_AGREGADA = 3;
 
 
     ImageView imgCiudad;
     EditText txNombre, txDescr;
     Button bRest, bMonum, bMus, bTrans, bLug, bAceptar, bSearchM;
     Uri fotoGaleria;
+    ArrayList<Integer> idsSubcats = new ArrayList<>();
+    OperacionesBD opBd;
+    Calendar calendario;
+    Ciudad ciudad;
+    int idC;
+
+    private JSONObject json;
+    private int exito=0;
+    private String ip_server;
+    private String url_select;
+    private String url_insert;
+    private String url_update;
+    private ProgressDialog pDialog;
+    private ConexionHttpInsert conexion;
+    private ConexionFtp conexionftp;
+    private String url_ftp_upload, url_ftp_filepath;
+
+    //Variables y constantes para pedir permisos de almacenamiento de imagenes
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] permisosAlmacenamiento = {
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     //Latitud y longitud que se guardan en el registro de ciudad
     double lat, longi;
@@ -68,6 +104,22 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
         bLug = (Button) findViewById(R.id.edbotonciudadLugaresInter);
         bAceptar = (Button) findViewById(R.id.edbotonciudadAceptar);
         bSearchM = (Button) findViewById(R.id.edbotonciudadSearchmapa);
+
+        opBd = new OperacionesBD();
+
+        //Recuperar la IP de las preferencias
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        ip_server = sharedPref.getString("ipServer","192.168.1.101");
+
+        url_insert = "http://" + ip_server + "/archivosphp/insert_ciudad.php";
+
+        url_select = "http://" + ip_server + "/archivosphp/consulta.php";
+
+        url_update = "http://" + ip_server + "/archivosphp/update.php";
+
+        conexion = new ConexionHttpInsert();
+
+        conexionftp = new ConexionFtp();
 
         //Fragmento con el mapa
         mapaFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.edcfragment);
@@ -118,8 +170,38 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
         bAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //!!se añade el registro de ciudad, se coge un array con los ids de subcategorias añadidas y se les añade la id
-                //!!de la ciudad - UPDATE
+                //!!volvemos a la lista d ciudades (dialog d exito)- recargar lista
+                //Añadir registro de ciudad y actualizar la id de ciudad de las subcategorias añadidas
+                if(fotoGaleria != null && !txNombre.getText().toString().equals("")){
+                    //Sube el registro a la BD y la foto a Filezilla
+                    //Nombre de la foto (su nombre en galeria + la fecha actual + extension)
+                    calendario = Calendar.getInstance();
+                    String nomFoto = "F" + calendario.get(Calendar.YEAR) + calendario.get(Calendar.MONTH) +
+                            calendario.get(Calendar.DAY_OF_MONTH) + calendario.get(Calendar.HOUR_OF_DAY) +
+                            calendario.get(Calendar.MINUTE) + calendario.get(Calendar.SECOND) +
+                            calendario.get(Calendar.MILLISECOND) + "F" + fotoGaleria.getLastPathSegment() + ".jpg";
+
+                    //urls para subir la foto al servidor Filezilla y para localizar la foto a subir de la galeria del dispositivo
+                    url_ftp_upload = "archivosFilezilla/" + nomFoto;
+                    url_ftp_filepath = getPathAbsolutoUri(getApplicationContext(), fotoGaleria);
+                    System.out.println(nomFoto + " --- " + url_ftp_upload + " --- " + url_ftp_filepath);
+
+                    ciudad = new Ciudad(txNombre.getText().toString(), txDescr.getText().toString(),
+                            nomFoto, lat, longi);
+
+                    //Antes de insertar nada, verificamos los permisos de acceso a media, fotos... (necesario para versiones mayores a la 23)
+                    boolean verificado = false;
+                    while (!verificado) {
+                        verificado = verificarPermisosAlmacenamiento(EditarCiudad.this);
+                    }
+                    //insertamos...
+                    new AgregaCiudadAsyncTask().execute();
+                }
+                else{
+                    //Si no, muestra un mensaje avisandonos
+                    new MostrarMensaje(EditarCiudad.this).mostrarMensaje(getString(R.string.titulodiagsignup),getString(R.string.textodiaginsertsubcat),
+                            getString(R.string.aceptar));
+                }
             }
         });
 
@@ -139,6 +221,38 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
         startActivityForResult(intent, TU_FOTO);
     }
 
+    //metodo para obtener la ruta absoluta de la variable fotoGaleria
+    public String getPathAbsolutoUri(Context contexto, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = contexto.getContentResolver().query(contentUri,  proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    public static boolean verificarPermisosAlmacenamiento(Activity activity) {
+        // Comprobamos si tenemos permisos de escritura
+        int permission = ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            //Si no tenemos permisos, le pedimos al usuario que los habilite
+            ActivityCompat.requestPermissions(
+                    activity,
+                    permisosAlmacenamiento,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
+
+        return true;
+    }
+
     protected void mostrarBusquedaGoogle(){
         try {
             Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
@@ -154,7 +268,7 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
         //Tipos de categorias: 1 - restaurante, 2 - Monumento, 3 -Museo, 4 - Transporte, 5 - Lugar de interes
         Intent intent = new Intent(this, EditarSubcategoria.class);
         intent.putExtra("tipoCat", tipoC);
-        startActivity(intent);
+        startActivityForResult(intent, SUBCATEGORIA_AGREGADA);
     }
 
     @Override
@@ -182,6 +296,12 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
             Status status = PlaceAutocomplete.getStatus(this, data);
             new MostrarMensaje(this).mostrarMensaje(getString(R.string.error),
                     getString(R.string.error) + ": " + status.getStatusMessage() ,getString(R.string.aceptar));
+        }
+        else if(requestCode == SUBCATEGORIA_AGREGADA && resultCode == RESULT_OK){
+            idsSubcats.add(data.getExtras().getInt("idSub"));
+
+            new MostrarMensaje(EditarCiudad.this).mostrarMensaje(getString(R.string.titulodiagsubcatcreada),
+                    getString(R.string.textodiagsubcatcreada), getString(R.string.aceptar));
         }
     }
 
@@ -245,6 +365,93 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
             return;
+        }
+    }
+
+    //Tarea asincrona para hacer el insert y luego la consulta de la id de subcategoria
+    class AgregaCiudadAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        String response = "";
+        int resUpdate = 0;
+        //Crear hashmaps para mandar los parametros al servidor http y ftp
+        HashMap<String, String> postDataParams;
+        HashMap<String, String> params;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pDialog = new ProgressDialog(EditarCiudad.this);
+            pDialog.setMessage(getString(R.string.espereAddCiudad));
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+
+            //parametros del insert
+            postDataParams = new HashMap<String, String>();
+            postDataParams.put("Nombre", ciudad.getNombre());
+            postDataParams.put("Descripcion", ciudad.getDescripcion());
+            postDataParams.put("UrlFoto", ciudad.getUrlfoto());
+            postDataParams.put("Latitud", Double.toString(ciudad.getLatitud()));
+            postDataParams.put("Longitud", Double.toString(ciudad.getLongitud()));
+
+            //parametros del FTP
+            params = new HashMap<String, String>();
+            params.put("host", ip_server);
+            params.put("uploadpath", url_ftp_upload);
+            params.put("filepath", url_ftp_filepath);
+
+            //Llamamos a serverData() para almacenar el resultado en response
+            response = conexion.serverData(url_insert, postDataParams);
+            //Llamamos a SubirDatos() para subir la foto a Filezilla Server
+            conexionftp.SubirDatos(params);
+
+            try {
+
+                json = new JSONObject(response);
+
+                //Obtenemos los valores del json
+                System.out.println(json.get("success"));
+                exito = json.getInt("success");
+
+                //Hacemos un UPDATE de los idCiudad de las subcategorias
+                if(exito == 1){
+                    if(idsSubcats.size() > 0) {
+                        idC = opBd.getIdCiudad(url_select); //obtenemos el id de ciudad que acabamos de añadir
+
+                        if (idC != -1) {
+                            //actualizamos el campo idCiudad de las subcats
+                            resUpdate = opBd.updateIdCiudadSubcategorias(url_update, idC, idsSubcats);
+                        }
+                    }
+                    else
+                        resUpdate = 1;
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            if (pDialog.isShowing())
+                pDialog.dismiss();
+
+            if(exito==1) {
+                //El registro se ha insertado al completo y la imagen se ha subido al servidor FTP.
+                if(resUpdate != 1)
+                    new MostrarMensaje(EditarCiudad.this).mostrarMensaje(getString(R.string.tituloidciudadsubcats),
+                            getString(R.string.textoidciudadsubcats), getString(R.string.aceptar));
+                else
+                    finish();
+            }
         }
     }
 }

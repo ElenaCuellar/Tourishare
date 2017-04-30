@@ -85,4 +85,16 @@
     <string name="navOpen">Open Navigation Drawer</string>
     <string name="edciudadsearchmapa">Google search</string>
     <string name="error">Error</string>
+    <string name="textoidsubcatultima">Las Subcategories ID not found</string>
+    <string name="tituloidsubcatultima">ID not found</string>
+    <string name="espereAddSubcat">Adding subcategory. Please wait ...</string>
+    <string name="textodiaginsertsubcat">Choose a pic and a name</string>
+    <string name="textodiagsubcatcreada">Subcategor added</string>
+    <string name="titulodiagsubcatcreada">Subctegory added</string>
+    <string name="espereAddCiudad">Adding city. Please wait ...</string>
+    <string name="textoidciudadsubcats">Error while updating subcategory data on this city</string>
+    <string name="tituloidciudadsubcats">Updating error</string>
+    <string name="esperellenarlistaprincipal">Updating main list. Please wait ...</string>
+    <string name="textoproblemaactulistaprincipal">Error while updating cities main list</string>
+    <string name="tituloproblemaactulistaprincipal">Error while updating</string>
 </resources>

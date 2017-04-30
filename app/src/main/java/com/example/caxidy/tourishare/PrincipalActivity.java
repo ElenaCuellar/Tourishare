@@ -1,10 +1,14 @@
 package com.example.caxidy.tourishare;
 
 import android.app.ListActivity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -20,16 +24,25 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import java.io.IOException;
+import java.util.ArrayList;
 
 public class PrincipalActivity extends ListActivity implements AppCompatCallback, NavigationView.OnNavigationItemSelectedListener{
 
     private AppCompatDelegate delegate;
 
     Usuario miUsuario;
+    AdaptadorPrincipal adaptadorP;
+    ArrayList<Ciudad> listaCiudades;
+    ListView listview;
+    private String ip_server;
+    private String url_select;
+    private ProgressDialog pDialog;
+    private OperacionesBD opDb;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,6 +77,51 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
         TextView navc = (TextView)hView.findViewById(R.id.navCiudad);
         navc.setText(miUsuario.getCiudad());
 
+        //Recuperar la IP de las preferencias
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        ip_server = sharedPref.getString("ipServer","192.168.1.101");
+
+        url_select = "http://" + ip_server + "/archivosphp/consulta.php";
+
+        opDb = new OperacionesBD();
+
+        //Creamos la lista de ciudades
+        listaCiudades = new ArrayList<>();
+        llenarLista();
+
+        listview = (ListView) findViewById(android.R.id.list);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView adapter, View view, int position, long arg)
+            {
+                long ciu = listview.getAdapter().getItemId(position);
+                //Abrir la actividad para mostrar la ciudad
+                abrirCiudad(ciu);
+            }
+        });
+
+    }
+
+    public void abrirCiudad(long ciu){
+        //Se abre la actividad que muestra la ciudad, pasandole la id de la ciudad, para recuperar los datos en la nueva actividad
+        /*Intent i = new Intent(this,Modificacion.class); //!!
+        i.putExtra("codigoCiu",ciu);
+        startActivity(i);*/
+    }
+
+    public void llenarLista(){
+        listaCiudades.clear();
+        //Llenar la lista de ciudades
+        new GetCiudadesAsyncTask().execute();
+    }
+
+    @Override
+    protected void onRestart () {
+        super.onRestart();
+        adaptadorP = null;
+        adaptadorP = new AdaptadorPrincipal(this,listaCiudades, ip_server);
+        adaptadorP.notifyDataSetChanged();
+        setListAdapter(adaptadorP);
     }
 
     @Override
@@ -145,4 +203,44 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
         img.setImageDrawable(dr);
         img.setAdjustViewBounds(true);
     }
+
+    //Tarea asincrona para llenar la lista de ciudades
+    class GetCiudadesAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pDialog = new ProgressDialog(PrincipalActivity.this);
+            pDialog.setMessage(getString(R.string.esperellenarlistaprincipal));
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+
+            listaCiudades = opDb.getCiudades(url_select);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            if (pDialog.isShowing())
+                pDialog.dismiss();
+
+            if(listaCiudades != null) {
+                adaptadorP = new AdaptadorPrincipal(PrincipalActivity.this, listaCiudades, ip_server);
+                adaptadorP.notifyDataSetChanged();
+                setListAdapter(adaptadorP);
+            }
+            else
+                new MostrarMensaje(PrincipalActivity.this).mostrarMensaje(getString(R.string.tituloproblemaactulistaprincipal),
+                        getString(R.string.textoproblemaactulistaprincipal),getString(R.string.aceptar));
+        }
+    }
+
 }
