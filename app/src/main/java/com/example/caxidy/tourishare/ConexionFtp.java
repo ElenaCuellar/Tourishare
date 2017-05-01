@@ -63,6 +63,7 @@ public class ConexionFtp {
     }
 
     public Boolean bajarDatos (HashMap<String, String> params, Activity act) throws IOException {
+        //Metodo para descargar una única imagen del servidor FTP
 
         FTPClient ftp = null;
 
@@ -75,11 +76,12 @@ public class ConexionFtp {
             ftp.setFileType(FTP.BINARY_FILE_TYPE);
             ftp.enterLocalPassiveMode();
 
+            //Creamos un archivo de imagen temporal en la carpeta del proyecto, para poder acceder a la imagen y ponerla en un ImageView
             OutputStream outputStream = null;
             boolean success = false;
             try {
                 outputStream = new BufferedOutputStream(new FileOutputStream(
-                        new File(act.getExternalFilesDir(null), "temporal.jpg")));
+                        new File(act.getExternalFilesDir(null), params.get("temporalpath"))));
                 success = ftp.retrieveFile(params.get("downloadpath"), outputStream);
             } finally {
                 if (outputStream != null) {
@@ -94,6 +96,58 @@ public class ConexionFtp {
                 ftp.disconnect();
             }
         }
+    }
 
+    public Boolean bajarArchivos (String host, Activity act) throws IOException {
+
+        FTPClient ftp = null;
+        OutputStream outputStream = null;
+        boolean success = false;
+        int totalArchivos = 0;
+        int sizeArchivos = 0;
+
+        try {
+            ftp = new FTPClient();
+            ftp.setConnectTimeout(1500000);
+            ftp.connect(host);
+
+            ftp.login("tourishare", "root");
+            ftp.setFileType(FTP.BINARY_FILE_TYPE);
+            ftp.enterLocalPassiveMode();
+
+            //Obtenemos la lista de archivos
+            FTPFile[] archivos = ftp.listFiles("archivosFilezilla");
+
+            //Vamos descargando cada uno de los archivos en el directorio del proyecto
+            if(archivos.length > 0) {
+                for (int i = 0; i < archivos.length; i++){
+                    if(archivos[i].isFile() && archivos[i].getName().contains(".jpg")){
+                        sizeArchivos++;
+                        try {
+                            outputStream = new BufferedOutputStream(new FileOutputStream(
+                                    new File(act.getExternalFilesDir(null), archivos[i].getName())));
+                            success = ftp.retrieveFile("archivosFilezilla/" + archivos[i].getName(), outputStream);
+                        } finally {
+                            if (outputStream != null) {
+                                outputStream.close();
+                            }
+                        }
+                        if(success)
+                            totalArchivos++;
+                    }
+                }
+            }
+
+            //Si se han descargado todos los archivos satisfactoriamente...
+            if(totalArchivos == sizeArchivos)
+                return true;
+            else
+                return false;
+        } finally {
+            if (ftp != null) {
+                ftp.logout();
+                ftp.disconnect();
+            }
+        }
     }
 }

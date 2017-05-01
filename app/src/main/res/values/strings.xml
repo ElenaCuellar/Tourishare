@@ -107,12 +107,17 @@
     <string name="textoidciudadsubcats">Error al actualizar los datos de las subcategorías de esta ciudad</string>
     <string name="tituloproblemaactulistaprincipal">Problema al actualizar</string>
     <string name="textoproblemaactulistaprincipal">Problema al actualizar la lista principal de ciudades.</string>
+    <string name="titulodatosiniciales">Fallo con los datos iniciales</string>
+    <string name="textodatosiniciales">Fallo al descargar los datos iniciales.</string>
+    <string name="titulociudadagregada">Ciudad agregada</string>
+    <string name="textociudadagregada">La nueva ciudad se ha agregado a la lista.</string>
 
     <!--Login-->
     <string name="espereLogin">Entrando en la app. Espere, por favor ...</string>
     <string name="espereAddSubcat">Insertando subcategoria. Espere, por favor ...</string>
     <string name="espereAddCiudad">Insertando ciudad. Espere, por favor ...</string>
     <string name="esperellenarlistaprincipal">Actualizando la lista principal. Espere, por favor ...</string>
+    <string name="esperebajarfotos">Descargando datos iniciales. Espere, por favor ...</string>
 
     <!--otras -->
     <string name="espereNuevoUser">Insertando registro y subiendo foto. Espere, por favor...</string>

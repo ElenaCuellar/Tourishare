@@ -56,6 +56,8 @@
 
         <activity android:name=".EditarSubcategoria"/>
 
+        <activity android:name=".MostrarCiudad"/>
+
         <activity
             android:name=".PrincipalActivity"
             android:theme="@style/AppTheme.NoActionBar"/>

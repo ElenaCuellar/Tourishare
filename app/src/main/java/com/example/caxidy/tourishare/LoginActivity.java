@@ -56,9 +56,11 @@ public class LoginActivity extends AppCompatActivity{
 
     public void lanzarActividadPrincipal(){
         Intent intent = new Intent(this,PrincipalActivity.class);
+        intent.putExtra("miIdUser",miUser.getId());
         intent.putExtra("miNombre",miUser.getNombre());
         intent.putExtra("miPass",miUser.getPass());
         intent.putExtra("miFoto",miUser.getUrlfoto());
+        intent.putExtra("miIdRango",miUser.getIdRango());
         intent.putExtra("miCiudad",miUser.getCiudad());
         startActivity(intent);
     }

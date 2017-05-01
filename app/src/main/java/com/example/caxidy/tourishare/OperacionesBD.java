@@ -14,6 +14,7 @@ public class OperacionesBD {
 
     ConexionHttpSelect conex;
     ConexionHttpUpdateDelete conexUp;
+    ConexionHttpInsert conexInsert;
     String consulta;
     JSONArray jsonArrResultado;
     JSONObject jsonOb;
@@ -21,6 +22,7 @@ public class OperacionesBD {
     public OperacionesBD(){
         conex = new ConexionHttpSelect();
         conexUp = new ConexionHttpUpdateDelete();
+        conexInsert = new ConexionHttpInsert();
         jsonArrResultado = new JSONArray();
         jsonOb = new JSONObject();
 
@@ -64,8 +66,9 @@ public class OperacionesBD {
             //Sacamos el objeto JSON y pasamos sus datos a un objeto Usuario
             if (jsonArrResultado != null) {
                 JSONObject jsonObject = jsonArrResultado.getJSONObject(0);
-                Usuario us = new Usuario(jsonObject.getString("Nombre"),jsonObject.getString("Password"),
-                        jsonObject.getString("UrlFoto"),jsonObject.getString("ciudad"));
+                Usuario us = new Usuario(jsonObject.getInt("idUsuario"),
+                        jsonObject.getString("Nombre"),jsonObject.getString("Password"),
+                        jsonObject.getString("UrlFoto"),jsonObject.getInt("idRango"), jsonObject.getString("ciudad"));
                 return us;
             }
         }catch(Exception e){
@@ -114,6 +117,22 @@ public class OperacionesBD {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    public void agregarColab (String linkInsert, int idC, int idUsuario){
+        //INSERT INTO colaboradores (IdCiudad, IdUsuario) VALUES (idC, idU);
+
+        try {
+            //Agregamos un nuevo colaborador
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("IdCiudad", Integer.toString(idC));
+            parametros.put("IdUsuario", Integer.toString(idUsuario));
+            conexInsert.serverData(linkInsert, parametros);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     public int updateIdCiudadSubcategorias(String linkConsulta, int idC, ArrayList<Integer> idsS) {
@@ -168,6 +187,109 @@ public class OperacionesBD {
                     arrCiudad.add(i,c);
                 }
                 return arrCiudad;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Ciudad getCiudad(String linkConsulta, long id) {
+        //SELECT * FROM ciudades WHERE IdCiudad = id;
+        consulta="SELECT * FROM ciudades WHERE IdCiudad = " + (int)id;
+
+        try {
+            //Realizar la consulta que devolvera un array de JSON
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            jsonArrResultado = conex.sendRequest(linkConsulta, parametros);
+
+            //Sacamos el objeto JSON
+            if (jsonArrResultado != null) {
+                JSONObject jsonObject = jsonArrResultado.getJSONObject(0);
+                Ciudad c = new Ciudad(jsonObject.getInt("IdCiudad"),
+                        jsonObject.getString("Nombre"),jsonObject.getString("Descripcion"),
+                        jsonObject.getString("UrlFoto"),jsonObject.getDouble("Latitud"),jsonObject.getDouble("Longitud"));
+                return c;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean sigueCiudad(String linkConsulta, long idC, int id) {
+        //comprueba si un usuario sigue a una ciudad (la tiene en favoritos) o no
+        //SELECT COUNT(*) FROM ciudadesfav WHERE IdCiudad = idC AND IdUsuario = id;
+        consulta="SELECT COUNT(*) AS total FROM ciudadesfav WHERE IdCiudad = " + (int)idC + " AND IdUsuario = " + id;
+
+        try {
+            //Realizar la consulta que devolvera un array de JSON
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            jsonArrResultado = conex.sendRequest(linkConsulta, parametros);
+
+            //Sacamos el objeto JSON
+            if (jsonArrResultado != null) {
+                JSONObject jsonObject = jsonArrResultado.getJSONObject(0);
+                if(jsonObject.getInt("total") > 0)
+                    return true;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void updateSigueCiudad(boolean marcado, String linkConsultaDel, String linkConsultaInsert, long idC, int idU) {
+        //DELETE FROM ciudadesfav WHERE IdCiudad = idC AND IdUsuario = idU;
+        //INSERT INTO ciudadesfav (IdCiudad, IdUsuario) VALUES (idC, idU);
+
+        consulta="DELETE FROM ciudadesfav WHERE IdCiudad = " + idC + " AND IdUsuario = " +idU;
+
+        try {
+            //Primero hacemos el delete, por si ya existia
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            conexUp.sendRequest(linkConsultaDel, parametros);
+
+            if(marcado) {
+                //Ahora hacemos el insert, en caso de que el boton de seguir estuviese marcado
+                parametros.clear();
+                parametros.put("IdCiudad", Long.toString(idC));
+                parametros.put("IdUsuario", Integer.toString(idU));
+                conexInsert.serverData(linkConsultaInsert, parametros);
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<Usuario> updateSpinnerColaboradores(String linkConsulta, int id){
+        //SELECT * FROM usuarios WHERE IdUsuario IN (SELECT IdUsuario FROM colaboradores WHERE IdCiudad = id)
+
+        consulta = "SELECT * FROM usuarios WHERE IdUsuario IN (SELECT IdUsuario FROM colaboradores WHERE IdCiudad = " + id + ")";
+
+        ArrayList<Usuario> arrUsers = new ArrayList<>();
+
+        try {
+            //Realizar la consulta que devolvera un array de JSON
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            jsonArrResultado = conex.sendRequest(linkConsulta, parametros);
+
+            //Recorremos el jsonarray con los distintos usuarios
+            if (jsonArrResultado != null) {
+                System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                for (int i = 0; i < jsonArrResultado.length(); i++) {
+                    JSONObject jsonObject = jsonArrResultado.getJSONObject(i);
+                    Usuario u = new Usuario(jsonObject.getInt("idUsuario"),jsonObject.getString("Nombre"),
+                            jsonObject.getString("Password"),jsonObject.getString("UrlFoto"),
+                            jsonObject.getInt("idRango"),jsonObject.getString("ciudad"));
+                    arrUsers.add(u);
+                }
+                return arrUsers;
             }
         }catch(Exception e){
             e.printStackTrace();

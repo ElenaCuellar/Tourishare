@@ -61,7 +61,7 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
     OperacionesBD opBd;
     Calendar calendario;
     Ciudad ciudad;
-    int idC;
+    int idC, idUsuario;
 
     private JSONObject json;
     private int exito=0;
@@ -69,6 +69,7 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
     private String url_select;
     private String url_insert;
     private String url_update;
+    private String url_insert_colab;
     private ProgressDialog pDialog;
     private ConexionHttpInsert conexion;
     private ConexionFtp conexionftp;
@@ -105,6 +106,11 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
         bAceptar = (Button) findViewById(R.id.edbotonciudadAceptar);
         bSearchM = (Button) findViewById(R.id.edbotonciudadSearchmapa);
 
+        Bundle extras = getIntent().getExtras();
+
+        if(extras != null)
+            idUsuario = extras.getInt("idUsua");
+
         opBd = new OperacionesBD();
 
         //Recuperar la IP de las preferencias
@@ -116,6 +122,8 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
         url_select = "http://" + ip_server + "/archivosphp/consulta.php";
 
         url_update = "http://" + ip_server + "/archivosphp/update.php";
+
+        url_insert_colab = "http://" + ip_server + "/archivosphp/insert_nuevaciudadcolab.php";
 
         conexion = new ConexionHttpInsert();
 
@@ -425,6 +433,9 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
                         if (idC != -1) {
                             //actualizamos el campo idCiudad de las subcats
                             resUpdate = opBd.updateIdCiudadSubcategorias(url_update, idC, idsSubcats);
+
+                            //añadimos el colaborador
+                            opBd.agregarColab(url_insert_colab,idC,idUsuario);
                         }
                     }
                     else
@@ -449,8 +460,11 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
                 if(resUpdate != 1)
                     new MostrarMensaje(EditarCiudad.this).mostrarMensaje(getString(R.string.tituloidciudadsubcats),
                             getString(R.string.textoidciudadsubcats), getString(R.string.aceptar));
-                else
+                else {
+                    Intent intent = new Intent();
+                    setResult(RESULT_OK,intent);
                     finish();
+                }
             }
         }
     }

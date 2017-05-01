@@ -13,8 +13,8 @@ public class Usuario {
         id = -1;
     }
 
-    public Usuario(int id, String nombre, String pass, String urlfoto, String ciudad) {
-        this.idRango = 1;
+    public Usuario(int id, String nombre, String pass, String urlfoto, int idRango, String ciudad) {
+        this.idRango = idRango;
         this.nombre = nombre;
         this.pass = pass;
         this.urlfoto = urlfoto;

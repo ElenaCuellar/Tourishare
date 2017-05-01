@@ -1,15 +1,30 @@
 package com.example.caxidy.tourishare;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity {
 
+    private static final int SERVIDOR_CAMBIADO = 1;
+
     Button bsignup, bentrar, bacercade, bprefsmain;
+    private ProgressDialog pDialog;
+    private String ip_server;
+    ConexionFtp conexFtp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
         bentrar = (Button) findViewById(R.id.bEntrar);
         bacercade = (Button) findViewById(R.id.bAcercade);
         bprefsmain = (Button) findViewById(R.id.bPrefsMain);
+
+        conexFtp = new ConexionFtp();
 
         bsignup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
                 verPreferencias();
             }
         });
+
+        //Descargamos las fotos del FTP de forma temporal
+        descargaFotos();
     }
 
     protected void verActividadSignup(){
@@ -69,6 +89,77 @@ public class MainActivity extends AppCompatActivity {
 
     protected void verPreferencias(){
         Intent i = new Intent(this,Preferencias.class);
-        startActivity(i);
+        startActivityForResult(i,SERVIDOR_CAMBIADO);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == SERVIDOR_CAMBIADO && resultCode == RESULT_OK)
+            //Actualizamos la descarga de fotos
+            descargaFotos();
+    }
+
+    protected void descargaFotos(){
+
+        //Actualizamos la ip del servidor
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        ip_server = sharedPref.getString("ipServer","192.168.1.101");
+
+        //Borramos las fotos, si las hubiere
+        File miRuta = getExternalFilesDir(null);
+        File archivos[] = miRuta.listFiles();
+
+        if(archivos.length > 0) {
+            for (int i = 0; i < archivos.length; i++) {
+                //si el archivo no es un directorio y es una imagen, se borra
+                if (archivos[i].isFile() && archivos[i].getName().contains(".jpg")) {
+                    archivos[i].delete();
+                }
+            }
+        }
+
+        //Descargamos todas las fotos de forma temporal
+        new GetFotosAsyncTask().execute();
+    }
+
+    //Tarea asincrona para hacer la consulta al servidor ftp
+    class GetFotosAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        boolean downloadok = false;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pDialog = new ProgressDialog(MainActivity.this);
+            pDialog.setMessage(getString(R.string.esperebajarfotos));
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            //Descargar la foto de Filezilla
+            try {
+                downloadok = conexFtp.bajarArchivos(ip_server, MainActivity.this);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            if(pDialog.isShowing())
+                pDialog.dismiss();
+
+            //Si las fotos no se han descargado correctamente...
+            if(!downloadok)
+                new MostrarMensaje(MainActivity.this).mostrarMensaje(getString(R.string.titulodatosiniciales),
+                        getString(R.string.textodatosiniciales),getString(R.string.aceptar));
+        }
     }
 }

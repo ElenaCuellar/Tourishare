@@ -6,12 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -29,9 +27,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class PrincipalActivity extends ListActivity implements AppCompatCallback, NavigationView.OnNavigationItemSelectedListener{
+
+    private static final int CIUDAD_NUEVA = 1;
 
     private AppCompatDelegate delegate;
 
@@ -43,6 +45,7 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
     private String url_select;
     private ProgressDialog pDialog;
     private OperacionesBD opDb;
+    private ConexionFtp conexFtp;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,10 +66,12 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        conexFtp = new ConexionFtp();
+
         //Creamos el objeto usuario con los datos de nuestro perfil
         Bundle datosUser = getIntent().getExtras();
-        miUsuario = new Usuario(datosUser.getString("miNombre"),datosUser.getString("miPass"),
-                datosUser.getString("miFoto"),datosUser.getString("miCiudad"));
+        miUsuario = new Usuario(datosUser.getInt("miIdUser"),datosUser.getString("miNombre"),datosUser.getString("miPass"),
+                datosUser.getString("miFoto"),datosUser.getInt("miIdRango"),datosUser.getString("miCiudad"));
 
         //Ponemos los datos del usuario en la cabecera del navigation drawer
         View hView =  navigationView.getHeaderView(0);
@@ -104,9 +109,10 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
 
     public void abrirCiudad(long ciu){
         //Se abre la actividad que muestra la ciudad, pasandole la id de la ciudad, para recuperar los datos en la nueva actividad
-        /*Intent i = new Intent(this,Modificacion.class); //!!
+        Intent i = new Intent(this,MostrarCiudad.class);
         i.putExtra("codigoCiu",ciu);
-        startActivity(i);*/
+        i.putExtra("miUserId",miUsuario.getId());
+        startActivity(i); //!!startActivityForResult() ?? para actualizar la lista principal
     }
 
     public void llenarLista(){
@@ -119,7 +125,7 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
     protected void onRestart () {
         super.onRestart();
         adaptadorP = null;
-        adaptadorP = new AdaptadorPrincipal(this,listaCiudades, ip_server);
+        adaptadorP = new AdaptadorPrincipal(this,listaCiudades);
         adaptadorP.notifyDataSetChanged();
         setListAdapter(adaptadorP);
     }
@@ -135,13 +141,15 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
         int id = item.getItemId();
 
         if (id == R.id.menuactu) {
-            //!!recargar la lista de ciudades. Volver a sacar todos los datos del servidor - SELECT * FROM Ciudades
+            //recargar la lista de ciudades
+            llenarLista();
         }
 
         else if (id == R.id.menunueva){
             //Añadir nueva ciudad
             Intent i = new Intent(this,EditarCiudad.class);
-            startActivity(i);
+            i.putExtra("idUsua",miUsuario.getId());
+            startActivityForResult(i, CIUDAD_NUEVA);
         }
 
         else if (id == R.id.menuprefs){
@@ -186,26 +194,35 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
         return true;
     }
 
-    //!!para recargar la lista de ciudades con la nueva ciudad, tras añadirla
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == CIUDAD_NUEVA && resultCode == RESULT_OK){
+            new MostrarMensaje(this).mostrarMensaje(getString(R.string.titulociudadagregada),
+                    getString(R.string.textociudadagregada),getString(R.string.aceptar));
+            //para recargar la lista de ciudades con la nueva ciudad, tras añadirla
+            llenarLista();
+        }
     }
 
     public void setImagen(ImageView img){
-        //!!Este metodo hay que cambiarlo para que coja la imagen del usuario del servidor ftp, la pase a bitmap, la redimensione
-        //!!y la ponga en el ImageView
-        Drawable dr;
-        dr = getResources().getDrawable(R.mipmap.ic_launcher);
-        //Bitmap bmResized = Bitmap.createScaledBitmap(bm, 250, 250, true);
-        if (img.getDrawingCache() != null)
-            img.destroyDrawingCache();
-        img.setImageDrawable(dr);
-        img.setAdjustViewBounds(true);
+        //Poner la imagen de usuario en el Navigation Drawer
+
+        File archivoImg = new File(getExternalFilesDir(null) + "/" + miUsuario.getUrlfoto());
+
+        if (archivoImg.exists()) {
+            Bitmap bm = BitmapFactory.decodeFile(archivoImg.getAbsolutePath());
+            Bitmap bmResized = Bitmap.createScaledBitmap(bm, 120, 120, true);
+            if (img.getDrawingCache() != null)
+                img.destroyDrawingCache();
+            img.setImageBitmap(bmResized);
+            img.setAdjustViewBounds(true);
+        }
     }
 
     //Tarea asincrona para llenar la lista de ciudades
     class GetCiudadesAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        boolean downloadok = false;
 
         @Override
         protected void onPreExecute() {
@@ -219,7 +236,27 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
 
         @Override
         protected Void doInBackground(Void... arg0) {
+            //1-Actualizar las fotos
+            //Borramos las fotos, si las hubiere
+            File miRuta = getExternalFilesDir(null);
+            File archivos[] = miRuta.listFiles();
 
+            if(archivos.length > 0) {
+                for (int i = 0; i < archivos.length; i++) {
+                    //si el archivo no es un directorio y es una imagen, se borra
+                    if (archivos[i].isFile() && archivos[i].getName().contains(".jpg")) {
+                        archivos[i].delete();
+                    }
+                }
+            }
+
+            try {
+                downloadok = conexFtp.bajarArchivos(ip_server, PrincipalActivity.this);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //2-Llenar la lista de ciudades
             listaCiudades = opDb.getCiudades(url_select);
 
             return null;
@@ -232,8 +269,8 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
             if (pDialog.isShowing())
                 pDialog.dismiss();
 
-            if(listaCiudades != null) {
-                adaptadorP = new AdaptadorPrincipal(PrincipalActivity.this, listaCiudades, ip_server);
+            if(listaCiudades != null && downloadok) {
+                adaptadorP = new AdaptadorPrincipal(PrincipalActivity.this, listaCiudades);
                 adaptadorP.notifyDataSetChanged();
                 setListAdapter(adaptadorP);
             }

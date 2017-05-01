@@ -97,4 +97,9 @@
     <string name="esperellenarlistaprincipal">Updating main list. Please wait ...</string>
     <string name="textoproblemaactulistaprincipal">Error while updating cities main list</string>
     <string name="tituloproblemaactulistaprincipal">Error while updating</string>
+    <string name="esperebajarfotos">Downloading starting data. Please wait ...</string>
+    <string name="textodatosiniciales">Error while doownloading starting data</string>
+    <string name="titulodatosiniciales">Starting data error</string>
+    <string name="textociudadagregada">The new city has been added to the list.</string>
+    <string name="titulociudadagregada">City added</string>
 </resources>
