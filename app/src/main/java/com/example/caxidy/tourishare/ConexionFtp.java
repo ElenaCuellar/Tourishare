@@ -150,4 +150,28 @@ public class ConexionFtp {
             }
         }
     }
+
+    public boolean borrarArchivo(HashMap<String, String> params) throws IOException{
+        //Metodo para borrar una única imagen del servidor FTP
+
+        FTPClient ftp = null;
+
+        try {
+            ftp = new FTPClient();
+            ftp.setConnectTimeout(1500000);
+            ftp.connect(params.get("host"));
+
+            ftp.login("tourishare", "root");
+            ftp.setFileType(FTP.BINARY_FILE_TYPE);
+            ftp.enterLocalPassiveMode();
+
+            return ftp.deleteFile("archivosFilezilla" + "/" + params.get("nombreFoto"));
+
+        } finally {
+            if (ftp != null) {
+                ftp.logout();
+                ftp.disconnect();
+            }
+        }
+    }
 }

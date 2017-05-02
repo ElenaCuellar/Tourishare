@@ -102,4 +102,11 @@
     <string name="titulodatosiniciales">Starting data error</string>
     <string name="textociudadagregada">The new city has been added to the list.</string>
     <string name="titulociudadagregada">City added</string>
+    <string name="cancelar">Cancel</string>
+    <string name="introduzcaadmin">Write admin pass ...</string>
+    <string name="textoborrarciudad">Confirm city deletion</string>
+    <string name="textopassincorrecta">Invalid admin password</string>
+    <string name="tituloborrarciudad">Delete city</string>
+    <string name="titulopassincorrecta">Invalid password</string>
+    <string name="registroborrado">Row deleted</string>
 </resources>

@@ -26,6 +26,8 @@
     <string name="ciudad">Ciudad</string>
     <string name="rango">Rango</string>
     <string name="error">Error</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="introduzcaadmin">Introduzca pass admin ...</string>
 
     <!--cadenas del menu lateral -->
     <string name="nombrenav">NOMBRE DEL USUARIO</string>
@@ -111,6 +113,11 @@
     <string name="textodatosiniciales">Fallo al descargar los datos iniciales.</string>
     <string name="titulociudadagregada">Ciudad agregada</string>
     <string name="textociudadagregada">La nueva ciudad se ha agregado a la lista.</string>
+    <string name="titulopassincorrecta">Contraseña incorrecta</string>
+    <string name="textopassincorrecta">Contraseña de administrador incorrecta</string>
+    <string name="tituloborrarciudad">Borrar ciudad</string>
+    <string name="textoborrarciudad">¿Está seguro de que quiere eliminar esta ciudad?</string>
+    <string name="registroborrado">Registro eliminado</string>
 
     <!--Login-->
     <string name="espereLogin">Entrando en la app. Espere, por favor ...</string>

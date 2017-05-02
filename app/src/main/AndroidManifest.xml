@@ -52,11 +52,13 @@
 
         <activity android:name=".Preferencias"/>
 
-        <activity android:name=".EditarCiudad"/>
+        <activity android:name=".CrearCiudad"/>
 
-        <activity android:name=".EditarSubcategoria"/>
+        <activity android:name=".CrearSubcategoria"/>
 
         <activity android:name=".MostrarCiudad"/>
+
+        <activity android:name=".EditarCiudad"/>
 
         <activity
             android:name=".PrincipalActivity"

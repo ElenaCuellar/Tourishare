@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -124,10 +123,11 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
     @Override
     protected void onRestart () {
         super.onRestart();
-        adaptadorP = null;
+        /*adaptadorP = null;
         adaptadorP = new AdaptadorPrincipal(this,listaCiudades);
         adaptadorP.notifyDataSetChanged();
-        setListAdapter(adaptadorP);
+        setListAdapter(adaptadorP);*/
+        llenarLista();
     }
 
     @Override
@@ -147,7 +147,7 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
 
         else if (id == R.id.menunueva){
             //Añadir nueva ciudad
-            Intent i = new Intent(this,EditarCiudad.class);
+            Intent i = new Intent(this,CrearCiudad.class);
             i.putExtra("idUsua",miUsuario.getId());
             startActivityForResult(i, CIUDAD_NUEVA);
         }
@@ -199,8 +199,6 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
         if(requestCode == CIUDAD_NUEVA && resultCode == RESULT_OK){
             new MostrarMensaje(this).mostrarMensaje(getString(R.string.titulociudadagregada),
                     getString(R.string.textociudadagregada),getString(R.string.aceptar));
-            //para recargar la lista de ciudades con la nueva ciudad, tras añadirla
-            llenarLista();
         }
     }
 

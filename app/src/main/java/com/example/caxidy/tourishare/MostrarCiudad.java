@@ -2,6 +2,7 @@ package com.example.caxidy.tourishare;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -17,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -40,6 +42,7 @@ public class MostrarCiudad extends AppCompatActivity implements OnMapReadyCallba
     TextView nombre;
     EditText descripcion;
     ToggleButton bSeguir;
+    Button bBorrar, bEditar;
     OperacionesBD opBd;
     private String ip_server;
     private String url_select;
@@ -77,6 +80,8 @@ public class MostrarCiudad extends AppCompatActivity implements OnMapReadyCallba
         nombre = (TextView) findViewById(R.id.textonombreciudad);
         descripcion = (EditText) findViewById(R.id.txdescrpciudad);
         bSeguir = (ToggleButton) findViewById(R.id.bciudadseguir);
+        bBorrar = (Button) findViewById(R.id.botonciudadBorrar);
+        bEditar = (Button) findViewById(R.id.bciudadEditar);
         sp = (Spinner) findViewById(R.id.spcolaboradores);
 
         opBd = new OperacionesBD();
@@ -86,6 +91,28 @@ public class MostrarCiudad extends AppCompatActivity implements OnMapReadyCallba
             public void onClick(View v) {
                 //añadir o quitar de favoritos
                 new SeguirCiudad(bSeguir.isChecked()).start();
+            }
+        });
+
+        bBorrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Borrar los datos de esa ciudad
+                new MostrarMensaje(MostrarCiudad.this).mostrarBorrar(getString(R.string.tituloborrarciudad),
+                        getString(R.string.textoborrarciudad),getString(R.string.aceptar),
+                        (int)id,"ciudades","IdCiudad",url_delete, url_select, ip_server, MostrarCiudad.this, true);
+            }
+        });
+
+        bEditar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Abrir Editar ciudad
+                Intent i = new Intent(MostrarCiudad.this,EditarCiudad.class); //!!EditarCiudad es casi copypasteo de CrearCiudad
+                //!!!, pero con updates en vez d inserts, borrar y luego añadir otra foto, y cosas asi
+                i.putExtra("idUsua",idUsuario);
+                //!!...pasar como extras los datos que apareceran en la nueva actividad por defecto
+                startActivity(i);
             }
         });
 

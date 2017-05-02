@@ -46,7 +46,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class EditarSubcategoria extends AppCompatActivity implements OnMapReadyCallback {
+public class CrearSubcategoria extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final int TU_FOTO = 1;
     private static final int PLACE_AUTOCOMPLETE = 2;
@@ -157,14 +157,14 @@ public class EditarSubcategoria extends AppCompatActivity implements OnMapReadyC
                     //Antes de insertar nada, verificamos los permisos de acceso a media, fotos... (necesario para versiones mayores a la 23)
                     boolean verificado = false;
                     while (!verificado) {
-                        verificado = verificarPermisosAlmacenamiento(EditarSubcategoria.this);
+                        verificado = verificarPermisosAlmacenamiento(CrearSubcategoria.this);
                     }
                     //insertamos...
                     new AgregaSubcatAsyncTask().execute();
                 }
                 else{
                     //Si no, muestra un mensaje avisandonos
-                    new MostrarMensaje(EditarSubcategoria.this).mostrarMensaje(getString(R.string.titulodiagsignup),getString(R.string.textodiaginsertsubcat),
+                    new MostrarMensaje(CrearSubcategoria.this).mostrarMensaje(getString(R.string.titulodiagsignup),getString(R.string.textodiaginsertsubcat),
                             getString(R.string.aceptar));
                 }
             }
@@ -336,7 +336,7 @@ public class EditarSubcategoria extends AppCompatActivity implements OnMapReadyC
         protected void onPreExecute() {
             super.onPreExecute();
 
-            pDialog = new ProgressDialog(EditarSubcategoria.this);
+            pDialog = new ProgressDialog(CrearSubcategoria.this);
             pDialog.setMessage(getString(R.string.espereAddSubcat));
             pDialog.setCancelable(false);
             pDialog.show();

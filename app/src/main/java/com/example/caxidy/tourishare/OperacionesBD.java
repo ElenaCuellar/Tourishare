@@ -281,7 +281,6 @@ public class OperacionesBD {
 
             //Recorremos el jsonarray con los distintos usuarios
             if (jsonArrResultado != null) {
-                System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 for (int i = 0; i < jsonArrResultado.length(); i++) {
                     JSONObject jsonObject = jsonArrResultado.getJSONObject(i);
                     Usuario u = new Usuario(jsonObject.getInt("idUsuario"),jsonObject.getString("Nombre"),
@@ -295,6 +294,69 @@ public class OperacionesBD {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public String getNombreFoto(String linkConsulta, String tabla, String condicion, int id) {
+        //SELECT UrlFoto FROM tabla WHERE condicion = id;
+        consulta="SELECT UrlFoto FROM " + tabla + " WHERE " + condicion + " = " + id;
+
+        try {
+            //Realizar la consulta
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            jsonArrResultado = conex.sendRequest(linkConsulta, parametros);
+
+            //Sacamos el objeto JSON y sacamos la id
+            if (jsonArrResultado != null) {
+                JSONObject jsonObject = jsonArrResultado.getJSONObject(0);
+                return jsonObject.getString("UrlFoto");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public void borrarRegistro(String linkConsultaDel, String tabla, String condicion, int id){
+        //DELETE FROM tabla WHERE condicion = id;
+
+        consulta="DELETE FROM " + tabla + " WHERE " + condicion + " = " + id;
+
+        try {
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            conexUp.sendRequest(linkConsultaDel, parametros);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<Integer> getIdsSubcategorias(String linkConsulta, int idC){
+        //SELECT IdItem FROM items WHERE IdCiudad = idC;
+
+        consulta = "SELECT IdItem FROM items WHERE IdCiudad = " + idC;
+
+        ArrayList<Integer> arrIds = new ArrayList<>();
+
+        try {
+            //Realizar la consulta
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            jsonArrResultado = conex.sendRequest(linkConsulta, parametros);
+
+            //Sacamos el objeto JSON y sacamos la id
+            if (jsonArrResultado != null) {
+                for (int i = 0; i < jsonArrResultado.length(); i++) {
+                    JSONObject jsonObject = jsonArrResultado.getJSONObject(i);
+                    arrIds.add(jsonObject.getInt("IdItem"));
+                }
+                return arrIds;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+
     }
 
 }
