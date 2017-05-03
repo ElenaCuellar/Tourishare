@@ -34,9 +34,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MostrarCiudad extends AppCompatActivity implements OnMapReadyCallback {
+
+    private static final int EDITAR_CIUDAD = 1;
 
     ImageView foto;
     TextView nombre;
@@ -44,6 +47,7 @@ public class MostrarCiudad extends AppCompatActivity implements OnMapReadyCallba
     ToggleButton bSeguir;
     Button bBorrar, bEditar;
     OperacionesBD opBd;
+    ConexionFtp conexFtp;
     private String ip_server;
     private String url_select;
     private String url_insert;
@@ -56,6 +60,7 @@ public class MostrarCiudad extends AppCompatActivity implements OnMapReadyCallba
     Spinner sp;
     ArrayAdapter<String> adp;
     ArrayList<String> nombresUsers;
+    boolean nuevaFoto;
 
     private double lat, longi;
     private SupportMapFragment mapaFragment;
@@ -84,7 +89,12 @@ public class MostrarCiudad extends AppCompatActivity implements OnMapReadyCallba
         bEditar = (Button) findViewById(R.id.bciudadEditar);
         sp = (Spinner) findViewById(R.id.spcolaboradores);
 
+        //!!añadir botones de subcats y hacerles su funcionalidad + funcionalidad del spinner de colab
+
+        nuevaFoto = false;
+
         opBd = new OperacionesBD();
+        conexFtp = new ConexionFtp();
 
         bSeguir.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,11 +118,15 @@ public class MostrarCiudad extends AppCompatActivity implements OnMapReadyCallba
             @Override
             public void onClick(View v) {
                 //Abrir Editar ciudad
-                Intent i = new Intent(MostrarCiudad.this,EditarCiudad.class); //!!EditarCiudad es casi copypasteo de CrearCiudad
-                //!!!, pero con updates en vez d inserts, borrar y luego añadir otra foto, y cosas asi
+                Intent i = new Intent(MostrarCiudad.this,EditarCiudad.class);
                 i.putExtra("idUsua",idUsuario);
-                //!!...pasar como extras los datos que apareceran en la nueva actividad por defecto
-                startActivity(i);
+                i.putExtra("idCiu",(int)id);
+                i.putExtra("editnombre",nombre.getText().toString());
+                i.putExtra("editdescrp",descripcion.getText().toString());
+                i.putExtra("editlat",lat);
+                i.putExtra("editlongi",longi);
+                i.putExtra("editurlfoto",ciudad.getUrlfoto());
+                startActivityForResult(i,EDITAR_CIUDAD);
             }
         });
 
@@ -172,6 +186,16 @@ public class MostrarCiudad extends AppCompatActivity implements OnMapReadyCallba
         return bmpWithBorder;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == EDITAR_CIUDAD && resultCode == RESULT_OK) {
+            nuevaFoto =true;
+            new MuestraCiudadAsyncTask().execute();
+        }
+    }
+
     //Hilos para seguir o dejar de seguir una ciudad
     class SeguirCiudad extends Thread {
 
@@ -197,13 +221,22 @@ public class MostrarCiudad extends AppCompatActivity implements OnMapReadyCallba
             super.onPreExecute();
 
             pDialog = new ProgressDialog(MostrarCiudad.this);
-            pDialog.setMessage(getString(R.string.espereAddCiudad));
+            pDialog.setMessage(getString(R.string.esperemostrarciudad));
             pDialog.setCancelable(false);
             pDialog.show();
         }
 
         @Override
         protected Void doInBackground(Void... arg0) {
+
+            //Si hemos actualizado los datos del registro, tenemos que actualizar tambien las fotos
+            if(nuevaFoto) {
+                try {
+                    conexFtp.bajarArchivos(ip_server, MostrarCiudad.this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
             ciudad = opBd.getCiudad(url_select,id);
 

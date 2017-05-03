@@ -1,6 +1,7 @@
 package com.example.caxidy.tourishare;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -119,15 +120,35 @@ public class OperacionesBD {
         return -1;
     }
 
-    public void agregarColab (String linkInsert, int idC, int idUsuario){
+    public boolean nuevoColaborador(String linkConsulta,int idC, int idUsuario) throws JSONException {
+        //SELECT COUNT(*) FROM colaboradores WHERE IdCiudad = idC AND IdUsuario = idUsuario
+
+        consulta = "SELECT COUNT(*) AS total FROM colaboradores WHERE IdCiudad = " + idC + " AND IdUsuario = " + idUsuario;
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("ins_sql", consulta);
+        jsonArrResultado = conex.sendRequest(linkConsulta, params);
+
+        if (jsonArrResultado != null) {
+            if (jsonArrResultado.getJSONObject(0).getInt("total") <= 0)
+                return true;
+        }
+
+        return false;
+    }
+
+    public void agregarColab (String linkInsert, int idC, int idUsuario, boolean nuevo){
+        //Si el colaborador no existe, lo agregamos
         //INSERT INTO colaboradores (IdCiudad, IdUsuario) VALUES (idC, idU);
 
         try {
-            //Agregamos un nuevo colaborador
-            HashMap<String, String> parametros = new HashMap<>();
-            parametros.put("IdCiudad", Integer.toString(idC));
-            parametros.put("IdUsuario", Integer.toString(idUsuario));
-            conexInsert.serverData(linkInsert, parametros);
+            if(nuevo) {
+                //Agregamos un nuevo colaborador
+                HashMap<String, String> parametros = new HashMap<>();
+                parametros.put("IdCiudad", Integer.toString(idC));
+                parametros.put("IdUsuario", Integer.toString(idUsuario));
+                conexInsert.serverData(linkInsert, parametros);
+            }
 
         }catch(Exception e){
             e.printStackTrace();
@@ -357,6 +378,28 @@ public class OperacionesBD {
         }
         return null;
 
+    }
+
+    public boolean modificarCiudad(String linkConsultaUp, int id, Ciudad ciudad){
+        //UPDATE ciudades SET .... WHERE IdCiudad = id
+
+        consulta="UPDATE ciudades SET Nombre = '" + ciudad.getNombre() +"', Descripcion = '" +
+                ciudad.getDescripcion() + "', UrlFoto = '"+ ciudad.getUrlfoto()+ "', Latitud = " +
+                ciudad.getLatitud() + ", Longitud = " + ciudad.getLongitud() + " WHERE IdCiudad = " + id;
+
+        try {
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            JSONObject json = conexUp.sendRequest(linkConsultaUp, parametros);
+
+            if(json != null && json.getInt("success") != 0)
+                return true;
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
 }

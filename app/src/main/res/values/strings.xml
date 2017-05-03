@@ -125,6 +125,8 @@
     <string name="espereAddCiudad">Insertando ciudad. Espere, por favor ...</string>
     <string name="esperellenarlistaprincipal">Actualizando la lista principal. Espere, por favor ...</string>
     <string name="esperebajarfotos">Descargando datos iniciales. Espere, por favor ...</string>
+    <string name="espereactualizandociudad">Actualizando ciudad. Espere, por favor ...</string>
+    <string name="esperemostrarciudad">Mostrando ciudad. Espere, por favor ...</string>
 
     <!--otras -->
     <string name="espereNuevoUser">Insertando registro y subiendo foto. Espere, por favor...</string>

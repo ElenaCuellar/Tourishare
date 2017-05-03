@@ -434,7 +434,7 @@ public class CrearCiudad extends AppCompatActivity implements OnMapReadyCallback
                             resUpdate = opBd.updateIdCiudadSubcategorias(url_update, idC, idsSubcats);
 
                             //añadimos el colaborador
-                            opBd.agregarColab(url_insert_colab,idC,idUsuario);
+                            opBd.agregarColab(url_insert_colab,idC,idUsuario, true);
                         }
                     }
                     else

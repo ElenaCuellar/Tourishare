@@ -109,4 +109,6 @@
     <string name="tituloborrarciudad">Delete city</string>
     <string name="titulopassincorrecta">Invalid password</string>
     <string name="registroborrado">Row deleted</string>
+    <string name="espereactualizandociudad">Updating city. Please wait ...</string>
+    <string name="esperemostrarciudad">Showing city. Please wait ...</string>
 </resources>
