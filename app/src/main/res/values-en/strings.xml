@@ -94,8 +94,8 @@
     <string name="espereAddCiudad">Adding city. Please wait ...</string>
     <string name="textoidciudadsubcats">Error while updating subcategory data on this city</string>
     <string name="tituloidciudadsubcats">Updating error</string>
-    <string name="esperellenarlistaprincipal">Updating main list. Please wait ...</string>
-    <string name="textoproblemaactulistaprincipal">Error while updating cities main list</string>
+    <string name="esperellenarlistaprincipal">Updating list. Please wait ...</string>
+    <string name="textoproblemaactulistaprincipal">Error while updating list</string>
     <string name="tituloproblemaactulistaprincipal">Error while updating</string>
     <string name="esperebajarfotos">Downloading starting data. Please wait ...</string>
     <string name="textodatosiniciales">Error while doownloading starting data</string>
@@ -111,4 +111,9 @@
     <string name="registroborrado">Row deleted</string>
     <string name="espereactualizandociudad">Updating city. Please wait ...</string>
     <string name="esperemostrarciudad">Showing city. Please wait ...</string>
+    <string name="textoborrarsubcat">Confirm subcategory deletion</string>
+    <string name="tituloborrarsubcat">Delete subcategory</string>
+    <string name="esperemostrarsubcat">Showing subcategory. Please wait ...</string>
+    <string name="espereactualizandosubcat">Updating subcategory. Please wait ...</string>
+    <string name="textoeditarsubcaterroractu">Error while updating subcategory</string>
 </resources>

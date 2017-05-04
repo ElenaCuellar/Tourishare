@@ -111,7 +111,7 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
         Intent i = new Intent(this,MostrarCiudad.class);
         i.putExtra("codigoCiu",ciu);
         i.putExtra("miUserId",miUsuario.getId());
-        startActivity(i); //!!startActivityForResult() ?? para actualizar la lista principal
+        startActivity(i);
     }
 
     public void llenarLista(){

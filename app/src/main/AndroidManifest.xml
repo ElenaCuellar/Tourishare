@@ -60,6 +60,12 @@
 
         <activity android:name=".EditarCiudad"/>
 
+        <activity android:name=".ListaSubcategoria"/>
+
+        <activity android:name=".MostrarSubcategoria"/>
+
+        <activity android:name=".EditarSubcategoria"/>
+
         <activity
             android:name=".PrincipalActivity"
             android:theme="@style/AppTheme.NoActionBar"/>

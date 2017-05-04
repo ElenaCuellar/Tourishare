@@ -108,7 +108,7 @@
     <string name="tituloidciudadsubcats">Error al actualizar</string>
     <string name="textoidciudadsubcats">Error al actualizar los datos de las subcategorías de esta ciudad</string>
     <string name="tituloproblemaactulistaprincipal">Problema al actualizar</string>
-    <string name="textoproblemaactulistaprincipal">Problema al actualizar la lista principal de ciudades.</string>
+    <string name="textoproblemaactulistaprincipal">Problema al actualizar la lista.</string>
     <string name="titulodatosiniciales">Fallo con los datos iniciales</string>
     <string name="textodatosiniciales">Fallo al descargar los datos iniciales.</string>
     <string name="titulociudadagregada">Ciudad agregada</string>
@@ -118,15 +118,20 @@
     <string name="tituloborrarciudad">Borrar ciudad</string>
     <string name="textoborrarciudad">¿Está seguro de que quiere eliminar esta ciudad?</string>
     <string name="registroborrado">Registro eliminado</string>
+    <string name="tituloborrarsubcat">Borrar subcategoría</string>
+    <string name="textoborrarsubcat">¿Está seguro de que quiere eliminar esta subcategoría?</string>
+    <string name="textoeditarsubcaterroractu">Error al actualizar la subcategoría</string>
 
     <!--Login-->
     <string name="espereLogin">Entrando en la app. Espere, por favor ...</string>
     <string name="espereAddSubcat">Insertando subcategoria. Espere, por favor ...</string>
     <string name="espereAddCiudad">Insertando ciudad. Espere, por favor ...</string>
-    <string name="esperellenarlistaprincipal">Actualizando la lista principal. Espere, por favor ...</string>
+    <string name="esperellenarlistaprincipal">Actualizando la lista. Espere, por favor ...</string>
     <string name="esperebajarfotos">Descargando datos iniciales. Espere, por favor ...</string>
     <string name="espereactualizandociudad">Actualizando ciudad. Espere, por favor ...</string>
     <string name="esperemostrarciudad">Mostrando ciudad. Espere, por favor ...</string>
+    <string name="esperemostrarsubcat">Mostrando subcategoría. Espere, por favor ...</string>
+    <string name="espereactualizandosubcat">Actualizando subcategoría. Espere, por favor ...</string>
 
     <!--otras -->
     <string name="espereNuevoUser">Insertando registro y subiendo foto. Espere, por favor...</string>

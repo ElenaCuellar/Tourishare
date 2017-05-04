@@ -1,12 +1,11 @@
 package com.example.caxidy.tourishare;
 
 public class Subcategoria {
-    int idCategoria, id;
+    int idCategoria, id, idCiudad;
     String nombre, descripcion, urlfoto;
-    double latitud, longitud;
-    float puntuacion;
+    double latitud, longitud, puntuacion;
 
-    public Subcategoria(int idCategoria, String nombre, String descripcion, String urlfoto, double latitud, double longitud, float puntuacion) {
+    public Subcategoria(int idCategoria, String nombre, String descripcion, String urlfoto, double latitud, double longitud, double puntuacion) {
         this.idCategoria = idCategoria;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -18,8 +17,9 @@ public class Subcategoria {
         id = -1;
     }
 
-    public Subcategoria(int id, int idCategoria, String nombre, String descripcion, String urlfoto, double latitud, double longitud, float puntuacion) {
+    public Subcategoria(int id, int idCiudad, int idCategoria, String nombre, String descripcion, String urlfoto, double latitud, double longitud, double puntuacion) {
         this.idCategoria = idCategoria;
+        this.idCiudad = idCiudad;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.urlfoto = urlfoto;
@@ -74,11 +74,11 @@ public class Subcategoria {
         return longitud;
     }
 
-    public void setLongitud(float longitud) {
+    public void setLongitud(double longitud) {
         this.longitud = longitud;
     }
 
-    public float getPuntuacion() {
+    public double getPuntuacion() {
         return puntuacion;
     }
 
@@ -88,5 +88,13 @@ public class Subcategoria {
 
     public int getId() {
         return id;
+    }
+
+    public int getIdCiudad() {
+        return idCiudad;
+    }
+
+    public void setIdCiudad(int idCiudad) {
+        this.idCiudad = idCiudad;
     }
 }

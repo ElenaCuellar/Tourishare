@@ -24,7 +24,7 @@
     </LinearLayout>
 
     <ListView
-        android:id="@+id/listaAmigosFav"
+        android:id="@android:id/list"
         android:layout_below="@id/capaamifav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >

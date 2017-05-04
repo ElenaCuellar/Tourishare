@@ -45,7 +45,7 @@ public class MostrarCiudad extends AppCompatActivity implements OnMapReadyCallba
     TextView nombre;
     EditText descripcion;
     ToggleButton bSeguir;
-    Button bBorrar, bEditar;
+    Button bBorrar, bEditar, bRest, bMonum, bMus, bTrans, bLug;
     OperacionesBD opBd;
     ConexionFtp conexFtp;
     private String ip_server;
@@ -87,14 +87,52 @@ public class MostrarCiudad extends AppCompatActivity implements OnMapReadyCallba
         bSeguir = (ToggleButton) findViewById(R.id.bciudadseguir);
         bBorrar = (Button) findViewById(R.id.botonciudadBorrar);
         bEditar = (Button) findViewById(R.id.bciudadEditar);
+        bRest = (Button) findViewById(R.id.botonciudadRest);
+        bMonum = (Button) findViewById(R.id.botonciudadMonum);
+        bMus = (Button) findViewById(R.id.botonciudadMuseos);
+        bTrans = (Button) findViewById(R.id.botonciudadTransp);
+        bLug = (Button) findViewById(R.id.botonciudadLugaresInter);
         sp = (Spinner) findViewById(R.id.spcolaboradores);
-
-        //!!añadir botones de subcats y hacerles su funcionalidad + funcionalidad del spinner de colab
 
         nuevaFoto = false;
 
         opBd = new OperacionesBD();
         conexFtp = new ConexionFtp();
+
+        bRest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarLista(1);
+            }
+        });
+
+        bMonum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarLista(2);
+            }
+        });
+
+        bMus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarLista(3);
+            }
+        });
+
+        bTrans.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarLista(4);
+            }
+        });
+
+        bLug.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarLista(5);
+            }
+        });
 
         bSeguir.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,6 +180,15 @@ public class MostrarCiudad extends AppCompatActivity implements OnMapReadyCallba
 
         new MuestraCiudadAsyncTask().execute();
 
+    }
+
+    private void mostrarLista(int tipoC){
+        //Tipos de categorias: 1 - restaurante, 2 - Monumento, 3 -Museo, 4 - Transporte, 5 - Lugar de interes
+        Intent intent = new Intent(this, ListaSubcategoria.class);
+        intent.putExtra("tipoCat", tipoC);
+        intent.putExtra("idCiu",(int)id);
+        intent.putExtra("idUser",idUsuario);
+        startActivity(intent);
     }
 
     @Override

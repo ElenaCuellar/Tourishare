@@ -402,4 +402,135 @@ public class OperacionesBD {
         return false;
     }
 
+    public String getCabeceraSubcat(String linkConsulta, int idTipo){
+        //SELECT Categoria FROM categorias WHERE IdCategoria = idTipo
+
+        consulta = "SELECT Categoria FROM categorias WHERE IdCategoria = " + idTipo;
+
+        try {
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            jsonArrResultado = conex.sendRequest(linkConsulta, parametros);
+
+            if (jsonArrResultado != null) {
+                JSONObject jsonObject = jsonArrResultado.getJSONObject(0);
+                return jsonObject.getString("Categoria");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public ArrayList<Subcategoria> getListaSubcategoriaCiudad(String linkConsulta, int idC, int idTipo) {
+        //SELECT * FROM items WHERE IdCiudad = idC AND IdCategoria = idTipo;
+        consulta="SELECT * FROM items WHERE IdCiudad = " + idC + " AND IdCategoria = " + idTipo;
+
+        ArrayList<Subcategoria> arrSubc = new ArrayList<>();
+
+        try {
+            //Realizar la consulta que devolvera un array de JSON
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            jsonArrResultado = conex.sendRequest(linkConsulta, parametros);
+
+            //Recorremos el jsonarray con las distintas subcats
+            if (jsonArrResultado != null) {
+                for (int i = 0; i < jsonArrResultado.length(); i++) {
+                    JSONObject jsonObject = jsonArrResultado.getJSONObject(i);
+                    Subcategoria s = new Subcategoria(jsonObject.getInt("IdItem"),jsonObject.getInt("IdCiudad"),
+                            jsonObject.getInt("IdCategoria"), jsonObject.getString("Nombre"),
+                            jsonObject.getString("Descripcion"),jsonObject.getString("UrlFoto"),
+                            jsonObject.getDouble("Latitud"),jsonObject.getDouble("Longitud"),
+                            jsonObject.getDouble("Puntuacion"));
+                    arrSubc.add(i,s);
+                }
+                return arrSubc;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Subcategoria getSubcategoria(String linkConsulta, int id) {
+        //SELECT * FROM items WHERE IdItem = id;
+        consulta="SELECT * FROM items WHERE IdItem = " + id;
+
+        try {
+            //Realizar la consulta que devolvera un array de JSON
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            jsonArrResultado = conex.sendRequest(linkConsulta, parametros);
+
+            //Sacamos el objeto JSON
+            if (jsonArrResultado != null) {
+                JSONObject jsonObject = jsonArrResultado.getJSONObject(0);
+                Subcategoria s = new Subcategoria(jsonObject.getInt("IdItem"),jsonObject.getInt("IdCiudad"),
+                        jsonObject.getInt("IdCategoria"), jsonObject.getString("Nombre"),
+                        jsonObject.getString("Descripcion"),jsonObject.getString("UrlFoto"),
+                        jsonObject.getDouble("Latitud"),jsonObject.getDouble("Longitud"),
+                        jsonObject.getDouble("Puntuacion"));
+                return s;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean modificarSubcategoria(String linkConsultaUp, int id, Subcategoria subcat){
+        //UPDATE items SET .... WHERE IdItem = id
+
+        consulta="UPDATE items SET IdCiudad = " + subcat.getIdCiudad() + ", IdCategoria = " + subcat.getIdCategoria() +
+                ", Nombre = '" + subcat.getNombre() +"', Descripcion = '" +
+                subcat.getDescripcion() + "', UrlFoto = '"+ subcat.getUrlfoto()+ "', Latitud = " +
+                subcat.getLatitud() + ", Longitud = " + subcat.getLongitud() + ", Puntuacion = " + subcat.getPuntuacion() +
+                " WHERE IdItem = " + id;
+
+        try {
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            JSONObject json = conexUp.sendRequest(linkConsultaUp, parametros);
+
+            if(json != null && json.getInt("success") != 0)
+                return true;
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public Usuario mostrarColaborador (String linkConsulta, String nombreColab, int idCiudad){
+        //SELECT IdUsuario FROM colaboradores WHERE IdUsuario IN (SELECT idUsuario FROM usuarios WHERE
+        // Nombre = nombreColab) AND IdCiudad = idCiudad
+
+        //!!cogemos el primer registro de la consulta y de ese id de usuario que cogemos, sacamos un objeto Usuario
+
+        /*consulta="SELECT * FROM items WHERE IdItem = " + id;
+
+        try {
+            //Realizar la consulta que devolvera un array de JSON
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            jsonArrResultado = conex.sendRequest(linkConsulta, parametros);
+
+            //Sacamos el objeto JSON
+            if (jsonArrResultado != null) {
+                JSONObject jsonObject = jsonArrResultado.getJSONObject(0);
+                Subcategoria s = new Subcategoria(jsonObject.getInt("IdItem"),jsonObject.getInt("IdCiudad"),
+                        jsonObject.getInt("IdCategoria"), jsonObject.getString("Nombre"),
+                        jsonObject.getString("Descripcion"),jsonObject.getString("UrlFoto"),
+                        jsonObject.getDouble("Latitud"),jsonObject.getDouble("Longitud"),
+                        jsonObject.getDouble("Puntuacion"));
+                return s;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }*/
+        return null;
+    }
+
 }

@@ -1,6 +1,6 @@
 package com.example.caxidy.tourishare;
 
-import android.Manifest;
+import android.*;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -40,35 +41,33 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class CrearSubcategoria extends AppCompatActivity implements OnMapReadyCallback {
+public class EditarSubcategoria extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final int TU_FOTO = 1;
     private static final int PLACE_AUTOCOMPLETE = 2;
 
-    ImageView imgSubc;
+    ImageView imgSubcat;
     EditText txNombre, txDescr;
     Button bAceptar, bSearchM;
-    RatingBar rB;
+    RatingBar rBar;
     Uri fotoGaleria;
-    int idTipo, idS;
-    Context contexto;
     OperacionesBD opBd;
     Calendar calendario;
     Subcategoria subcategoria;
+    int idSubcat, idTipo, idC, idUsuario;
 
-    private JSONObject json;
-    private int exito=0;
     private String ip_server;
+    private String url_update;
     private String url_select;
-    private String url_insert;
+    private String url_insert_colab;
     private ProgressDialog pDialog;
-    private ConexionHttpInsert conexion;
     private ConexionFtp conexionftp;
     private String url_ftp_upload, url_ftp_filepath;
 
@@ -76,10 +75,10 @@ public class CrearSubcategoria extends AppCompatActivity implements OnMapReadyCa
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] permisosAlmacenamiento = {
             android.Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
-    //Latitud y longitud que se guardan en el registro de subcategoria
+    //Latitud y longitud que se guardan en el registro de ciudad
     double lat, longi;
 
     private SupportMapFragment mapaFragment;
@@ -92,19 +91,44 @@ public class CrearSubcategoria extends AppCompatActivity implements OnMapReadyCa
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_editar_subcategoria);
 
-        Bundle extras = getIntent().getExtras();
-
-        //tipo de categoria
-        idTipo = extras.getInt("tipoCat");
-
-        contexto = this;
-
-        imgSubc = (ImageView) findViewById(R.id.edsubcatfoto);
+        imgSubcat = (ImageView) findViewById(R.id.edsubcatfoto);
         txNombre = (EditText) findViewById(R.id.edtxnombresubcat);
         txDescr = (EditText) findViewById(R.id.edtxdescrpsubcat);
-        rB = (RatingBar) findViewById(R.id.edratingBarSubcat);
+        rBar = (RatingBar) findViewById(R.id.edratingBarSubcat);
         bAceptar = (Button) findViewById(R.id.edbotonsubcatAceptar);
         bSearchM = (Button) findViewById(R.id.edbotonsubcatSearchM);
+
+        //Ponemos los datos por defecto
+        Bundle extras = getIntent().getExtras();
+
+        if(extras != null) {
+            idSubcat = extras.getInt("idSubcat");
+            idTipo = extras.getInt("idTipo");
+            idUsuario = extras.getInt("idUsua");
+            idC = extras.getInt("idCiu");
+
+            //Ponemos la foto
+            File archivoImg = new File(getExternalFilesDir(null) + "/" + extras.getString("editurlfoto"));
+
+            if (archivoImg.exists()) {
+                Bitmap bm = BitmapFactory.decodeFile(archivoImg.getAbsolutePath());
+                Bitmap bmResized = Bitmap.createScaledBitmap(bm, 250, 250, true);
+                imgSubcat.setImageBitmap(bmResized);
+                imgSubcat.setAdjustViewBounds(true);
+            }
+
+            //Ponemos el nombre y la descripcion
+            txNombre.setText(extras.getString("editnombre"));
+            txDescr.setText(extras.getString("editdescrp"));
+
+            //Ponemos la latitud y longitud en el mapa
+            lat = extras.getDouble("editlat");
+            longi = extras.getDouble("editlongi");
+
+            //Ponemos la puntuacion
+            rBar.setRating((float)extras.getDouble("editrating"));
+
+        }
 
         opBd = new OperacionesBD();
 
@@ -112,11 +136,11 @@ public class CrearSubcategoria extends AppCompatActivity implements OnMapReadyCa
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         ip_server = sharedPref.getString("ipServer","192.168.1.101");
 
-        url_insert = "http://" + ip_server + "/archivosphp/insert_subcategoria.php";
+        url_update = "http://" + ip_server + "/archivosphp/update.php";
 
         url_select = "http://" + ip_server + "/archivosphp/consulta.php";
 
-        conexion = new ConexionHttpInsert();
+        url_insert_colab = "http://" + ip_server + "/archivosphp/insert_nuevaciudadcolab.php";
 
         conexionftp = new ConexionFtp();
 
@@ -124,7 +148,7 @@ public class CrearSubcategoria extends AppCompatActivity implements OnMapReadyCa
         mapaFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.edsubcfragment);
         mapaFragment.getMapAsync(this);
 
-        imgSubc.setOnClickListener(new View.OnClickListener() {
+        imgSubcat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 escogerFoto();
@@ -134,11 +158,9 @@ public class CrearSubcategoria extends AppCompatActivity implements OnMapReadyCa
         bAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Añadir registro y hacer el select de la id
-                //Si hemos seleccionado una foto y hemos escrito un nombre, subimos los datos al servidor
+                //Actualizar registro de subcategoria
                 if(fotoGaleria != null && !txNombre.getText().toString().equals("")){
-                    //Sube el registro a la BD y la foto a Filezilla
-
+                    //Modifica el registro en la BD y la foto en Filezilla
                     //Nombre de la foto (su nombre en galeria + la fecha actual + extension)
                     calendario = Calendar.getInstance();
                     String nomFoto = "F" + calendario.get(Calendar.YEAR) + calendario.get(Calendar.MONTH) +
@@ -151,20 +173,21 @@ public class CrearSubcategoria extends AppCompatActivity implements OnMapReadyCa
                     url_ftp_filepath = getPathAbsolutoUri(getApplicationContext(), fotoGaleria);
                     System.out.println(nomFoto + " --- " + url_ftp_upload + " --- " + url_ftp_filepath);
 
-                    subcategoria = new Subcategoria(idTipo, txNombre.getText().toString(), txDescr.getText().toString(),
-                            nomFoto, lat, longi, rB.getRating());
+                    subcategoria = new Subcategoria(idSubcat, idC, idTipo,
+                    txNombre.getText().toString(), txDescr.getText().toString(), nomFoto,
+                            lat, longi, rBar.getRating());
 
                     //Antes de insertar nada, verificamos los permisos de acceso a media, fotos... (necesario para versiones mayores a la 23)
                     boolean verificado = false;
                     while (!verificado) {
-                        verificado = verificarPermisosAlmacenamiento(CrearSubcategoria.this);
+                        verificado = verificarPermisosAlmacenamiento(EditarSubcategoria.this);
                     }
-                    //insertamos...
-                    new AgregaSubcatAsyncTask().execute();
+                    //modificamos...
+                    new ModificaSubcategoriaAsyncTask().execute();
                 }
                 else{
                     //Si no, muestra un mensaje avisandonos
-                    new MostrarMensaje(CrearSubcategoria.this).mostrarMensaje(getString(R.string.titulodiagsignup),getString(R.string.textodiaginsertsubcat),
+                    new MostrarMensaje(EditarSubcategoria.this).mostrarMensaje(getString(R.string.titulodiagsignup),getString(R.string.textodiaginsertsubcat),
                             getString(R.string.aceptar));
                 }
             }
@@ -177,20 +200,12 @@ public class CrearSubcategoria extends AppCompatActivity implements OnMapReadyCa
                 mostrarBusquedaGoogle();
             }
         });
-
     }
 
-    protected void escogerFoto(){
-        //Seleccionamos una foto de la galeria para la ciudad
-        Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+    protected void escogerFoto() {
+        //Seleccionamos una foto de la galeria
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(intent, TU_FOTO);
-    }
-
-    protected void pasarId(int id){
-        //pasamos la id a la ciudad
-        Intent intent = new Intent();
-        intent.putExtra("idSub",id);
-        setResult(RESULT_OK,intent);
     }
 
     //metodo para obtener la ruta absoluta de la variable fotoGaleria
@@ -245,11 +260,12 @@ public class CrearSubcategoria extends AppCompatActivity implements OnMapReadyCa
                 //Ponemos la foto en el ImageView
                 bm = MediaStore.Images.Media.getBitmap(getContentResolver(), fotoGaleria);
                 Bitmap bmResized = Bitmap.createScaledBitmap(bm, 250, 250, true);
-                if (imgSubc.getDrawingCache() != null)
-                    imgSubc.destroyDrawingCache();
-                imgSubc.setImageBitmap(bmResized);
-                imgSubc.setAdjustViewBounds(true);
-            } catch (IOException e) {}
+                if (imgSubcat.getDrawingCache() != null)
+                    imgSubcat.destroyDrawingCache();
+                imgSubcat.setImageBitmap(bmResized);
+                imgSubcat.setAdjustViewBounds(true);
+            } catch (IOException e) {
+            }
         }
         else if(requestCode == PLACE_AUTOCOMPLETE && resultCode == RESULT_OK){
             //Guardamos el sitio y lo situamos con un marcador en el mapa - borramos el marcador anterior, si lo hay
@@ -277,8 +293,8 @@ public class CrearSubcategoria extends AppCompatActivity implements OnMapReadyCa
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(lat, longi), 16));
 
-        //poner la imagen en la posic correcta
-        Bitmap bitmap = ((BitmapDrawable) imgSubc.getDrawable()).getBitmap();
+        //poner la imagen en la posic
+        Bitmap bitmap = ((BitmapDrawable) imgSubcat.getDrawable()).getBitmap();
         Bitmap bmResized = Bitmap.createScaledBitmap(ponerBordeImg(bitmap,15), 120, 120, true);
 
         gMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(bmResized))
@@ -298,22 +314,28 @@ public class CrearSubcategoria extends AppCompatActivity implements OnMapReadyCa
         return bmpWithBorder;
     }
 
+    //Acciones del mapa
     @Override
     public void onMapReady(GoogleMap mapa) {
+        //Config. mapa y situacion por defecto
         gMap = mapa;
 
+        //Le ponemos zoom
         gMap.getUiSettings().setZoomControlsEnabled(true);
 
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                new LatLng(47.17, 27.5699), 16));
+                new LatLng(lat, longi), 16));
 
-        gMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher))
+        //poner la imagen en la posic de la ciudad
+        Bitmap bitmap = ((BitmapDrawable) imgSubcat.getDrawable()).getBitmap();
+        Bitmap bmResized = Bitmap.createScaledBitmap(ponerBordeImg(bitmap,15), 120, 120, true);
+
+        gMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(bmResized))
                 .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
-                .position(new LatLng(47.17, 27.5699))
+                .position(new LatLng(lat, longi))
                 .flat(true)); //Iasi, Romania
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -324,20 +346,19 @@ public class CrearSubcategoria extends AppCompatActivity implements OnMapReadyCa
         }
     }
 
-    //Tarea asincrona para hacer el insert y luego la consulta de la id de subcategoria
-    class AgregaSubcatAsyncTask extends AsyncTask<Void, Void, Void> {
+    //Tarea asincrona para hacer el update
+    class ModificaSubcategoriaAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        String response = "";
-        //Crear hashmaps para mandar los parametros al servidor http y ftp
-        HashMap<String, String> postDataParams;
+        boolean actualizado = false;
+        //Crear hashmap para mandar los parametros al servidor ftp
         HashMap<String, String> params;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            pDialog = new ProgressDialog(CrearSubcategoria.this);
-            pDialog.setMessage(getString(R.string.espereAddSubcat));
+            pDialog = new ProgressDialog(EditarSubcategoria.this);
+            pDialog.setMessage(getString(R.string.espereactualizandosubcat));
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -345,15 +366,16 @@ public class CrearSubcategoria extends AppCompatActivity implements OnMapReadyCa
         @Override
         protected Void doInBackground(Void... arg0) {
 
-            //parametros del insert
-            postDataParams = new HashMap<String, String>();
-            postDataParams.put("IdCategoria", Integer.toString(subcategoria.getIdCategoria()));
-            postDataParams.put("Nombre", subcategoria.getNombre());
-            postDataParams.put("Descripcion", subcategoria.getDescripcion());
-            postDataParams.put("UrlFoto", subcategoria.getUrlfoto());
-            postDataParams.put("Latitud", Double.toString(subcategoria.getLatitud()));
-            postDataParams.put("Longitud", Double.toString(subcategoria.getLongitud()));
-            postDataParams.put("Puntuacion", Double.toString(subcategoria.getPuntuacion()));
+            //Borrar la foto anterior
+            HashMap<String, String> prms = new HashMap<>();
+            prms.put("host",ip_server);
+            prms.put("nombreFoto",opBd.getNombreFoto(url_select,"items","IdItem",idC));
+
+            try {
+                conexionftp.borrarArchivo(prms);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             //parametros del FTP
             params = new HashMap<String, String>();
@@ -361,30 +383,26 @@ public class CrearSubcategoria extends AppCompatActivity implements OnMapReadyCa
             params.put("uploadpath", url_ftp_upload);
             params.put("filepath", url_ftp_filepath);
 
-            //Llamamos a serverData() para almacenar el resultado en response
-            response = conexion.serverData(url_insert, postDataParams);
             //Llamamos a SubirDatos() para subir la foto a Filezilla Server
             conexionftp.SubirDatos(params);
 
-            try {
+            //Update del registro
+            actualizado = opBd.modificarSubcategoria(url_update,idSubcat,subcategoria);
 
-                json = new JSONObject(response);
+            //Hacemos un UPDATE de los idCiudad de las subcategorias
+            if(actualizado){
+                try{
+                    //comprobamos que el colaborador no ha sido agregado anteriormente a la ciudad de la subcat.
+                    boolean nuevo = opBd.nuevoColaborador(url_select,idC,idUsuario);
 
-                //Obtenemos los valores del json
-                System.out.println(json.get("success"));
-                exito = json.getInt("success");
+                    //añadimos el colaborador
+                    opBd.agregarColab(url_insert_colab,idC,idUsuario,nuevo);
 
-                //Guardamos el indice de la categoria para pasarlo al intent de ciudad
-                if(exito == 1){
-                    idS = opBd.getIdSubcategoria(url_select);
-
-                    if (idS != -1)
-                        pasarId(idS);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+
             return null;
         }
 
@@ -395,13 +413,12 @@ public class CrearSubcategoria extends AppCompatActivity implements OnMapReadyCa
             if (pDialog.isShowing())
                 pDialog.dismiss();
 
-            if(exito==1) {
-                //El registro se ha insertado al completo y la imagen se ha subido al servidor FTP.
-                if(idS == -1)
-                    new MostrarMensaje(contexto).mostrarMensaje(getString(R.string.tituloidsubcatultima),
-                            getString(R.string.textoidsubcatultima), getString(R.string.aceptar));
-                else
-                    finish();
+            if(!actualizado)
+                new MostrarMensaje(EditarSubcategoria.this).mostrarMensaje(getString(R.string.tituloidciudadsubcats),
+                        getString(R.string.textoeditarsubcaterroractu), getString(R.string.aceptar));
+            else {
+                setResult(RESULT_OK);
+                finish();
             }
         }
     }
