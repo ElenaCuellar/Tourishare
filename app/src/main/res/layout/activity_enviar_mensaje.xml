@@ -34,23 +34,36 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="16dp"
                 android:layout_toRightOf="@id/textoSubjectenv"
-                android:text="@string/asuntoejbandeja"
+                android:hint="@string/asuntoejbandeja"
                 android:textSize="18sp" />
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/textoBodyenv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="25dp"
+            android:text="@string/cuerpomensaje"
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/txBodyenv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp"
             android:ems="10"
-            android:text="@string/cuerpoejbandeja"
+            android:hint="@string/cuerpoejbandeja"
             android:inputType="textMultiLine" />
 
         <Button
             android:id="@+id/bEnviarMsg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp"
             android:background="@color/colortitulobandejaentrada"
             android:text="@string/botonenviarbandejaentrada" />
@@ -60,6 +73,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colortitulobandejaentrada"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp"
             android:text="@string/salir" />
     </LinearLayout>

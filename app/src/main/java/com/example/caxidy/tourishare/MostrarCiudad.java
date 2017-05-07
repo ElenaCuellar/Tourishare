@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -61,6 +62,7 @@ public class MostrarCiudad extends AppCompatActivity implements OnMapReadyCallba
     ArrayAdapter<String> adp;
     ArrayList<String> nombresUsers;
     boolean nuevaFoto;
+    Usuario usu;
 
     private double lat, longi;
     private SupportMapFragment mapaFragment;
@@ -168,6 +170,19 @@ public class MostrarCiudad extends AppCompatActivity implements OnMapReadyCallba
             }
         });
 
+        sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //Usuario seleccionado
+                String itemSeleccionado = parent.getItemAtPosition(position).toString();
+
+                if(!itemSeleccionado.equals(getString(R.string.colaboradores))) {
+                    new SeleccionarColab(itemSeleccionado).execute();
+                }
+
+            }
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
         //Recuperar la IP de las preferencias
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         ip_server = sharedPref.getString("ipServer","192.168.1.101");
@@ -243,6 +258,20 @@ public class MostrarCiudad extends AppCompatActivity implements OnMapReadyCallba
         }
     }
 
+    //metodo para mostrar el intent del colaborador
+    public void mostrarColabSeleccionado(){
+        Intent intent = new Intent(this,MostrarUsuario.class);
+        intent.putExtra("idU",usu.getId());
+        intent.putExtra("nombreU",usu.getNombre());
+        intent.putExtra("idRangoU",usu.getIdRango());
+        intent.putExtra("passU",usu.getPass());
+        intent.putExtra("urlfotoU",usu.getUrlfoto());
+        intent.putExtra("ciudadU",usu.getCiudad());
+        intent.putExtra("miIdUser",idUsuario);
+
+        startActivity(intent);
+    }
+
     //Hilos para seguir o dejar de seguir una ciudad
     class SeguirCiudad extends Thread {
 
@@ -257,6 +286,36 @@ public class MostrarCiudad extends AppCompatActivity implements OnMapReadyCallba
         }
     }
 
+    //Tarea asincrona para seleccionar un colaborador
+    class SeleccionarColab extends AsyncTask<Void, Void, Void> {
+
+        String colaborador;
+
+        SeleccionarColab(String colaborador){
+            this.colaborador = colaborador;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            //seleccionamos la id del usuario
+            int idSeleccionado = opBd.mostrarColaborador(url_select,colaborador,(int)id);
+            if(idSeleccionado != -1){
+                //obtenemos dicho usuario
+                usu = opBd.getUsuario(url_select,idSeleccionado);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            if(usu != null)
+                mostrarColabSeleccionado();
+        }
+    }
 
     //Tarea asincrona para mostrar los datos de la ciudad
     class MuestraCiudadAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -288,7 +347,9 @@ public class MostrarCiudad extends AppCompatActivity implements OnMapReadyCallba
             ciudad = opBd.getCiudad(url_select,id);
 
             //Activar o no activar el boton de "siguiendo"
-            sigueciudad = opBd.sigueCiudad(url_select,id,idUsuario);
+            String miConsulta = "SELECT COUNT(*) AS total FROM ciudadesfav WHERE IdCiudad = " +
+                    (int)id + " AND IdUsuario = " + idUsuario;
+            sigueciudad = opBd.sigueItem(url_select,miConsulta);
 
             //Llenar el arraylist con los usuarios colaboradores, para ponerlo en el spinner
             arrColaboradores = new ArrayList<>();
@@ -334,6 +395,8 @@ public class MostrarCiudad extends AppCompatActivity implements OnMapReadyCallba
                 if(arrColaboradores != null){
                     //sacar los nombres de los usuarios y ponerlos en el spinner
                     nombresUsers = new ArrayList<>();
+                    //añadimos cabecera
+                    nombresUsers.add(getString(R.string.colaboradores));
                     for(int i=0; i<arrColaboradores.size();i++)
                         nombresUsers.add(arrColaboradores.get(i).getNombre());
 

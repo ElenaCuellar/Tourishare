@@ -28,6 +28,7 @@
     <string name="error">Error</string>
     <string name="cancelar">Cancelar</string>
     <string name="introduzcaadmin">Introduzca pass admin ...</string>
+    <string name="colaboradores">Colaboradores</string>
 
     <!--cadenas del menu lateral -->
     <string name="nombrenav">NOMBRE DEL USUARIO</string>
@@ -59,6 +60,7 @@
     <string name="titulobandejaentrada">BANDEJA DE ENTRADA</string>
     <string name="emisorbandejaentrada">Emisor</string>
     <string name="asuntobandejaentrada">Asunto</string>
+    <string name="cuerpomensaje">Cuerpo</string>
     <string name="emisorejbandeja">Nombre emisor...</string>
     <string name="asuntoejbandeja">Asunto del mensaje...</string>
     <string name="cuerpoejbandeja">Cuerpo del mensaje...</string>
@@ -121,6 +123,8 @@
     <string name="tituloborrarsubcat">Borrar subcategoría</string>
     <string name="textoborrarsubcat">¿Está seguro de que quiere eliminar esta subcategoría?</string>
     <string name="textoeditarsubcaterroractu">Error al actualizar la subcategoría</string>
+    <string name="tituloenviarmensaje">Mensaje enviado</string>
+    <string name="textoenviarmensaje">El mensaje se ha enviado correctamente.</string>
 
     <!--Login-->
     <string name="espereLogin">Entrando en la app. Espere, por favor ...</string>
@@ -132,6 +136,8 @@
     <string name="esperemostrarciudad">Mostrando ciudad. Espere, por favor ...</string>
     <string name="esperemostrarsubcat">Mostrando subcategoría. Espere, por favor ...</string>
     <string name="espereactualizandosubcat">Actualizando subcategoría. Espere, por favor ...</string>
+    <string name="esperemostrarusuario">Mostrando datos de usuario. Espere, por favor ...</string>
+    <string name="espereenviarmensaje">Enviando mensaje. Espere, por favor ...</string>
 
     <!--otras -->
     <string name="espereNuevoUser">Insertando registro y subiendo foto. Espere, por favor...</string>

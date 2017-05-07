@@ -116,4 +116,10 @@
     <string name="esperemostrarsubcat">Showing subcategory. Please wait ...</string>
     <string name="espereactualizandosubcat">Updating subcategory. Please wait ...</string>
     <string name="textoeditarsubcaterroractu">Error while updating subcategory</string>
+    <string name="colaboradores">Collaborators</string>
+    <string name="esperemostrarusuario">Showing user data. Please wait ...</string>
+    <string name="espereenviarmensaje">Sending message. Please wait ...</string>
+    <string name="textoenviarmensaje">Your message was sent successfully.</string>
+    <string name="tituloenviarmensaje">Message sent</string>
+    <string name="cuerpomensaje">Body</string>
 </resources>

@@ -66,17 +66,14 @@
 
         <activity android:name=".EditarSubcategoria"/>
 
+        <activity android:name=".MostrarUsuario"/>
+
+        <activity android:name=".EnviarMensaje"/>
+
         <activity
             android:name=".PrincipalActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
-        <activity android:name=".MapaFragmentEdCiudad"/>
-
-        <activity android:name=".MapaFragmentEdSubcategoria"/>
-
-        <activity android:name=".MapaFragmentCiudad"/>
-
-        <activity android:name=".MapaFragmentSubcategoria"/>
     </application>
 
 </manifest>

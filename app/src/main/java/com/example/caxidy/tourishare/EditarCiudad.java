@@ -439,23 +439,27 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
 
             //Hacemos un UPDATE de los idCiudad de las subcategorias
             if(actualizado){
-                if(idsSubcats.size() > 0) {
-                    try{
+                try{
+                    if(idsSubcats.size() > 0) {
                         //actualizamos el campo idCiudad de las subcats
                         resUpdate = opBd.updateIdCiudadSubcategorias(url_update, idC, idsSubcats);
-
-                        //comprobamos que el colaborador no ha sido agregado anteriormente
-                        boolean nuevo = opBd.nuevoColaborador(url_select,idC,idUsuario);
-
-                        //añadimos el colaborador
-                        opBd.agregarColab(url_insert_colab,idC,idUsuario,nuevo);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
+                    else
+                        resUpdate = 1;
+
+                    //comprobamos que el colaborador no ha sido agregado anteriormente
+                    boolean nuevo = opBd.nuevoColaborador(url_select,idC,idUsuario);
+
+                    //añadimos el colaborador
+                    opBd.agregarColab(url_insert_colab,idC,idUsuario,nuevo);
+
+                    //sumamos puntos al colaborador, para el rango
+                    opBd.sumarPuntosRango(url_update,idUsuario);
+                    opBd.cambiarRango(url_update,idUsuario);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                else
-                    resUpdate = 1;
             }
 
             return null;

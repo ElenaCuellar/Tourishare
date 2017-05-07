@@ -20,8 +20,8 @@
                 android:id="@+id/usuariofoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
                 android:layout_marginLeft="15dp"
+                android:layout_marginTop="50dp"
                 app:srcCompat="@mipmap/ic_launcher" />
 
             <TextView
@@ -41,30 +41,17 @@
                 android:id="@+id/busuarioseguir"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_below="@id/textonombreusuario"
                 android:layout_marginBottom="15dp"
-                android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_toRightOf="@id/usuariofoto"
                 android:background="@color/colorBoton"
+                android:textColor="@color/colorBlanco"
                 android:textOff="@string/seguir"
                 android:textOn="@string/dejarseguir"
-                android:textColor="@color/colorBlanco"
-                android:textStyle="bold"
-                android:layout_toRightOf="@id/usuariofoto"
-                android:layout_below="@id/textonombreusuario"/>
-
-            <Button
-                android:id="@+id/busuariomensaje"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="15dp"
-                android:background="@color/colorBoton"
-                android:text="@string/botonenviarbandejaentrada"
-                android:textColor="@color/colorBlanco"
-                android:textStyle="bold"
-                android:layout_toRightOf="@id/busuarioseguir"
-                android:layout_below="@id/textonombreusuario"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textousuariociudad"
@@ -73,8 +60,7 @@
                 android:layout_below="@id/busuarioseguir"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_toRightOf="@id/usuariofoto"
+                android:layout_marginTop="20dp"
                 android:text="@string/ciudad"
                 android:textColor="@color/colorBlanco"
                 android:textSize="24sp"
@@ -82,17 +68,17 @@
 
             <EditText
                 android:id="@+id/txusuariociudad"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/textousuariociudad"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:textColor="@color/colorBlanco"
-                android:textStyle="bold"
                 android:ems="10"
-                android:inputType="textPersonName"
                 android:focusable="false"
-                android:layout_toRightOf="@id/usuariofoto"
-                android:layout_below="@id/textousuariociudad"/>
+                android:inputType="textPersonName"
+                android:textColor="@color/colorBlanco"
+                android:gravity="center"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textousuariorango"
@@ -102,7 +88,6 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="15dp"
-                android:layout_toRightOf="@id/usuariofoto"
                 android:text="@string/rango"
                 android:textColor="@color/colorBlanco"
                 android:textSize="24sp"
@@ -110,17 +95,31 @@
 
             <EditText
                 android:id="@+id/txusuariorango"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/textousuariorango"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:textColor="@color/colorBlanco"
-                android:textStyle="bold"
                 android:ems="10"
-                android:inputType="textPersonName"
                 android:focusable="false"
-                android:layout_toRightOf="@id/usuariofoto"
-                android:layout_below="@id/textousuariorango"/>
+                android:inputType="textPersonName"
+                android:textColor="@color/colorBlanco"
+                android:gravity="center"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/busuariomensaje"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txusuariorango"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorBoton"
+                android:text="@string/botonenviarbandejaentrada"
+                android:textColor="@color/colorBlanco"
+                android:textStyle="bold" />
 
         </RelativeLayout>
     </LinearLayout>

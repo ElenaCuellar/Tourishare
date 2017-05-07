@@ -435,6 +435,10 @@ public class CrearCiudad extends AppCompatActivity implements OnMapReadyCallback
 
                             //añadimos el colaborador
                             opBd.agregarColab(url_insert_colab,idC,idUsuario, true);
+
+                            //sumamos puntos al colaborador, para el rango
+                            opBd.sumarPuntosRango(url_update,idUsuario);
+                            opBd.cambiarRango(url_update,idUsuario);
                         }
                     }
                     else

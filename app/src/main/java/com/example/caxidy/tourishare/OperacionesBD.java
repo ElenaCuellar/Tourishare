@@ -156,6 +156,37 @@ public class OperacionesBD {
 
     }
 
+    public void sumarPuntosRango(String linkUp, int idUsuario){
+        //UPDATE usuarios SET puntos = (puntos * 2) WHERE idUsuario = id
+
+        consulta="UPDATE usuarios SET puntos = (puntos * 2) WHERE idUsuario = " + idUsuario;
+
+        try {
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            conexUp.sendRequest(linkUp, parametros);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void cambiarRango(String linkUp, int idUsuario){
+        //Novato <=16, Ocasional <= 256, Viajero <= 2048, Viajero experto > 2048
+        //UPDATE usuarios SET idRango = CASE WHEN puntos <= 16 THEN 1 .... END
+        //WHERE idUsuario = id
+
+        consulta="UPDATE usuarios SET idRango = CASE WHEN puntos <= 16 THEN 1 WHEN (puntos > 16 AND puntos <= 256) THEN " +
+                "2 WHEN (puntos > 256 AND puntos <= 2048) THEN 3 WHEN puntos > 2048 THEN 4 END WHERE idUsuario = " + idUsuario;
+
+        try {
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            conexUp.sendRequest(linkUp, parametros);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     public int updateIdCiudadSubcategorias(String linkConsulta, int idC, ArrayList<Integer> idsS) {
         //UPDATE items SET IdCiudad = idC WHERE IdItem = idsS(0) OR .....
         //Formar la consulta...
@@ -239,15 +270,14 @@ public class OperacionesBD {
         return null;
     }
 
-    public boolean sigueCiudad(String linkConsulta, long idC, int id) {
-        //comprueba si un usuario sigue a una ciudad (la tiene en favoritos) o no
-        //SELECT COUNT(*) FROM ciudadesfav WHERE IdCiudad = idC AND IdUsuario = id;
-        consulta="SELECT COUNT(*) AS total FROM ciudadesfav WHERE IdCiudad = " + (int)idC + " AND IdUsuario = " + id;
+    public boolean sigueItem(String linkConsulta, String consult) {
+        //comprueba si un usuario sigue a una ciudad, usuario, etc... (la tiene en favoritos) o no
+        //SELECT COUNT(*) FROM tabla WHERE id1 = id1 AND id2 = id2;
 
         try {
             //Realizar la consulta que devolvera un array de JSON
             HashMap<String, String> parametros = new HashMap<>();
-            parametros.put("ins_sql", consulta);
+            parametros.put("ins_sql", consult);
             jsonArrResultado = conex.sendRequest(linkConsulta, parametros);
 
             //Sacamos el objeto JSON
@@ -503,13 +533,12 @@ public class OperacionesBD {
         return false;
     }
 
-    public Usuario mostrarColaborador (String linkConsulta, String nombreColab, int idCiudad){
+    public int mostrarColaborador (String linkConsulta, String nombreColab, int idCiudad){
         //SELECT IdUsuario FROM colaboradores WHERE IdUsuario IN (SELECT idUsuario FROM usuarios WHERE
         // Nombre = nombreColab) AND IdCiudad = idCiudad
 
-        //!!cogemos el primer registro de la consulta y de ese id de usuario que cogemos, sacamos un objeto Usuario
-
-        /*consulta="SELECT * FROM items WHERE IdItem = " + id;
+        consulta="SELECT IdUsuario FROM colaboradores WHERE IdUsuario IN (SELECT idUsuario FROM usuarios WHERE Nombre = '" +
+                nombreColab + "') AND IdCiudad = " + idCiudad;
 
         try {
             //Realizar la consulta que devolvera un array de JSON
@@ -520,17 +549,92 @@ public class OperacionesBD {
             //Sacamos el objeto JSON
             if (jsonArrResultado != null) {
                 JSONObject jsonObject = jsonArrResultado.getJSONObject(0);
-                Subcategoria s = new Subcategoria(jsonObject.getInt("IdItem"),jsonObject.getInt("IdCiudad"),
-                        jsonObject.getInt("IdCategoria"), jsonObject.getString("Nombre"),
-                        jsonObject.getString("Descripcion"),jsonObject.getString("UrlFoto"),
-                        jsonObject.getDouble("Latitud"),jsonObject.getDouble("Longitud"),
-                        jsonObject.getDouble("Puntuacion"));
-                return s;
+                return jsonObject.getInt("IdUsuario");
             }
         }catch(Exception e){
             e.printStackTrace();
-        }*/
+        }
+        return -1;
+    }
+
+    public Usuario getUsuario(String linkConsulta, int idUsuario){
+        //SELECT * FROM usuarios WHERE idUsuario = idU;
+
+        consulta = "SELECT * FROM usuarios WHERE idUsuario = " + idUsuario;
+
+        try {
+            //Realizar la consulta que devolvera un array de JSON
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            jsonArrResultado = conex.sendRequest(linkConsulta, parametros);
+
+            //Sacamos el objeto JSON
+            if (jsonArrResultado != null) {
+                JSONObject jsonObject = jsonArrResultado.getJSONObject(0);
+                Usuario us = new Usuario(jsonObject.getInt("idUsuario"),
+                        jsonObject.getString("Nombre"),jsonObject.getString("Password"),
+                        jsonObject.getString("UrlFoto"),jsonObject.getInt("idRango"), jsonObject.getString("ciudad"));
+                return us;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         return null;
     }
 
+    public void updateSigueUsuario(boolean marcado, String linkConsultaDel, String linkConsultaInsert, int idAmigo, int idU) {
+        //DELETE FROM amigos WHERE IdAmigo = idAmigo AND IdUsuario = idU;
+        //INSERT INTO amigos (IdUsuario, IdAmigo) VALUES (idU, idAmigo);
+
+        consulta="DELETE FROM amigos WHERE IdAmigo = " + idAmigo + " AND IdUsuario = " +idU;
+
+        try {
+            //Primero hacemos el delete, por si ya existia
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            conexUp.sendRequest(linkConsultaDel, parametros);
+
+            if(marcado) {
+                //Ahora hacemos el insert, en caso de que el boton de seguir estuviese marcado
+                parametros.clear();
+                parametros.put("IdUsuario", Integer.toString(idU));
+                parametros.put("IdAmigo", Integer.toString(idAmigo));
+                conexInsert.serverData(linkConsultaInsert, parametros);
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public String getRango(String linkConsulta, int idR){
+        //SELECT Rango from rangos WHERE idRango = idR
+
+        consulta = "SELECT Rango FROM rangos WHERE idRango = " + idR;
+
+        try {
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            jsonArrResultado = conex.sendRequest(linkConsulta, parametros);
+
+            if (jsonArrResultado != null) {
+                JSONObject jsonObject = jsonArrResultado.getJSONObject(0);
+                return jsonObject.getString("Rango");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+
+    public String insertarMensaje(String linkInsert, HashMap<String, String> params){
+        //Insertar un nuevo registro en la tabla de mensaje ---> insertar un nuevo mensaje
+        try {
+            return conexInsert.serverData(linkInsert, params);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return "";
+    }
 }
