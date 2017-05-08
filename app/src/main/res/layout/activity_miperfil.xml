@@ -55,7 +55,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="10dp"
-                android:layout_below="@id/tuperfilFoto"
+                android:layout_below="@id/tuperfilNombre"
+                android:layout_toRightOf="@id/tuperfilFoto"
                 android:text="@string/tuciudad" />
 
             <EditText
@@ -65,8 +66,8 @@
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:layout_marginTop="10dp"
-                android:layout_below="@id/tuperfilNombre"
-                android:layout_toRightOf="@id/textView7"
+                android:layout_below="@id/textView7"
+                android:layout_toRightOf="@id/tuperfilFoto"
                 android:text="" />
 
             <TextView
@@ -75,6 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_below="@id/tuperfilCiudad"
+                android:layout_toRightOf="@id/tuperfilFoto"
                 android:text="@string/turango" />
 
             <TextView
@@ -86,50 +88,58 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="50dp"
                 android:layout_toRightOf="@id/textView8"
+                android:layout_alignBaseline="@id/textView8"
                 android:text="@string/novato"
                 android:textSize="18sp" />
 
-            <Button
-                android:id="@+id/tuperfilConfirmar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/colorBoton"
+            <LinearLayout
                 android:layout_below="@id/tuperfilRango"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:text="@string/miconfirmar" />
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/tuperfilPass"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/colorBoton"
-                android:layout_below="@id/tuperfilRango"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@id/tuperfilConfirmar"
-                android:text="@string/mipass" />
+                <Button
+                    android:id="@+id/tuperfilConfirmar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorBoton"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/miconfirmar" />
 
-            <Button
-                android:id="@+id/tuperfilBorrar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/colorBoton"
-                android:layout_below="@id/tuperfilConfirmar"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/miborrar" />
+                <Button
+                    android:id="@+id/tuperfilPass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorBoton"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/mipass" />
 
-            <Button
-                android:id="@+id/tuperfilSalir"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/colorBoton"
-                android:layout_below="@id/tuperfilPass"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@id/tuperfilConfirmar"
-                android:text="@string/misalir" />
+                <Button
+                    android:id="@+id/tuperfilBorrar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorBoton"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/miborrar" />
+
+                <Button
+                    android:id="@+id/tuperfilSalir"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorBoton"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/misalir" />
+
+            </LinearLayout>
 
         </RelativeLayout>
 

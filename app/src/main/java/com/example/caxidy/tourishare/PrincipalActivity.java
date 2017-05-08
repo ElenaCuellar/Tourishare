@@ -33,6 +33,7 @@ import java.util.ArrayList;
 public class PrincipalActivity extends ListActivity implements AppCompatCallback, NavigationView.OnNavigationItemSelectedListener{
 
     private static final int CIUDAD_NUEVA = 1;
+    private static final int MI_PERFIL = 2;
 
     private AppCompatDelegate delegate;
 
@@ -45,6 +46,7 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
     private ProgressDialog pDialog;
     private OperacionesBD opDb;
     private ConexionFtp conexFtp;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,7 +64,7 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         conexFtp = new ConexionFtp();
@@ -73,13 +75,7 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
                 datosUser.getString("miFoto"),datosUser.getInt("miIdRango"),datosUser.getString("miCiudad"));
 
         //Ponemos los datos del usuario en la cabecera del navigation drawer
-        View hView =  navigationView.getHeaderView(0);
-        ImageView navF = (ImageView)hView.findViewById(R.id.navFoto);
-        setImagen(navF);
-        TextView navuser = (TextView)hView.findViewById(R.id.navUser);
-        navuser.setText(miUsuario.getNombre());
-        TextView navc = (TextView)hView.findViewById(R.id.navCiudad);
-        navc.setText(miUsuario.getCiudad());
+        setDatosCabeceraDrawer(navigationView);
 
         //Recuperar la IP de las preferencias
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
@@ -104,6 +100,16 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
             }
         });
 
+    }
+
+    protected void setDatosCabeceraDrawer(NavigationView navigationView){
+        View hView =  navigationView.getHeaderView(0);
+        ImageView navF = (ImageView)hView.findViewById(R.id.navFoto);
+        setImagen(navF);
+        TextView navuser = (TextView)hView.findViewById(R.id.navUser);
+        navuser.setText(miUsuario.getNombre());
+        TextView navc = (TextView)hView.findViewById(R.id.navCiudad);
+        navc.setText(miUsuario.getCiudad());
     }
 
     public void abrirCiudad(long ciu){
@@ -179,7 +185,14 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
 
         if(id == R.id.itemPerfil){
             //ver o editar nuestros datos
-            //!!aparece intent con nuestros datos, editable y con algunos botones
+            Intent i = new Intent(this,MiPerfil.class);
+            i.putExtra("miId",miUsuario.getId());
+            i.putExtra("miNombre",miUsuario.getNombre());
+            i.putExtra("miPass",miUsuario.getPass());
+            i.putExtra("miFoto",miUsuario.getUrlfoto());
+            i.putExtra("miIdRango",miUsuario.getIdRango());
+            i.putExtra("miCiudad",miUsuario.getCiudad());
+            startActivityForResult(i,MI_PERFIL);
 
         }else if(id == R.id.itemCiudades){
             //lista de ciudades favoritas
@@ -208,6 +221,15 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
         if(requestCode == CIUDAD_NUEVA && resultCode == RESULT_OK){
             new MostrarMensaje(this).mostrarMensaje(getString(R.string.titulociudadagregada),
                     getString(R.string.textociudadagregada),getString(R.string.aceptar));
+        }
+        else if(requestCode == MI_PERFIL && resultCode == RESULT_OK){
+            //Refrescar los datos de usuario
+            Bundle extras = data.getExtras();
+            miUsuario.setNombre(extras.getString("miNombre"));
+            miUsuario.setPass(extras.getString("miPass"));
+            miUsuario.setUrlfoto(extras.getString("miFoto"));
+            miUsuario.setIdRango(extras.getInt("miIdRango"));
+            miUsuario.setCiudad(extras.getString("miCiudad"));
         }
     }
 
@@ -280,6 +302,7 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
                 adaptadorP = new AdaptadorPrincipal(PrincipalActivity.this, listaCiudades);
                 adaptadorP.notifyDataSetChanged();
                 setListAdapter(adaptadorP);
+                setDatosCabeceraDrawer(navigationView);
             }
             else
                 new MostrarMensaje(PrincipalActivity.this).mostrarMensaje(getString(R.string.tituloproblemaactulistaprincipal),

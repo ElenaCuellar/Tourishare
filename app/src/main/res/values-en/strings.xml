@@ -122,4 +122,16 @@
     <string name="textoenviarmensaje">Your message was sent successfully.</string>
     <string name="tituloenviarmensaje">Message sent</string>
     <string name="cuerpomensaje">Body</string>
+    <string name="esperemostrarperfil">Showing your profile. Please wait ...</string>
+    <string name="textononombre">Username cannot be empty</string>
+    <string name="titulononombre">Empty name</string>
+    <string name="espereactualizandoperfil">Updating your profile. Please wait ...</string>
+    <string name="textoerroractuperfil">Error while updating profile</string>
+    <string name="tituloerroractuperfil">Update error</string>
+    <string name="introduzcapass">New pass ...</string>
+    <string name="textoborrarperfil">Confirm profile deletion</string>
+    <string name="tituloborrarperfil">Delete profile</string>
+    <string name="titulocambiarpass">Update password</string>
+    <string name="textocambiopassexito">Password updated successfully</string>
+    <string name="titulocambiopassexito">Password updated</string>
 </resources>

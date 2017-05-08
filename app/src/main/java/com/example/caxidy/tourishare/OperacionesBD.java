@@ -368,10 +368,24 @@ public class OperacionesBD {
         return "";
     }
 
-    public void borrarRegistro(String linkConsultaDel, String tabla, String condicion, int id){
+    public void borrarRegistroId(String linkConsultaDel, String tabla, String condicion, int id){
         //DELETE FROM tabla WHERE condicion = id;
 
         consulta="DELETE FROM " + tabla + " WHERE " + condicion + " = " + id;
+
+        try {
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            conexUp.sendRequest(linkConsultaDel, parametros);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void borrarRegistro(String linkConsultaDel, String tabla, String condicion){
+        //DELETE FROM tabla WHERE condicion;
+
+        consulta="DELETE FROM " + tabla + " WHERE " + condicion;
 
         try {
             HashMap<String, String> parametros = new HashMap<>();
@@ -636,5 +650,46 @@ public class OperacionesBD {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public boolean modificarUsuario(String linkConsultaUp, Usuario usuario){
+        //UPDATE usuarios SET .... WHERE idUsuario = usuario.getId()
+
+        consulta="UPDATE usuarios SET Nombre = '" + usuario.getNombre() + "', UrlFoto = '"+ usuario.getUrlfoto()+
+                "', ciudad = '" + usuario.getCiudad() + "' WHERE idUsuario = " + usuario.getId();
+
+        try {
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            JSONObject json = conexUp.sendRequest(linkConsultaUp, parametros);
+
+            if(json != null && json.getInt("success") != 0)
+                return true;
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public boolean modificarPass(String linkConsultaUp, String nuevaP, int idU){
+        //UPDATE usuarios SET Password = 'nuevaP' WHERE idUsuario = id
+
+        consulta="UPDATE usuarios SET Password = '" + nuevaP + "' WHERE idUsuario = " + idU ;
+
+        try {
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            JSONObject json = conexUp.sendRequest(linkConsultaUp, parametros);
+
+            if(json != null && json.getInt("success") != 0)
+                return true;
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }

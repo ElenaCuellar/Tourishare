@@ -70,6 +70,8 @@
 
         <activity android:name=".EnviarMensaje"/>
 
+        <activity android:name=".MiPerfil"/>
+
         <activity
             android:name=".PrincipalActivity"
             android:theme="@style/AppTheme.NoActionBar"/>

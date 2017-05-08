@@ -29,6 +29,7 @@
     <string name="cancelar">Cancelar</string>
     <string name="introduzcaadmin">Introduzca pass admin ...</string>
     <string name="colaboradores">Colaboradores</string>
+    <string name="introduzcapass">Nueva contraseña...</string>
 
     <!--cadenas del menu lateral -->
     <string name="nombrenav">NOMBRE DEL USUARIO</string>
@@ -125,6 +126,15 @@
     <string name="textoeditarsubcaterroractu">Error al actualizar la subcategoría</string>
     <string name="tituloenviarmensaje">Mensaje enviado</string>
     <string name="textoenviarmensaje">El mensaje se ha enviado correctamente.</string>
+    <string name="titulononombre">Sin nombre</string>
+    <string name="textononombre">El nombre de usuario no debe estar vacío</string>
+    <string name="tituloerroractuperfil">Error al actualizar</string>
+    <string name="textoerroractuperfil">Error al actualizar el perfil</string>
+    <string name="tituloborrarperfil">Borrar perfil</string>
+    <string name="textoborrarperfil">¿Está seguro de que quiere borrar su usuario?</string>
+    <string name="titulocambiarpass">Cambiar contraseña</string>
+    <string name="titulocambiopassexito">Contraseña modificada</string>
+    <string name="textocambiopassexito">La contraseña ha sido actualizada con éxito</string>
 
     <!--Login-->
     <string name="espereLogin">Entrando en la app. Espere, por favor ...</string>
@@ -138,6 +148,8 @@
     <string name="espereactualizandosubcat">Actualizando subcategoría. Espere, por favor ...</string>
     <string name="esperemostrarusuario">Mostrando datos de usuario. Espere, por favor ...</string>
     <string name="espereenviarmensaje">Enviando mensaje. Espere, por favor ...</string>
+    <string name="esperemostrarperfil">Mostrando tu perfil. Espere, por favor ...</string>
+    <string name="espereactualizandoperfil">Actualizando perfil. Espere, por favor ...</string>
 
     <!--otras -->
     <string name="espereNuevoUser">Insertando registro y subiendo foto. Espere, por favor...</string>
