@@ -692,4 +692,33 @@ public class OperacionesBD {
 
         return false;
     }
+
+    public ArrayList<Ciudad> getCiudadesFav(String linkConsulta, int id) {
+        //SELECT * FROM ciudades WHERE IdCiudad IN (SELECT IdCiudad FROM ciudadesfav WHERE IdUsuario = id);
+        consulta="SELECT * FROM ciudades WHERE IdCiudad IN (SELECT IdCiudad FROM ciudadesfav WHERE IdUsuario = " + id + ")";
+
+        ArrayList<Ciudad> arrCiudad = new ArrayList<>();
+
+        try {
+            //Realizar la consulta que devolvera un array de JSON
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            jsonArrResultado = conex.sendRequest(linkConsulta, parametros);
+
+            //Recorremos el jsonarray con las distintas ciudades
+            if (jsonArrResultado != null) {
+                for (int i = 0; i < jsonArrResultado.length(); i++) {
+                    JSONObject jsonObject = jsonArrResultado.getJSONObject(i);
+                    Ciudad c = new Ciudad(jsonObject.getInt("IdCiudad"),jsonObject.getString("Nombre"),
+                            jsonObject.getString("Descripcion"),jsonObject.getString("UrlFoto"),
+                            jsonObject.getDouble("Latitud"),jsonObject.getDouble("Longitud"));
+                    arrCiudad.add(i,c);
+                }
+                return arrCiudad;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

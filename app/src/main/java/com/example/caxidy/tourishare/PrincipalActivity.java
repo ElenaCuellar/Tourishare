@@ -197,6 +197,10 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
         }else if(id == R.id.itemCiudades){
             //lista de ciudades favoritas
             //!!lista filtrando por ciudades favoritas, se puede reciclar o parametrizar la clase MostrarCiudad y etc
+            Intent i = new Intent(this,CiudadesFavActivity.class);
+            //!!pasar extras = id de usuario, etc , un objeto usuario entero a lo mejor
+            i.putExtra("miId",miUsuario.getId());
+            startActivity(i);
 
         }else if(id == R.id.itemamigos){
             //lista de amigos
