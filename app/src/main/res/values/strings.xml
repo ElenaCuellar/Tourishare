@@ -59,8 +59,9 @@
 
     <!-- cadenas de apartado de mensajes -->
     <string name="titulobandejaentrada">BANDEJA DE ENTRADA</string>
-    <string name="emisorbandejaentrada">Emisor</string>
-    <string name="asuntobandejaentrada">Asunto</string>
+    <string name="emisorbandejaentrada">Emisor: </string>
+    <string name="asuntobandejaentrada">Asunto: </string>
+    <string name="asunto">Asunto</string>
     <string name="cuerpomensaje">Cuerpo</string>
     <string name="emisorejbandeja">Nombre emisor...</string>
     <string name="asuntoejbandeja">Asunto del mensaje...</string>
@@ -135,6 +136,12 @@
     <string name="titulocambiarpass">Cambiar contraseña</string>
     <string name="titulocambiopassexito">Contraseña modificada</string>
     <string name="textocambiopassexito">La contraseña ha sido actualizada con éxito</string>
+    <string name="tituloborrarmensaje">Borrar mensaje</string>
+    <string name="textoborrarmensaje">¿Está seguro de que quiere borrar el mensaje?</string>
+    <string name="titulomensajeborrado">Mensaje borrado</string>
+    <string name="textomensajeborrado">El mensaje se ha borrado correctamente.</string>
+    <string name="titulocerrarsesion">Cerrar sesión</string>
+    <string name="textocerrarsesion">¿Está seguro de que quiere cerrar sesión?</string>
 
     <!--Login-->
     <string name="espereLogin">Entrando en la app. Espere, por favor ...</string>
@@ -150,6 +157,8 @@
     <string name="espereenviarmensaje">Enviando mensaje. Espere, por favor ...</string>
     <string name="esperemostrarperfil">Mostrando tu perfil. Espere, por favor ...</string>
     <string name="espereactualizandoperfil">Actualizando perfil. Espere, por favor ...</string>
+    <string name="esperebandejaentrada">Cargando mensajes. Espere, por favor ...</string>
+    <string name="espereleermensaje">Mostrando mensaje. Espere, por favor ...</string>
 
     <!--otras -->
     <string name="espereNuevoUser">Insertando registro y subiendo foto. Espere, por favor...</string>

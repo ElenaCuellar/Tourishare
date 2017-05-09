@@ -41,9 +41,6 @@ public class EnviarMensaje extends AppCompatActivity{
         Bundle extras = getIntent().getExtras();
 
         if(extras != null) {
-            //!!para parametrizar mas esta clase y poder usarla al enviar un mensaje desde la lista d amigos tambien, usar
-            //!!las ids idEmisor e idReceptor con la misma key siempre
-            //!!tambien tener en cuenta lo del mensaje en el onactivityresult de la actividad que llama a esta
             idEmisor = extras.getInt("idEmisor");
             idReceptor = extras.getInt("idReceptor");
         }

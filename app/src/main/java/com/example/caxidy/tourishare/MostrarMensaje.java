@@ -81,7 +81,7 @@ public class MostrarMensaje {
         alertDialog.show();
     }
 
-    public void mensajeMainIntent(final Activity act, String titulo, String mensaje, String boton){
+    public void mensajeMainIntent(final Activity act, String titulo, String mensaje, String boton, boolean conCancelar){
         AlertDialog.Builder alertDialogBu = new AlertDialog.Builder(contx);
         alertDialogBu.setTitle(titulo);
         alertDialogBu.setMessage(mensaje);
@@ -95,6 +95,13 @@ public class MostrarMensaje {
                 act.startActivity(i);
             }
         });
+        if(conCancelar) {
+            alertDialogBu.setNeutralButton(contx.getString(R.string.cancelar), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+        }
         AlertDialog alertDialog = alertDialogBu.create();
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
@@ -364,6 +371,71 @@ public class MostrarMensaje {
 
             //Volvemos al intent principal (de registro)
             mensajeMainIntent(act,contx.getString(R.string.registroborrado),contx.getString(R.string.registroborrado),
+                    contx.getString(R.string.aceptar),false);
+        }
+    }
+
+    //Borrar mensaje
+    public void mostrarBorrarMensaje(String titulo, String mensaje, String boton, final int id,
+                                    final String tabla, final String cond,
+                                    final String url_del, final String url_sel, final String ip, final Activity act){
+
+        AlertDialog.Builder alertDialogBu = new AlertDialog.Builder(contx);
+        alertDialogBu.setTitle(titulo);
+        alertDialogBu.setMessage(mensaje);
+        alertDialogBu.setIcon(R.mipmap.ic_launcher);
+        alertDialogBu.setPositiveButton(boton, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                //Borrar registro
+                opBd = new OperacionesBD();
+                new BorrarMensajeAsyncTask(url_del,tabla,cond,id, url_sel, ip, act).execute();
+            }
+        });
+        alertDialogBu.setNeutralButton(contx.getString(R.string.cancelar), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {}
+        });
+        AlertDialog alertDialog = alertDialogBu.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
+    //Tarea asincrona para borrar el mensaje
+    class BorrarMensajeAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        String tabla, cond, url, urlSel, ip;
+        int id;
+        Activity act;
+
+        protected BorrarMensajeAsyncTask(String url, String tabla, String cond, int id, String urlSel, String ip, Activity act){
+            this.url = url;
+            this.tabla = tabla;
+            this.cond = cond;
+            this.id = id;
+            this.urlSel = urlSel;
+            this.ip = ip;
+            this.act = act;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+
+            opBd.borrarRegistroId(url, tabla, cond, id);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            //Volvemos a la bandeja de entrada
+            mensajeFinish(act,contx.getString(R.string.titulomensajeborrado),contx.getString(R.string.textomensajeborrado),
                     contx.getString(R.string.aceptar));
         }
     }

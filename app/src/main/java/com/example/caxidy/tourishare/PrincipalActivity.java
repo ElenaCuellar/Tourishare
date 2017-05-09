@@ -54,7 +54,7 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
 
         delegate = AppCompatDelegate.create(this,this);
         delegate.onCreate(savedInstanceState);
-        delegate.setContentView(R.layout.activity_acciones_user); //!!activity_principal ---> a lo mejor es este layout, pero tngo q Inflate el drawer pa q s vea
+        delegate.setContentView(R.layout.activity_acciones_user);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         delegate.setSupportActionBar(toolbar);
 
@@ -196,23 +196,26 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
 
         }else if(id == R.id.itemCiudades){
             //lista de ciudades favoritas
-            //!!lista filtrando por ciudades favoritas, se puede reciclar o parametrizar la clase MostrarCiudad y etc
             Intent i = new Intent(this,CiudadesFavActivity.class);
-            //!!pasar extras = id de usuario, etc , un objeto usuario entero a lo mejor
             i.putExtra("miId",miUsuario.getId());
             startActivity(i);
 
         }else if(id == R.id.itemamigos){
             //lista de amigos
-            //!!lista filtrando por amigos, se pueden reciclar  o parametrizar las clases MostrarUsuario y EnviarMensaje
+            Intent i = new Intent(this,AmigosActivity.class);
+            i.putExtra("miId",miUsuario.getId());
+            startActivity(i);
 
         }else if(id == R.id.itemMensajes){
             //bandeja de entrada
-            //!!lista con los mensajes recibidos. Tener en cuentas las notas de Keep
+            Intent i = new Intent(this,BandejaEntrada.class);
+            i.putExtra("miId",miUsuario.getId());
+            startActivity(i);
 
         }else if(id == R.id.itemlogout){
             //cerrar sesion
-            //!!mirar pdf
+            new MostrarMensaje(this).mensajeMainIntent(PrincipalActivity.this,getString(R.string.titulocerrarsesion),
+                    getString(R.string.textocerrarsesion),getString(R.string.aceptar),true);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

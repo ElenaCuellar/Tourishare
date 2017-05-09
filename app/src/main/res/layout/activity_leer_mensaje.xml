@@ -45,7 +45,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/asuntobandejaentrada"
-                android:textSize="14sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/txSubject"
@@ -56,7 +56,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_toRightOf="@id/textoSubject"
                 android:text="@string/asuntoejbandeja"
-                android:textSize="14sp" />
+                android:textSize="18sp" />
         </RelativeLayout>
 
         <EditText

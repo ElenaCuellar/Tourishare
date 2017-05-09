@@ -32,11 +32,11 @@
     <string name="novato">Newcomer</string>
     <string name="titulolistaamigos">YOUR FRIENDS</string>
     <string name="titulolistacfav">YOUR CITIES</string>
-    <string name="asuntobandejaentrada">Subject</string>
+    <string name="asuntobandejaentrada">Subject:</string>
     <string name="asuntoejbandeja">Message subject...</string>
     <string name="botonborrarbandejaentrada">Delete message</string>
     <string name="cuerpoejbandeja">Message body...</string>
-    <string name="emisorbandejaentrada">Sender</string>
+    <string name="emisorbandejaentrada">Sender:</string>
     <string name="emisorejbandeja">Sender name...</string>
     <string name="salir">Exit</string>
     <string name="titulobandejaentrada">MAILBOX</string>
@@ -134,4 +134,13 @@
     <string name="titulocambiarpass">Update password</string>
     <string name="textocambiopassexito">Password updated successfully</string>
     <string name="titulocambiopassexito">Password updated</string>
+    <string name="esperebandejaentrada">Loading messages. Please wait ...</string>
+    <string name="espereleermensaje">Showing message. Please wait ...</string>
+    <string name="asunto">Subject</string>
+    <string name="textoborrarmensaje">Confirm message deletion.</string>
+    <string name="tituloborrarmensaje">Delete message</string>
+    <string name="textomensajeborrado">Message deleted successfully.</string>
+    <string name="titulomensajeborrado">Message deleted</string>
+    <string name="textocerrarsesion">Confirm logout.</string>
+    <string name="titulocerrarsesion">Logout</string>
 </resources>

@@ -721,4 +721,83 @@ public class OperacionesBD {
         }
         return null;
     }
+
+    public ArrayList<Usuario> getAmigos(String linkConsulta, int id) {
+        //SELECT * FROM usuarios WHERE IdUsuario IN (SELECT IdAmigo FROM amigos WHERE IdUsuario = id);
+        consulta="SELECT * FROM usuarios WHERE IdUsuario IN (SELECT IdAmigo FROM amigos WHERE IdUsuario = " + id + ")";
+
+        ArrayList<Usuario> arrAmigo = new ArrayList<>();
+
+        try {
+            //Realizar la consulta que devolvera un array de JSON
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            jsonArrResultado = conex.sendRequest(linkConsulta, parametros);
+
+            //Recorremos el jsonarray con los distintos usuarios
+            if (jsonArrResultado != null) {
+                for (int i = 0; i < jsonArrResultado.length(); i++) {
+                    JSONObject jsonObject = jsonArrResultado.getJSONObject(i);
+                    Usuario us = new Usuario(jsonObject.getInt("idUsuario"),
+                            jsonObject.getString("Nombre"),jsonObject.getString("Password"),
+                            jsonObject.getString("UrlFoto"),jsonObject.getInt("idRango"), jsonObject.getString("ciudad"));
+                    arrAmigo.add(i,us);
+                }
+                return arrAmigo;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public ArrayList<Mensaje> getMensajes(String linkConsulta, int id) {
+        //SELECT * FROM mensajes WHERE IdUsuario = id;
+        consulta="SELECT * FROM mensajes WHERE IdUsuario = " + id;
+
+        ArrayList<Mensaje> arrM = new ArrayList<>();
+
+        try {
+            //Realizar la consulta que devolvera un array de JSON
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            jsonArrResultado = conex.sendRequest(linkConsulta, parametros);
+
+            //Recorremos el jsonarray con los distintos mensajes
+            if (jsonArrResultado != null) {
+                for (int i = 0; i < jsonArrResultado.length(); i++) {
+                    JSONObject jsonObject = jsonArrResultado.getJSONObject(i);
+                    Mensaje m = new Mensaje(jsonObject.getInt("IdMensaje"),
+                            jsonObject.getInt("IdUsuario"),jsonObject.getInt("IdEmisor"),
+                            jsonObject.getString("Cabecera"),jsonObject.getString("Cuerpo"));
+                    arrM.add(i,m);
+                }
+                return arrM;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getEmisor(String linkConsulta, int idE){
+        //SELECT Nombre from usuarios WHERE idUsuario = idE
+
+        consulta = "SELECT Nombre FROM usuarios WHERE idUsuario = " + idE;
+
+        try {
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            jsonArrResultado = conex.sendRequest(linkConsulta, parametros);
+
+            if (jsonArrResultado != null) {
+                JSONObject jsonObject = jsonArrResultado.getJSONObject(0);
+                return jsonObject.getString("Nombre");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return "";
+    }
 }

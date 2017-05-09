@@ -74,6 +74,12 @@
 
         <activity android:name=".CiudadesFavActivity"/>
 
+        <activity android:name=".AmigosActivity"/>
+
+        <activity android:name=".BandejaEntrada"/>
+
+        <activity android:name=".LeerMensaje"/>
+
         <activity
             android:name=".PrincipalActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
