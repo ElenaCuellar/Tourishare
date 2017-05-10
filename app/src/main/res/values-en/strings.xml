@@ -143,4 +143,8 @@
     <string name="titulomensajeborrado">Message deleted</string>
     <string name="textocerrarsesion">Confirm logout.</string>
     <string name="titulocerrarsesion">Logout</string>
+    <string name="notifTituloMsg">New messages</string>
+    <string name="notiftextoCiudad">New cities added to the list</string>
+    <string name="notiftextoMsg">New inbox messages</string>
+    <string name="notiftituloCiudad">New cities</string>
 </resources>

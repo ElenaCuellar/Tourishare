@@ -63,6 +63,20 @@ public class BandejaEntrada extends ListActivity{
         });
     }
 
+    public void comprobarBandeja(){
+        //Compara el numero de mensajes actual con el anterior, para lanzar una notificacion en caso de haber mas mensajes
+        SharedPreferences prefs = this.getPreferences(Context.MODE_PRIVATE);
+        int numMsg = prefs.getInt("numeroMensajes", 0);
+        int numMsgActual = listview.getAdapter().getCount();
+
+        //Si antes habia menos mensajes que ahora...hay nuevos mensajes
+        if (numMsg < numMsgActual)
+            new Notificacion().lanzarNotificacion(this,getString(R.string.notifTituloMsg),getString(R.string.notiftextoMsg));
+
+        //Guardamos el nuevo numero de mensajes
+        prefs.edit().putInt("numeroMensajes",numMsgActual).apply();
+    }
+
     public void abrirMensaje(int msg){
         Mensaje mensaje;
         boolean encontrado = false;
@@ -133,6 +147,8 @@ public class BandejaEntrada extends ListActivity{
                 adaptadorM = new AdaptadorMensaje(BandejaEntrada.this, listaMensajes);
                 adaptadorM.notifyDataSetChanged();
                 setListAdapter(adaptadorM);
+
+                comprobarBandeja();
             }
             else
                 new MostrarMensaje(BandejaEntrada.this).mostrarMensaje(getString(R.string.tituloproblemaactulistaprincipal),

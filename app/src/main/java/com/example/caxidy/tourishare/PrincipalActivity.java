@@ -120,6 +120,20 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
         startActivity(i);
     }
 
+    //Compara el numero de ciudades actual con el anterior, para lanzar una notificacion en caso de haber nuevas ciudades
+    public void comprobarListaCiudades(){
+        SharedPreferences prefs = this.getPreferences(Context.MODE_PRIVATE);
+        int numCiudades = prefs.getInt("numeroCiudades", 0);
+        int numCiudadesActual = listview.getAdapter().getCount();
+
+        //Si antes habia menos ciudades que ahora...hay nuevas ciudades
+        if (numCiudades < numCiudadesActual)
+            new Notificacion().lanzarNotificacion(this,getString(R.string.notiftituloCiudad),getString(R.string.notiftextoCiudad));
+
+        //Guardamos el nuevo numero de ciudades
+        prefs.edit().putInt("numeroCiudades",numCiudadesActual).apply();
+    }
+
     public void llenarLista(){
         listaCiudades.clear();
         //Llenar la lista de ciudades
@@ -310,6 +324,9 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
                 adaptadorP.notifyDataSetChanged();
                 setListAdapter(adaptadorP);
                 setDatosCabeceraDrawer(navigationView);
+
+                //Lanzar notificacion si hay nuevas ciudades
+                comprobarListaCiudades();
             }
             else
                 new MostrarMensaje(PrincipalActivity.this).mostrarMensaje(getString(R.string.tituloproblemaactulistaprincipal),
