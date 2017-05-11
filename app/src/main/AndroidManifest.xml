@@ -44,44 +44,79 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity"/>
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".SignupActivity"/>
+        <activity
+            android:name=".SignupActivity"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".LoginActivity"/>
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".Preferencias"/>
 
-        <activity android:name=".CrearCiudad"/>
+        <activity
+            android:name=".CrearCiudad"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".CrearSubcategoria"/>
+        <activity
+            android:name=".CrearSubcategoria"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".MostrarCiudad"/>
+        <activity
+            android:name=".MostrarCiudad"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".EditarCiudad"/>
+        <activity
+            android:name=".EditarCiudad"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".ListaSubcategoria"/>
+        <activity
+            android:name=".ListaSubcategoria"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".MostrarSubcategoria"/>
+        <activity
+            android:name=".MostrarSubcategoria"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".EditarSubcategoria"/>
+        <activity
+            android:name=".EditarSubcategoria"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".MostrarUsuario"/>
+        <activity
+            android:name=".MostrarUsuario"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".EnviarMensaje"/>
+        <activity
+            android:name=".EnviarMensaje"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".MiPerfil"/>
+        <activity
+            android:name=".MiPerfil"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".CiudadesFavActivity"/>
+        <activity
+            android:name=".CiudadesFavActivity"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".AmigosActivity"/>
+        <activity
+            android:name=".AmigosActivity"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".BandejaEntrada"/>
+        <activity
+            android:name=".BandejaEntrada"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".LeerMensaje"/>
+        <activity
+            android:name=".LeerMensaje"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".PrincipalActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
 
     </application>

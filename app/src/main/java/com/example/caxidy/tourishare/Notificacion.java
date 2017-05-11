@@ -22,7 +22,7 @@ public class Notificacion {
         Notification noti = new NotificationCompat.Builder(contexto)
                 .setContentTitle(titulo)
                 .setContentText(texto)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.icono_notifs)
                 .setOngoing(false)
                 .setAutoCancel(true)
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
