@@ -39,6 +39,7 @@
     <string name="opamigos">Amigos</string>
     <string name="opmensajes">Mensajes</string>
     <string name="oplogout">Cerrar sesión</string>
+    <string name="opcancion">Poner canción</string>
 
     <!--cadenas del menu principal -->
     <string name="mnueva">Nueva ciudad</string>

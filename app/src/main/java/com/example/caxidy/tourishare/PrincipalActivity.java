@@ -231,6 +231,8 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
             //cerrar sesion
             new MostrarMensaje(this).mensajeMainIntent(PrincipalActivity.this,getString(R.string.titulocerrarsesion),
                     getString(R.string.textocerrarsesion),getString(R.string.aceptar),true);
+        }else if(id == R.id.itemCancion){
+            //!!iniciar un servicio que reproduzca una cancion que escojamos del sistema
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
