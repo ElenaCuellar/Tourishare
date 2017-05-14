@@ -10,12 +10,6 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 public class Notificacion {
     //Clase para usar notificaciones
 
-    /**
-     * Metodo lanzarNotificacion:
-     * @param contexto El contexto desde donde se lanza la notificacion. Suele ser "this" el parametro
-     * @param titulo Titulo de la notificacion
-     * @param texto Texto de la notificacion
-     */
     public void lanzarNotificacion(Context contexto,String titulo, String texto){
 
         //Builder de la notificacion. Se establecen las propiedades

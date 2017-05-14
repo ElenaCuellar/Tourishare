@@ -7,6 +7,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -143,10 +148,6 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
     @Override
     protected void onRestart () {
         super.onRestart();
-        /*adaptadorP = null;
-        adaptadorP = new AdaptadorPrincipal(this,listaCiudades);
-        adaptadorP.notifyDataSetChanged();
-        setListAdapter(adaptadorP);*/
         llenarLista();
     }
 
@@ -262,9 +263,28 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
         if (archivoImg.exists()) {
             Bitmap bm = BitmapFactory.decodeFile(archivoImg.getAbsolutePath());
             Bitmap bmResized = Bitmap.createScaledBitmap(bm, 120, 120, true);
+
+            //Redondear la foto de perfil
+            Bitmap output = Bitmap.createBitmap(bmResized.getWidth(),
+                    bmResized.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(output);
+
+            final int color = 0xff424242;
+            final Paint paint = new Paint();
+            final Rect rect = new Rect(0, 0, bmResized.getWidth(), bmResized.getHeight());
+
+            paint.setAntiAlias(true);
+            canvas.drawARGB(0, 0, 0, 0);
+            paint.setColor(color);
+            canvas.drawCircle(bmResized.getWidth() / 2, bmResized.getHeight() / 2,
+                    bmResized.getWidth() / 2, paint);
+            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+            canvas.drawBitmap(bmResized, rect, rect, paint);
+
+            //Poner la foto en el imageView
             if (img.getDrawingCache() != null)
                 img.destroyDrawingCache();
-            img.setImageBitmap(bmResized);
+            img.setImageBitmap(output);
             img.setAdjustViewBounds(true);
         }
     }

@@ -68,6 +68,7 @@
     <string name="cuerpoejbandeja">Cuerpo del mensaje...</string>
     <string name="botonborrarbandejaentrada">Eliminar mensaje</string>
     <string name="botonenviarbandejaentrada">Enviar mensaje</string>
+    <string name="botonrespondermensajes">Responder mensaje</string>
 
     <!--cadenas de Preferencias -->
     <string name="prefGrupo">PREFERENCIAS DE SERVIDOR</string>

@@ -2,6 +2,7 @@ package com.example.caxidy.tourishare;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,9 +16,11 @@ import android.widget.TextView;
 
 public class LeerMensaje extends AppCompatActivity{
 
+    private static final int ENVIAR_MENSAJE = 1;
+
     TextView txSubject, txSender;
     EditText txBody;
-    Button bEliminar, bSalir;
+    Button bResponder, bEliminar, bSalir;
     OperacionesBD opBd;
     private String ip_server;
     private String url_select;
@@ -43,10 +46,18 @@ public class LeerMensaje extends AppCompatActivity{
         txSubject = (TextView) findViewById(R.id.txSubject);
         txSender = (TextView) findViewById(R.id.txFrom);
         txBody = (EditText) findViewById(R.id.txBody);
+        bResponder = (Button) findViewById(R.id.bEnvMsg);
         bEliminar = (Button) findViewById(R.id.bDeleteMsg);
         bSalir = (Button) findViewById(R.id.bExitMsg);
 
         opBd = new OperacionesBD();
+
+        bResponder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                responderMsg();
+            }
+        });
 
         bEliminar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +86,21 @@ public class LeerMensaje extends AppCompatActivity{
 
         new MuestraMensajeAsyncTask().execute();
 
+    }
+
+    protected void responderMsg(){
+        Intent intent = new Intent(this,EnviarMensaje.class);
+        intent.putExtra("idEmisor",msg.getIdUsuario());
+        intent.putExtra("idReceptor",msg.getIdEmisor());
+        startActivityForResult(intent,ENVIAR_MENSAJE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == ENVIAR_MENSAJE && resultCode == RESULT_OK){
+            new MostrarMensaje(this).mostrarMensaje(getString(R.string.tituloenviarmensaje),
+                    getString(R.string.textoenviarmensaje),getString(R.string.aceptar));
+        }
     }
 
     //Tarea asincrona para mostrar los datos del usuario
