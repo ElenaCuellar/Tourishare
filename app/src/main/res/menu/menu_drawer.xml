@@ -19,7 +19,7 @@
             android:title="@string/opmensajes" />
         <item
             android:id="@+id/itemCancion"
-            android:icon="@android:drawable/stat_sys_headset"
+            android:icon="@android:drawable/ic_lock_silent_mode_off"
             android:title="@string/opcancion" />
         <item
             android:id="@+id/itemlogout"

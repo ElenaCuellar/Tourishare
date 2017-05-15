@@ -232,12 +232,34 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
             new MostrarMensaje(this).mensajeMainIntent(PrincipalActivity.this,getString(R.string.titulocerrarsesion),
                     getString(R.string.textocerrarsesion),getString(R.string.aceptar),true);
         }else if(id == R.id.itemCancion){
-            //!!iniciar un servicio que reproduzca una cancion que escojamos del sistema
+            //Reproducir o parar la cancion de fondo
+            if(item.getTitle().equals(getString(R.string.opcancion))){
+
+                //arrancamos el servicio
+                startService(new Intent(this,ServicioMusicaFondo.class));
+                //cambiamos la apariencia de la opcion
+                item.setIcon(android.R.drawable.ic_lock_silent_mode);
+                item.setTitle(R.string.opcancionoff);
+
+            }else if(item.getTitle().equals(getString(R.string.opcancionoff))){
+
+                //paramos el servicio
+                stopService(new Intent(this,ServicioMusicaFondo.class));
+                item.setIcon(android.R.drawable.ic_lock_silent_mode_off);
+                item.setTitle(R.string.opcancion);
+
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        stopService(new Intent(this,ServicioMusicaFondo.class));
+        finish();
     }
 
     @Override

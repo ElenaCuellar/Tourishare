@@ -88,6 +88,8 @@ public class MostrarMensaje {
         alertDialogBu.setIcon(R.mipmap.ic_launcher);
         alertDialogBu.setPositiveButton(boton, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+                //parar la musica, si esta activa
+                contx.stopService(new Intent(contx,ServicioMusicaFondo.class));
                 //Ir a la actividad del Main Activity
                 Intent i = new Intent(act,MainActivity.class);
                 //limpiar la pila de actividades
