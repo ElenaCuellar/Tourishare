@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -77,8 +78,8 @@ public class SignupActivity extends AppCompatActivity {
         tuciudad = (EditText) findViewById(R.id.txtuciudad);
 
         //Recuperar la IP de las preferencias
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        ip_server = sharedPref.getString("ipServer","192.168.1.101");
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        ip_server = sharedPref.getString("ipServer","192.168.1.131");
 
         url_insert = "http://" + ip_server + "/archivosphp/insert_user.php";
 

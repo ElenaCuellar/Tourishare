@@ -16,6 +16,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -133,8 +134,8 @@ public class EditarSubcategoria extends AppCompatActivity implements OnMapReadyC
         opBd = new OperacionesBD();
 
         //Recuperar la IP de las preferencias
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        ip_server = sharedPref.getString("ipServer","192.168.1.101");
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        ip_server = sharedPref.getString("ipServer","192.168.1.131");
 
         url_update = "http://" + ip_server + "/archivosphp/update.php";
 

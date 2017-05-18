@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -70,8 +71,8 @@ public class EnviarMensaje extends AppCompatActivity{
         opBd = new OperacionesBD();
 
         //Recuperar la IP de las preferencias
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        ip_server = sharedPref.getString("ipServer","192.168.1.101");
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        ip_server = sharedPref.getString("ipServer","192.168.1.131");
 
         url_insert = "http://" + ip_server + "/archivosphp/insert_mensaje.php";
     }

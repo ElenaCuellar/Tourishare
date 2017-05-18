@@ -14,6 +14,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -83,8 +84,8 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
         setDatosCabeceraDrawer(navigationView);
 
         //Recuperar la IP de las preferencias
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        ip_server = sharedPref.getString("ipServer","192.168.1.101");
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        ip_server = sharedPref.getString("ipServer","192.168.1.131");
 
         url_select = "http://" + ip_server + "/archivosphp/consulta.php";
 

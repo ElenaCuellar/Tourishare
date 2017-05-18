@@ -7,11 +7,13 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -102,8 +104,9 @@ public class MainActivity extends AppCompatActivity {
     protected void descargaFotos(){
 
         //Actualizamos la ip del servidor
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        ip_server = sharedPref.getString("ipServer","192.168.1.101");
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        ip_server = sharedPref.getString("ipServer","192.168.1.131");
+        Toast.makeText(this,ip_server,Toast.LENGTH_SHORT).show();
 
         //Borramos las fotos, si las hubiere
         File miRuta = getExternalFilesDir(null);

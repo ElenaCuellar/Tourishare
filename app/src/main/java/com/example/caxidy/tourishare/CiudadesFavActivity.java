@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.Window;
@@ -45,8 +46,8 @@ public class CiudadesFavActivity extends ListActivity {
         conexFtp = new ConexionFtp();
 
         //Recuperar la IP de las preferencias
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        ip_server = sharedPref.getString("ipServer","192.168.1.101");
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        ip_server = sharedPref.getString("ipServer","192.168.1.131");
 
         url_select = "http://" + ip_server + "/archivosphp/consulta.php";
 

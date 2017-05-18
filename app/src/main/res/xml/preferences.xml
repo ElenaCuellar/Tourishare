@@ -10,7 +10,7 @@
             android:title="@string/tituloprefip"
             android:summary="@string/tituloprefip"
             android:dialogTitle="@string/tituloprefip"
-            android:defaultValue="192.168.1.101"/>
+            android:defaultValue="192.168.1.131"/>
 
     </PreferenceCategory>
 
