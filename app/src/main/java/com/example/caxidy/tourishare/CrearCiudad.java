@@ -425,25 +425,25 @@ public class CrearCiudad extends AppCompatActivity implements OnMapReadyCallback
                 System.out.println(json.get("success"));
                 exito = json.getInt("success");
 
-                //Hacemos un UPDATE de los idCiudad de las subcategorias
                 if(exito == 1){
-                    if(idsSubcats.size() > 0) {
-                        idC = opBd.getIdCiudad(url_select); //obtenemos el id de ciudad que acabamos de añadir
 
-                        if (idC != -1) {
+                    idC = opBd.getIdCiudad(url_select); //obtenemos el id de ciudad que acabamos de añadir
+
+                    if(idC != -1) {
+                        //Hacemos un UPDATE de los idCiudad de las subcategorias
+                        if (idsSubcats.size() > 0) {
                             //actualizamos el campo idCiudad de las subcats
                             resUpdate = opBd.updateIdCiudadSubcategorias(url_update, idC, idsSubcats);
+                        } else
+                            resUpdate = 1;
 
-                            //añadimos el colaborador
-                            opBd.agregarColab(url_insert_colab,idC,idUsuario, true);
+                        //añadimos el colaborador
+                        opBd.agregarColab(url_insert_colab, idC, idUsuario, true);
 
-                            //sumamos puntos al colaborador, para el rango
-                            opBd.sumarPuntosRango(url_update,idUsuario);
-                            opBd.cambiarRango(url_update,idUsuario);
-                        }
+                        //sumamos puntos al colaborador, para el rango
+                        opBd.sumarPuntosRango(url_update, idUsuario);
+                        opBd.cambiarRango(url_update, idUsuario);
                     }
-                    else
-                        resUpdate = 1;
                 }
 
             } catch (JSONException e) {
