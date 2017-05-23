@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -21,6 +22,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -63,6 +65,7 @@ public class EditarSubcategoria extends AppCompatActivity implements OnMapReadyC
     Calendar calendario;
     Subcategoria subcategoria;
     int idSubcat, idTipo, idC, idUsuario;
+    boolean nuevafoto = false;
 
     private String ip_server;
     private String url_update;
@@ -113,7 +116,13 @@ public class EditarSubcategoria extends AppCompatActivity implements OnMapReadyC
 
             if (archivoImg.exists()) {
                 Bitmap bm = BitmapFactory.decodeFile(archivoImg.getAbsolutePath());
-                Bitmap bmResized = Bitmap.createScaledBitmap(bm, 250, 250, true);
+                //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
+                Display display = getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                int scaleToUse = 20;
+                int sizeBm = size.y * scaleToUse / 100;
+                Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
                 imgSubcat.setImageBitmap(bmResized);
                 imgSubcat.setAdjustViewBounds(true);
             }
@@ -160,35 +169,42 @@ public class EditarSubcategoria extends AppCompatActivity implements OnMapReadyC
             @Override
             public void onClick(View v) {
                 //Actualizar registro de subcategoria
-                if(fotoGaleria != null && !txNombre.getText().toString().equals("")){
+                if(!txNombre.getText().toString().equals("")){
                     //Modifica el registro en la BD y la foto en Filezilla
-                    //Nombre de la foto (su nombre en galeria + la fecha actual + extension)
-                    calendario = Calendar.getInstance();
-                    String nomFoto = "F" + calendario.get(Calendar.YEAR) + calendario.get(Calendar.MONTH) +
-                            calendario.get(Calendar.DAY_OF_MONTH) + calendario.get(Calendar.HOUR_OF_DAY) +
-                            calendario.get(Calendar.MINUTE) + calendario.get(Calendar.SECOND) +
-                            calendario.get(Calendar.MILLISECOND) + "F" + fotoGaleria.getLastPathSegment() + ".jpg";
+                    if(fotoGaleria != null) {
+                        //Nombre de la foto (su nombre en galeria + la fecha actual + extension)
+                        calendario = Calendar.getInstance();
+                        String nomFoto = "F" + calendario.get(Calendar.YEAR) + calendario.get(Calendar.MONTH) +
+                                calendario.get(Calendar.DAY_OF_MONTH) + calendario.get(Calendar.HOUR_OF_DAY) +
+                                calendario.get(Calendar.MINUTE) + calendario.get(Calendar.SECOND) +
+                                calendario.get(Calendar.MILLISECOND) + "F" + fotoGaleria.getLastPathSegment() + ".jpg";
 
-                    //urls para subir la foto al servidor Filezilla y para localizar la foto a subir de la galeria del dispositivo
-                    url_ftp_upload = "archivosFilezilla/" + nomFoto;
-                    url_ftp_filepath = getPathAbsolutoUri(getApplicationContext(), fotoGaleria);
-                    System.out.println(nomFoto + " --- " + url_ftp_upload + " --- " + url_ftp_filepath);
+                        //urls para subir la foto al servidor Filezilla y para localizar la foto a subir de la galeria del dispositivo
+                        url_ftp_upload = "archivosFilezilla/" + nomFoto;
+                        url_ftp_filepath = getPathAbsolutoUri(getApplicationContext(), fotoGaleria);
+                        System.out.println(nomFoto + " --- " + url_ftp_upload + " --- " + url_ftp_filepath);
 
-                    subcategoria = new Subcategoria(idSubcat, idC, idTipo,
-                    txNombre.getText().toString(), txDescr.getText().toString(), nomFoto,
-                            lat, longi, rBar.getRating());
+                        subcategoria = new Subcategoria(idSubcat, idC, idTipo,
+                                txNombre.getText().toString(), txDescr.getText().toString(), nomFoto,
+                                lat, longi, rBar.getRating());
+                        nuevafoto=true;
 
-                    //Antes de insertar nada, verificamos los permisos de acceso a media, fotos... (necesario para versiones mayores a la 23)
-                    boolean verificado = false;
-                    while (!verificado) {
-                        verificado = verificarPermisosAlmacenamiento(EditarSubcategoria.this);
+                        //Antes de insertar nada, verificamos los permisos de acceso a media, fotos... (necesario para versiones mayores a la 23)
+                        boolean verificado = false;
+                        while (!verificado) {
+                            verificado = verificarPermisosAlmacenamiento(EditarSubcategoria.this);
+                        }
+                    }
+                    else{
+                        subcategoria = new Subcategoria(idSubcat, idC, idTipo,
+                                txNombre.getText().toString(), txDescr.getText().toString(), lat, longi, rBar.getRating());
                     }
                     //modificamos...
                     new ModificaSubcategoriaAsyncTask().execute();
                 }
                 else{
                     //Si no, muestra un mensaje avisandonos
-                    new MostrarMensaje(EditarSubcategoria.this).mostrarMensaje(getString(R.string.titulodiagsignup),getString(R.string.textodiaginsertsubcat),
+                    new MostrarMensaje(EditarSubcategoria.this).mostrarMensaje(getString(R.string.titulononombre),getString(R.string.textononombre),
                             getString(R.string.aceptar));
                 }
             }
@@ -260,7 +276,14 @@ public class EditarSubcategoria extends AppCompatActivity implements OnMapReadyC
             try {
                 //Ponemos la foto en el ImageView
                 bm = MediaStore.Images.Media.getBitmap(getContentResolver(), fotoGaleria);
-                Bitmap bmResized = Bitmap.createScaledBitmap(bm, 250, 250, true);
+                //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
+                Display display = getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                int scaleToUse = 20;
+                int sizeBm = size.y * scaleToUse / 100;
+                Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
+
                 if (imgSubcat.getDrawingCache() != null)
                     imgSubcat.destroyDrawingCache();
                 imgSubcat.setImageBitmap(bmResized);
@@ -296,7 +319,13 @@ public class EditarSubcategoria extends AppCompatActivity implements OnMapReadyC
 
         //poner la imagen en la posic
         Bitmap bitmap = ((BitmapDrawable) imgSubcat.getDrawable()).getBitmap();
-        Bitmap bmResized = Bitmap.createScaledBitmap(ponerBordeImg(bitmap,15), 120, 120, true);
+        //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int scaleToUse = 8;
+        int sizeBm = size.y * scaleToUse / 100;
+        Bitmap bmResized = Bitmap.createScaledBitmap(ponerBordeImg(bitmap,15), sizeBm, sizeBm, true);
 
         gMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(bmResized))
                 .anchor(0.0f, 1.0f)
@@ -329,7 +358,13 @@ public class EditarSubcategoria extends AppCompatActivity implements OnMapReadyC
 
         //poner la imagen en la posic de la ciudad
         Bitmap bitmap = ((BitmapDrawable) imgSubcat.getDrawable()).getBitmap();
-        Bitmap bmResized = Bitmap.createScaledBitmap(ponerBordeImg(bitmap,15), 120, 120, true);
+        //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int scaleToUse = 8;
+        int sizeBm = size.y * scaleToUse / 100;
+        Bitmap bmResized = Bitmap.createScaledBitmap(ponerBordeImg(bitmap,15), sizeBm, sizeBm, true);
 
         gMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(bmResized))
                 .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
@@ -367,30 +402,35 @@ public class EditarSubcategoria extends AppCompatActivity implements OnMapReadyC
         @Override
         protected Void doInBackground(Void... arg0) {
 
-            //Borrar la foto anterior
-            HashMap<String, String> prms = new HashMap<>();
-            prms.put("host",ip_server);
-            prms.put("nombreFoto",opBd.getNombreFoto(url_select,"items","IdItem",idC));
+            if(nuevafoto) {
+                //Borrar la foto anterior
+                HashMap<String, String> prms = new HashMap<>();
+                prms.put("host", ip_server);
+                prms.put("nombreFoto", opBd.getNombreFoto(url_select, "items", "IdItem", idSubcat));
 
-            try {
-                conexionftp.borrarArchivo(prms);
-            } catch (IOException e) {
-                e.printStackTrace();
+                try {
+                    conexionftp.borrarArchivo(prms);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                //parametros del FTP
+                params = new HashMap<String, String>();
+                params.put("host", ip_server);
+                params.put("uploadpath", url_ftp_upload);
+                params.put("filepath", url_ftp_filepath);
+
+                //Llamamos a SubirDatos() para subir la foto a Filezilla Server
+                conexionftp.SubirDatos(params);
+
+                //Update del registro
+                actualizado = opBd.modificarSubcategoria(url_update, idSubcat, subcategoria);
+            }
+            else{
+                actualizado = opBd.modificarSubcategoriaSinFoto(url_update, idSubcat, subcategoria);
             }
 
-            //parametros del FTP
-            params = new HashMap<String, String>();
-            params.put("host", ip_server);
-            params.put("uploadpath", url_ftp_upload);
-            params.put("filepath", url_ftp_filepath);
-
-            //Llamamos a SubirDatos() para subir la foto a Filezilla Server
-            conexionftp.SubirDatos(params);
-
-            //Update del registro
-            actualizado = opBd.modificarSubcategoria(url_update,idSubcat,subcategoria);
-
-            //Hacemos un UPDATE de los idCiudad de las subcategorias
+            //Actualizamos los colaboradores
             if(actualizado){
                 try{
                     //comprobamos que el colaborador no ha sido agregado anteriormente a la ciudad de la subcat.

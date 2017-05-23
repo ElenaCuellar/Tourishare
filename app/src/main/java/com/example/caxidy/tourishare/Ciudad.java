@@ -9,7 +9,15 @@ public class Ciudad {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.urlfoto = urlfoto;
-        this.urlfoto = urlfoto;
+        this.latitud = latitud;
+        this.longitud = longitud;
+        id = -1;
+    }
+
+    public Ciudad(String nombre, String descripcion, double latitud, double longitud) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.urlfoto = "";
         this.latitud = latitud;
         this.longitud = longitud;
         id = -1;
@@ -18,7 +26,6 @@ public class Ciudad {
     public Ciudad (int id, String nombre, String descripcion, String urlfoto, double latitud, double longitud){
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.urlfoto = urlfoto;
         this.urlfoto = urlfoto;
         this.latitud = latitud;
         this.longitud = longitud;

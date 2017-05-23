@@ -87,7 +87,6 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="15dp"
-                android:layout_toRightOf="@id/edciudadfoto"
                 android:text="@string/edsituacionmapa"
                 android:textColor="@color/colorBlanco"
                 android:textSize="18sp"

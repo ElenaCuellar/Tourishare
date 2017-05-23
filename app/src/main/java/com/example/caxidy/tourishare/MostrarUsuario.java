@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -177,7 +179,13 @@ public class MostrarUsuario extends AppCompatActivity {
 
                 if (archivoImg.exists()) {
                     Bitmap bm = BitmapFactory.decodeFile(archivoImg.getAbsolutePath());
-                    Bitmap bmResized = Bitmap.createScaledBitmap(bm, 250, 250, true);
+                    //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
+                    Display display = getWindowManager().getDefaultDisplay();
+                    Point size = new Point();
+                    display.getSize(size);
+                    int scaleToUse = 20;
+                    int sizeBm = size.y * scaleToUse / 100;
+                    Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
                     foto.setImageBitmap(bmResized);
                     foto.setAdjustViewBounds(true);
                 }

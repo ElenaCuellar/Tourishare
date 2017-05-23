@@ -446,6 +446,28 @@ public class OperacionesBD {
         return false;
     }
 
+    public boolean modificarCiudadSinFoto(String linkConsultaUp, int id, Ciudad ciudad){
+        //UPDATE ciudades SET .... WHERE IdCiudad = id
+
+        consulta="UPDATE ciudades SET Nombre = '" + ciudad.getNombre() +"', Descripcion = '" +
+                ciudad.getDescripcion() + "', Latitud = "
+                + ciudad.getLatitud() + ", Longitud = " + ciudad.getLongitud() + " WHERE IdCiudad = " + id;
+
+        try {
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            JSONObject json = conexUp.sendRequest(linkConsultaUp, parametros);
+
+            if(json != null && json.getInt("success") != 0)
+                return true;
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     public String getCabeceraSubcat(String linkConsulta, int idTipo){
         //SELECT Categoria FROM categorias WHERE IdCategoria = idTipo
 
@@ -531,6 +553,29 @@ public class OperacionesBD {
                 subcat.getDescripcion() + "', UrlFoto = '"+ subcat.getUrlfoto()+ "', Latitud = " +
                 subcat.getLatitud() + ", Longitud = " + subcat.getLongitud() + ", Puntuacion = " + subcat.getPuntuacion() +
                 " WHERE IdItem = " + id;
+
+        try {
+            HashMap<String, String> parametros = new HashMap<>();
+            parametros.put("ins_sql", consulta);
+            JSONObject json = conexUp.sendRequest(linkConsultaUp, parametros);
+
+            if(json != null && json.getInt("success") != 0)
+                return true;
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public boolean modificarSubcategoriaSinFoto(String linkConsultaUp, int id, Subcategoria subcat){
+        //UPDATE items SET .... WHERE IdItem = id
+
+        consulta="UPDATE items SET IdCiudad = " + subcat.getIdCiudad() + ", IdCategoria = " + subcat.getIdCategoria() +
+                ", Nombre = '" + subcat.getNombre() +"', Descripcion = '" +
+                subcat.getDescripcion() + "', Latitud = " + subcat.getLatitud() +
+                ", Longitud = " + subcat.getLongitud() + ", Puntuacion = " + subcat.getPuntuacion() + " WHERE IdItem = " + id;
 
         try {
             HashMap<String, String> parametros = new HashMap<>();

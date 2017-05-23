@@ -1,71 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorFondo">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="85dp"
-        android:layout_marginRight="85dp"
-        android:layout_marginTop="100dp"
-        android:text="@string/usuario"
-        android:textColor="@color/colorBlanco"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/txUser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="85dp"
-        android:layout_marginRight="85dp"
-        android:textColor="@color/colorBlanco"
-        android:textStyle="bold"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="@string/hintuser"
-        android:layout_below="@id/textView"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorFondo">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txUser"
-        android:layout_marginLeft="85dp"
-        android:layout_marginRight="85dp"
-        android:layout_marginTop="35dp"
-        android:text="@string/pass"
-        android:textColor="@color/colorBlanco"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="85dp"
+                android:layout_marginRight="85dp"
+                android:layout_marginTop="100dp"
+                android:text="@string/usuario"
+                android:textColor="@color/colorBlanco"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/txPass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="85dp"
-        android:layout_marginRight="85dp"
-        android:textColor="@color/colorBlanco"
-        android:textStyle="bold"
-        android:ems="10"
-        android:inputType="textPassword"
-        android:hint="@string/hintpass"
-        android:layout_below="@id/textView2"/>
+            <EditText
+                android:id="@+id/txUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="85dp"
+                android:layout_marginRight="85dp"
+                android:textColor="@color/colorBlanco"
+                android:textStyle="bold"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:hint="@string/hintuser"
+                android:layout_below="@id/textView"/>
 
-    <Button
-        android:id="@+id/bLogin"
-        android:layout_width="194dp"
-        android:layout_height="48dp"
-        android:layout_marginLeft="85dp"
-        android:layout_marginRight="85dp"
-        android:layout_marginTop="85dp"
-        android:background="@color/colorBoton"
-        android:text="@string/entrar"
-        android:textColor="@color/colorBlanco"
-        android:textStyle="bold"
-        android:layout_below="@id/txPass"/>
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txUser"
+                android:layout_marginLeft="85dp"
+                android:layout_marginRight="85dp"
+                android:layout_marginTop="35dp"
+                android:text="@string/pass"
+                android:textColor="@color/colorBlanco"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-</RelativeLayout>
+            <EditText
+                android:id="@+id/txPass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="85dp"
+                android:layout_marginRight="85dp"
+                android:textColor="@color/colorBlanco"
+                android:textStyle="bold"
+                android:ems="10"
+                android:inputType="textPassword"
+                android:hint="@string/hintpass"
+                android:layout_below="@id/textView2"/>
+
+            <Button
+                android:id="@+id/bLogin"
+                android:layout_width="194dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="85dp"
+                android:layout_marginRight="85dp"
+                android:layout_marginTop="85dp"
+                android:background="@color/colorBoton"
+                android:text="@string/entrar"
+                android:textColor="@color/colorBlanco"
+                android:textStyle="bold"
+                android:layout_below="@id/txPass"/>
+
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>

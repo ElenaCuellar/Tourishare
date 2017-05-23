@@ -58,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="15dp"
+                android:layout_marginRight="10dp"
                 android:background="@color/colorsubcatItem"
                 android:text="@string/borrarsubcat"
                 android:textColor="@color/colorBlanco"
@@ -70,11 +71,10 @@
                 style="@style/Widget.AppCompat.RatingBar.Indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/bsubcateliminar"
+                android:layout_below="@id/subcatfoto"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="15dp"
-                android:layout_toRightOf="@id/subcatfoto"
                 android:isIndicator="true"
                 android:numStars="5"
                 android:rating="0"
@@ -94,7 +94,6 @@
                 android:ems="10"
                 android:inputType="textMultiLine"
                 android:focusable="false"
-                android:layout_toRightOf="@id/subcatfoto"
                 android:layout_below="@id/ratingbSubcat"/>
 
             <LinearLayout
@@ -104,7 +103,8 @@
                 android:layout_below="@id/txdescrpsubcat"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:layout_marginTop="15dp">
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp">
 
                 <fragment
                     android:id = "@+id/mostrarcfragment"

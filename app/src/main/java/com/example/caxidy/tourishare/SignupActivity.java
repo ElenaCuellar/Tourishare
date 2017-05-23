@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -161,7 +163,14 @@ public class SignupActivity extends AppCompatActivity {
             try {
                 //Ponemos la foto en el ImageView
                 bm = MediaStore.Images.Media.getBitmap(getContentResolver(), fotoGaleria);
-                Bitmap bmResized = Bitmap.createScaledBitmap(bm, 250, 250, true);
+                //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
+                Display display = getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                int scaleToUse = 20;
+                int sizeBm = size.y * scaleToUse / 100;
+                Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
+
                 if (tuFoto.getDrawingCache() != null)
                     tuFoto.destroyDrawingCache();
                 tuFoto.setImageBitmap(bmResized);

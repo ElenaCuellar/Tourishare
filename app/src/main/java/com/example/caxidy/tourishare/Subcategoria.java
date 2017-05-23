@@ -10,7 +10,6 @@ public class Subcategoria {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.urlfoto = urlfoto;
-        this.urlfoto = urlfoto;
         this.latitud = latitud;
         this.longitud = longitud;
         this.puntuacion = puntuacion;
@@ -23,7 +22,18 @@ public class Subcategoria {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.urlfoto = urlfoto;
-        this.urlfoto = urlfoto;
+        this.latitud = latitud;
+        this.longitud = longitud;
+        this.puntuacion = puntuacion;
+        this.id = id;
+    }
+
+    public Subcategoria(int id, int idCiudad, int idCategoria, String nombre, String descripcion, double latitud, double longitud, double puntuacion) {
+        this.idCategoria = idCategoria;
+        this.idCiudad = idCiudad;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.urlfoto = "";
         this.latitud = latitud;
         this.longitud = longitud;
         this.puntuacion = puntuacion;

@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
@@ -24,6 +25,7 @@ import android.support.v7.app.AppCompatCallback;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -287,7 +289,13 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
 
         if (archivoImg.exists()) {
             Bitmap bm = BitmapFactory.decodeFile(archivoImg.getAbsolutePath());
-            Bitmap bmResized = Bitmap.createScaledBitmap(bm, 120, 120, true);
+            //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int scaleToUse = 12;
+            int sizeBm = size.y * scaleToUse / 100;
+            Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
 
             //Redondear la foto de perfil
             Bitmap output = Bitmap.createBitmap(bmResized.getWidth(),

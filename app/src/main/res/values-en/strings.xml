@@ -24,7 +24,7 @@
     <string name="mactu">Refresh</string>
     <string name="mnueva">Add city</string>
     <string name="mpref">Preferences</string>
-    <string name="turango">your level</string>
+    <string name="turango">Your level</string>
     <string name="miborrar">Delete account</string>
     <string name="miconfirmar">Confirm changes</string>
     <string name="mipass">Change password</string>
@@ -57,7 +57,7 @@
     <string name="edtransporte">Transport</string>
     <string name="editar">Edit</string>
     <string name="seguir">Follow</string>
-    <string name="borrarciudad">Eliminar ciudad</string>
+    <string name="borrarciudad">Delete city</string>
     <string name="dejarseguir">Unfollow</string>
     <string name="titulolistasubcat">SUBCATEGORY</string>
     <string name="borrarsubcat">Delete</string>
@@ -85,12 +85,12 @@
     <string name="navOpen">Open Navigation Drawer</string>
     <string name="edciudadsearchmapa">Google search</string>
     <string name="error">Error</string>
-    <string name="textoidsubcatultima">Las Subcategories ID not found</string>
+    <string name="textoidsubcatultima">Subcategories ID not found</string>
     <string name="tituloidsubcatultima">ID not found</string>
     <string name="espereAddSubcat">Adding subcategory. Please wait ...</string>
     <string name="textodiaginsertsubcat">Choose a pic and a name</string>
-    <string name="textodiagsubcatcreada">Subcategor added</string>
-    <string name="titulodiagsubcatcreada">Subctegory added</string>
+    <string name="textodiagsubcatcreada">Subcategory added</string>
+    <string name="titulodiagsubcatcreada">Subcategory added</string>
     <string name="espereAddCiudad">Adding city. Please wait ...</string>
     <string name="textoidciudadsubcats">Error while updating subcategory data on this city</string>
     <string name="tituloidciudadsubcats">Updating error</string>
