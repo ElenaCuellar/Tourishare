@@ -340,21 +340,22 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
         @Override
         protected Void doInBackground(Void... arg0) {
             //1-Actualizar las fotos
-            //Borramos las fotos, si las hubiere
+            //Nombres de las imagenes del alm. interno
             File miRuta = getExternalFilesDir(null);
             File archivos[] = miRuta.listFiles();
+            ArrayList<String> imagenes = new ArrayList<>();
 
             if(archivos.length > 0) {
                 for (int i = 0; i < archivos.length; i++) {
-                    //si el archivo no es un directorio y es una imagen, se borra
+                    //si el archivo no es un directorio y es una imagen, se añade
                     if (archivos[i].isFile() && archivos[i].getName().contains(".jpg")) {
-                        archivos[i].delete();
+                        imagenes.add(archivos[i].getName());
                     }
                 }
             }
 
             try {
-                downloadok = conexFtp.bajarArchivos(ip_server, PrincipalActivity.this);
+                downloadok = conexFtp.bajarArchivos2(ip_server, PrincipalActivity.this, imagenes);
             } catch (IOException e) {
                 e.printStackTrace();
             }

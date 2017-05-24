@@ -1,21 +1,18 @@
 package com.example.caxidy.tourishare;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.widget.ImageView;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import org.apache.commons.net.ftp.*;
 
@@ -108,7 +105,7 @@ public class ConexionFtp {
 
         try {
             ftp = new FTPClient();
-            ftp.setConnectTimeout(1500000);
+            ftp.setConnectTimeout(15000);
             ftp.connect(host);
 
             ftp.login("tourishare", "root");
@@ -127,6 +124,8 @@ public class ConexionFtp {
                             outputStream = new BufferedOutputStream(new FileOutputStream(
                                     new File(act.getExternalFilesDir(null), archivos[i].getName())));
                             success = ftp.retrieveFile("archivosFilezilla/" + archivos[i].getName(), outputStream);
+                            outputStream.flush();
+                            outputStream.close();
                         } finally {
                             if (outputStream != null) {
                                 outputStream.close();
@@ -148,6 +147,94 @@ public class ConexionFtp {
                 ftp.logout();
                 ftp.disconnect();
             }
+        }
+    }
+
+    public Boolean bajarArchivos2 (String host, Activity act, ArrayList<String> imagenes)  throws IOException {
+
+        FTPClient ftp = null;
+        OutputStream outputStream = null;
+        boolean success = false;
+        int totalArchivos = 0;
+        int sizeArchivos = 0;
+
+        try {
+            ftp = new FTPClient();
+            ftp.setConnectTimeout(15000);
+            ftp.connect(host);
+
+            ftp.login("tourishare", "root");
+            ftp.setFileType(FTP.BINARY_FILE_TYPE);
+            ftp.enterLocalPassiveMode();
+
+            //Obtenemos la lista de archivos
+            FTPFile[] archivos = ftp.listFiles("archivosFilezilla");
+
+            //Vamos descargando cada uno de los archivos en el directorio del proyecto
+            if(archivos.length > 0) {
+                for (int i = 0; i < archivos.length; i++){
+                    if(archivos[i].isFile() && archivos[i].getName().contains(".jpg")){
+                        //si el archivo no esta descargado, lo descargamos
+                        if(!archivoExiste(archivos[i].getName(),imagenes)) {
+                            sizeArchivos++;
+                            try {
+                                outputStream = new BufferedOutputStream(new FileOutputStream(
+                                        new File(act.getExternalFilesDir(null), archivos[i].getName())));
+                                success = ftp.retrieveFile("archivosFilezilla/" + archivos[i].getName(), outputStream);
+                                outputStream.flush();
+                                outputStream.close();
+                            } finally {
+                                if (outputStream != null) {
+                                    outputStream.close();
+                                }
+                            }
+                            if (success)
+                                totalArchivos++;
+                        }
+                        //!!!!!!!!!lo de borrar, hay que arreglarlo
+                        /*else{
+                            //si ya tenemos los archivos en el alm. interno pero no estan en el FTP, los borramos
+                            archivosBorrados(archivos,imagenes,act);
+                        }*/
+                    }
+                }
+            }
+
+            //Si se han descargado todos los archivos satisfactoriamente...
+            if(totalArchivos == sizeArchivos)
+                return true;
+            else
+                return false;
+        } finally {
+            if (ftp != null) {
+                ftp.logout();
+                ftp.disconnect();
+            }
+        }
+    }
+
+    public boolean archivoExiste (String archivo, ArrayList<String> archs){
+        //Comprueba si el archivo a bajar del FTP ya existe en el archivo interno, para ver si es necesario bajarlo o no
+        for(int i=0;i < archs.size(); i++){
+            if(archs.get(i).equals(archivo))
+                return true;
+        }
+
+        return false;
+    }
+
+    public void archivosBorrados (FTPFile[] archivos, ArrayList<String> archs, Activity act){
+        //Borra los archivos del alm. interno que ya no existan en el FTP
+        boolean borrado;
+        for(int i=0;i < archs.size(); i++){
+            borrado=true;
+            for(int j=0; j < archivos.length; j++){
+                if(archs.get(i).equals(archivos[j]))
+                    borrado=false;
+            }
+
+            if(borrado)
+                new File(act.getExternalFilesDir(null),archs.get(i)).delete();
         }
     }
 

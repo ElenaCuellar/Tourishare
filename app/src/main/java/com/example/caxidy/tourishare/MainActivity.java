@@ -1,11 +1,8 @@
 package com.example.caxidy.tourishare;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +14,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -108,19 +105,6 @@ public class MainActivity extends AppCompatActivity {
         ip_server = sharedPref.getString("ipServer","192.168.1.131");
         Toast.makeText(this,ip_server,Toast.LENGTH_SHORT).show();
 
-        //Borramos las fotos, si las hubiere
-        File miRuta = getExternalFilesDir(null);
-        File archivos[] = miRuta.listFiles();
-
-        if(archivos.length > 0) {
-            for (int i = 0; i < archivos.length; i++) {
-                //si el archivo no es un directorio y es una imagen, se borra
-                if (archivos[i].isFile() && archivos[i].getName().contains(".jpg")) {
-                    archivos[i].delete();
-                }
-            }
-        }
-
         //Descargamos todas las fotos de forma temporal
         new GetFotosAsyncTask().execute();
     }
@@ -142,9 +126,24 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... arg0) {
+
+            //Nombres de las imagenes del alm. interno
+            File miRuta = getExternalFilesDir(null);
+            File archivos[] = miRuta.listFiles();
+            ArrayList<String> imagenes = new ArrayList<>();
+
+            if(archivos.length > 0) {
+                for (int i = 0; i < archivos.length; i++) {
+                    //si el archivo no es un directorio y es una imagen, se añade
+                    if (archivos[i].isFile() && archivos[i].getName().contains(".jpg")) {
+                        imagenes.add(archivos[i].getName());
+                    }
+                }
+            }
+
             //Descargar la foto de Filezilla
             try {
-                downloadok = conexFtp.bajarArchivos(ip_server, MainActivity.this);
+                downloadok = conexFtp.bajarArchivos2(ip_server, MainActivity.this, imagenes);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -164,5 +163,6 @@ public class MainActivity extends AppCompatActivity {
                 new MostrarMensaje(MainActivity.this).mostrarMensaje(getString(R.string.titulodatosiniciales),
                         getString(R.string.textodatosiniciales),getString(R.string.aceptar));
         }
+
     }
 }
