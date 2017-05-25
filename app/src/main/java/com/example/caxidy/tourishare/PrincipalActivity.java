@@ -20,6 +20,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatCallback;
 import android.support.v7.app.AppCompatDelegate;
@@ -55,6 +56,7 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
     private OperacionesBD opDb;
     private ConexionFtp conexFtp;
     private NavigationView navigationView;
+    SwipeRefreshLayout swRefresh;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,6 +76,18 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //widget de refrescar lista
+        swRefresh = (SwipeRefreshLayout) findViewById(R.id.myswiperefresh);
+        swRefresh.setColorSchemeResources(R.color.colorAccent,R.color.colorBotonSubcategoria,R.color.colorNaranjaDark);
+        swRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //recargar la lista de ciudades
+                llenarLista();
+                swRefresh.setRefreshing(false);
+            }
+        });
 
         conexFtp = new ConexionFtp();
 
