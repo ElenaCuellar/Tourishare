@@ -209,8 +209,23 @@ public class MostrarSubcategoria extends AppCompatActivity implements OnMapReady
 
             //Si hemos actualizado los datos del registro, tenemos que actualizar tambien las fotos
             if(nuevaFoto) {
+
+                //Nombres de las imagenes del alm. interno
+                File miRuta = getExternalFilesDir(null);
+                File archivos[] = miRuta.listFiles();
+                ArrayList<String> imagenes = new ArrayList<>();
+
+                if(archivos.length > 0) {
+                    for (int i = 0; i < archivos.length; i++) {
+                        //si el archivo no es un directorio y es una imagen, se añade
+                        if (archivos[i].isFile() && archivos[i].getName().contains(".jpg")) {
+                            imagenes.add(archivos[i].getName());
+                        }
+                    }
+                }
+
                 try {
-                    conexFtp.bajarArchivos(ip_server, MostrarSubcategoria.this);
+                    conexFtp.bajarArchivos(ip_server, MostrarSubcategoria.this, imagenes);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

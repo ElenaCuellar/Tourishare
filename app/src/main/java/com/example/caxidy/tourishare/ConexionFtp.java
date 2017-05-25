@@ -95,7 +95,7 @@ public class ConexionFtp {
         }
     }
 
-    public Boolean bajarArchivos (String host, Activity act) throws IOException {
+    public Boolean bajarTodosLosArchivos (String host, Activity act) throws IOException {
 
         FTPClient ftp = null;
         OutputStream outputStream = null;
@@ -150,7 +150,7 @@ public class ConexionFtp {
         }
     }
 
-    public Boolean bajarArchivos2 (String host, Activity act, ArrayList<String> imagenes)  throws IOException {
+    public Boolean bajarArchivos (String host, Activity act, ArrayList<String> imagenes)  throws IOException {
 
         FTPClient ftp = null;
         OutputStream outputStream = null;
@@ -191,11 +191,10 @@ public class ConexionFtp {
                             if (success)
                                 totalArchivos++;
                         }
-                        //!!!!!!!!!lo de borrar, hay que arreglarlo
-                        /*else{
+                        else{
                             //si ya tenemos los archivos en el alm. interno pero no estan en el FTP, los borramos
                             archivosBorrados(archivos,imagenes,act);
-                        }*/
+                        }
                     }
                 }
             }
@@ -229,7 +228,7 @@ public class ConexionFtp {
         for(int i=0;i < archs.size(); i++){
             borrado=true;
             for(int j=0; j < archivos.length; j++){
-                if(archs.get(i).equals(archivos[j]))
+                if(archs.get(i).equals(archivos[j].getName()))
                     borrado=false;
             }
 

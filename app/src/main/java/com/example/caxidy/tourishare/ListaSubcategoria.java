@@ -120,22 +120,22 @@ public class ListaSubcategoria extends ListActivity {
              cabecera = opDb.getCabeceraSubcat(url_select,idTipo);
 
             //1-Actualizar las fotos
-            //Borramos las fotos, si las hubiere
+            //Nombres de las imagenes del alm. interno
             File miRuta = getExternalFilesDir(null);
             File archivos[] = miRuta.listFiles();
+            ArrayList<String> imagenes = new ArrayList<>();
 
             if(archivos.length > 0) {
                 for (int i = 0; i < archivos.length; i++) {
-                    //si el archivo no es un directorio y es una imagen, se borra
+                    //si el archivo no es un directorio y es una imagen, se añade
                     if (archivos[i].isFile() && archivos[i].getName().contains(".jpg")) {
-                        archivos[i].delete();
+                        imagenes.add(archivos[i].getName());
                     }
                 }
             }
 
-            //Nos bajamos las fotos actualizadas
             try {
-                downloadok = conexFtp.bajarArchivos(ip_server, ListaSubcategoria.this);
+                downloadok = conexFtp.bajarArchivos(ip_server, ListaSubcategoria.this, imagenes);
             } catch (IOException e) {
                 e.printStackTrace();
             }

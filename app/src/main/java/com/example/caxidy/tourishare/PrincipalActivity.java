@@ -355,7 +355,7 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
             }
 
             try {
-                downloadok = conexFtp.bajarArchivos2(ip_server, PrincipalActivity.this, imagenes);
+                downloadok = conexFtp.bajarArchivos(ip_server, PrincipalActivity.this, imagenes);
             } catch (IOException e) {
                 e.printStackTrace();
             }

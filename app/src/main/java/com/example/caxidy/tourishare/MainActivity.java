@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
             //Descargar la foto de Filezilla
             try {
-                downloadok = conexFtp.bajarArchivos2(ip_server, MainActivity.this, imagenes);
+                downloadok = conexFtp.bajarArchivos(ip_server, MainActivity.this, imagenes);
             } catch (IOException e) {
                 e.printStackTrace();
             }
