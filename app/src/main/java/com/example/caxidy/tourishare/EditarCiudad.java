@@ -122,7 +122,7 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
                 //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
                 Display display = getWindowManager().getDefaultDisplay();
                 Point size = new Point();
-                display.getSize(size);
+                size.y = display.getHeight();
                 int scaleToUse = 20;
                 int sizeBm = size.y * scaleToUse / 100;
                 Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
@@ -203,43 +203,7 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
         bAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Actualizar registro de ciudad y actualizar la id de ciudad de las subcategorias añadidas
-                if(!txNombre.getText().toString().equals("")){
-                    //Modifica el registro en la BD y la foto en Filezilla
-                    if(fotoGaleria != null) {
-                        //Nombre de la foto (su nombre en galeria + la fecha actual + extension)
-                        calendario = Calendar.getInstance();
-                        String nomFoto = "F" + calendario.get(Calendar.YEAR) + calendario.get(Calendar.MONTH) +
-                                calendario.get(Calendar.DAY_OF_MONTH) + calendario.get(Calendar.HOUR_OF_DAY) +
-                                calendario.get(Calendar.MINUTE) + calendario.get(Calendar.SECOND) +
-                                calendario.get(Calendar.MILLISECOND) + "F" + fotoGaleria.getLastPathSegment() + ".jpg";
-
-                        //urls para subir la foto al servidor Filezilla y para localizar la foto a subir de la galeria del dispositivo
-                        url_ftp_upload = "archivosFilezilla/" + nomFoto;
-                        url_ftp_filepath = getPathAbsolutoUri(getApplicationContext(), fotoGaleria);
-                        System.out.println(nomFoto + " --- " + url_ftp_upload + " --- " + url_ftp_filepath);
-
-                        ciudad = new Ciudad(txNombre.getText().toString(), txDescr.getText().toString(),
-                                nomFoto, lat, longi);
-                        nuevafoto=true;
-
-                        //Antes de insertar nada, verificamos los permisos de acceso a media, fotos... (necesario para versiones mayores a la 23)
-                        boolean verificado = false;
-                        while (!verificado) {
-                            verificado = verificarPermisosAlmacenamiento(EditarCiudad.this);
-                        }
-                    }
-                    else{
-                        ciudad = new Ciudad(txNombre.getText().toString(), txDescr.getText().toString(), lat, longi);
-                    }
-                    //modificamos...
-                    new ModificaCiudadAsyncTask().execute();
-                }
-                else{
-                    //Si no, muestra un mensaje avisandonos
-                    new MostrarMensaje(EditarCiudad.this).mostrarMensaje(getString(R.string.titulononombre),getString(R.string.textononombre),
-                            getString(R.string.aceptar));
-                }
+                guardarCambios();
             }
         });
 
@@ -250,6 +214,51 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
                 mostrarBusquedaGoogle();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        guardarCambios();
+    }
+
+    protected void guardarCambios(){
+        //Actualizar registro de ciudad y actualizar la id de ciudad de las subcategorias añadidas
+        if(!txNombre.getText().toString().equals("")){
+            //Modifica el registro en la BD y la foto en Filezilla
+            if(fotoGaleria != null) {
+                //Nombre de la foto (su nombre en galeria + la fecha actual + extension)
+                calendario = Calendar.getInstance();
+                String nomFoto = "F" + calendario.get(Calendar.YEAR) + calendario.get(Calendar.MONTH) +
+                        calendario.get(Calendar.DAY_OF_MONTH) + calendario.get(Calendar.HOUR_OF_DAY) +
+                        calendario.get(Calendar.MINUTE) + calendario.get(Calendar.SECOND) +
+                        calendario.get(Calendar.MILLISECOND) + "F" + fotoGaleria.getLastPathSegment() + ".jpg";
+
+                //urls para subir la foto al servidor Filezilla y para localizar la foto a subir de la galeria del dispositivo
+                url_ftp_upload = "archivosFilezilla/" + nomFoto;
+                url_ftp_filepath = getPathAbsolutoUri(getApplicationContext(), fotoGaleria);
+                System.out.println(nomFoto + " --- " + url_ftp_upload + " --- " + url_ftp_filepath);
+
+                ciudad = new Ciudad(txNombre.getText().toString(), txDescr.getText().toString(),
+                        nomFoto, lat, longi);
+                nuevafoto=true;
+
+                //Antes de insertar nada, verificamos los permisos de acceso a media, fotos... (necesario para versiones mayores a la 23)
+                boolean verificado = false;
+                while (!verificado) {
+                    verificado = verificarPermisosAlmacenamiento(EditarCiudad.this);
+                }
+            }
+            else{
+                ciudad = new Ciudad(txNombre.getText().toString(), txDescr.getText().toString(), lat, longi);
+            }
+            //modificamos...
+            new ModificaCiudadAsyncTask().execute();
+        }
+        else{
+            //Si no, muestra un mensaje avisandonos
+            new MostrarMensaje(EditarCiudad.this).mostrarMensaje(getString(R.string.titulononombre),getString(R.string.textononombre),
+                    getString(R.string.aceptar));
+        }
     }
 
     protected void escogerFoto() {
@@ -319,7 +328,7 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
                 //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
                 Display display = getWindowManager().getDefaultDisplay();
                 Point size = new Point();
-                display.getSize(size);
+                size.y = display.getHeight();
                 int scaleToUse = 20;
                 int sizeBm = size.y * scaleToUse / 100;
                 Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
@@ -368,7 +377,7 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
         //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
-        display.getSize(size);
+        size.y = display.getHeight();
         int scaleToUse = 8;
         int sizeBm = size.y * scaleToUse / 100;
         Bitmap bmResized = Bitmap.createScaledBitmap(ponerBordeImg(bitmap,15), sizeBm, sizeBm, true);
@@ -407,7 +416,7 @@ public class EditarCiudad extends AppCompatActivity implements OnMapReadyCallbac
         //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
-        display.getSize(size);
+        size.y = display.getHeight();
         int scaleToUse = 8;
         int sizeBm = size.y * scaleToUse / 100;
         Bitmap bmResized = Bitmap.createScaledBitmap(ponerBordeImg(bitmap,15), sizeBm, sizeBm, true);

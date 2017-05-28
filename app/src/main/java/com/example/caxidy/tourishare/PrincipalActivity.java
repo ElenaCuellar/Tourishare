@@ -321,7 +321,7 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
             //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
             Display display = getWindowManager().getDefaultDisplay();
             Point size = new Point();
-            display.getSize(size);
+            size.y = display.getHeight();
             int scaleToUse = 12;
             int sizeBm = size.y * scaleToUse / 100;
             Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);

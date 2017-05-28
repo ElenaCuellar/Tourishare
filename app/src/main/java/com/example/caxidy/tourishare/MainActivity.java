@@ -1,6 +1,5 @@
 package com.example.caxidy.tourishare;
 
-import android.*;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -14,7 +13,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -137,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
         //Actualizamos la ip del servidor
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         ip_server = sharedPref.getString("ipServer","192.168.1.131");
-        Toast.makeText(this,ip_server,Toast.LENGTH_SHORT).show();
 
         //Descargamos todas las fotos de forma temporal
         new GetFotosAsyncTask().execute();

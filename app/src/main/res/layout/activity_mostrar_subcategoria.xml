@@ -37,35 +37,6 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/bsubcateditar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="15dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="20dp"
-                android:background="@color/colorsubcatItem"
-                android:text="@string/editar"
-                android:textColor="@color/colorBlanco"
-                android:textStyle="bold"
-                android:layout_toRightOf="@id/subcatfoto"
-                android:layout_below="@id/textonombresubcat"/>
-
-            <Button
-                android:id="@+id/bsubcateliminar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="15dp"
-                android:layout_marginRight="10dp"
-                android:background="@color/colorsubcatItem"
-                android:text="@string/borrarsubcat"
-                android:textColor="@color/colorBlanco"
-                android:textStyle="bold"
-                android:layout_toRightOf="@id/bsubcateditar"
-                android:layout_below="@id/textonombresubcat"/>
-
             <RatingBar
                 android:id="@+id/ratingbSubcat"
                 style="@style/Widget.AppCompat.RatingBar.Indicator"
@@ -84,7 +55,7 @@
 
             <EditText
                 android:id="@+id/txdescrpsubcat"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
@@ -113,6 +84,34 @@
                     android:layout_height="match_parent"
                     tools:context="com.example.caxidy.ejemplomapas.MostrarSubcategoria"/>
             </LinearLayout>
+
+            <Button
+                android:id="@+id/bsubcateditar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:background="@color/colorsubcatItem"
+                android:text="@string/editar"
+                android:textColor="@color/colorBlanco"
+                android:textStyle="bold"
+                android:layout_below="@id/mapasubcat"/>
+
+            <Button
+                android:id="@+id/bsubcateliminar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:background="@color/colorsubcatItem"
+                android:text="@string/borrarsubcat"
+                android:textColor="@color/colorBlanco"
+                android:textStyle="bold"
+                android:layout_below="@id/bsubcateditar"/>
         </RelativeLayout>
     </LinearLayout>
 </ScrollView>

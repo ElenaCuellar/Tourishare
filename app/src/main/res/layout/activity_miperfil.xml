@@ -76,7 +76,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_below="@id/tuperfilCiudad"
-                android:layout_toRightOf="@id/tuperfilFoto"
                 android:text="@string/turango" />
 
             <TextView

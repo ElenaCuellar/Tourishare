@@ -68,7 +68,7 @@
 
             <EditText
                 android:id="@+id/txdescrpciudad"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
@@ -78,7 +78,6 @@
                 android:ems="10"
                 android:inputType="textMultiLine"
                 android:focusable="false"
-                android:layout_toRightOf="@id/ciudadfoto"
                 android:layout_below="@id/bciudadseguir"/>
 
             <LinearLayout

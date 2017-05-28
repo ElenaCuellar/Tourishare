@@ -150,7 +150,7 @@ public class MostrarSubcategoria extends AppCompatActivity implements OnMapReady
         //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
-        display.getSize(size);
+        size.y = display.getHeight();
         int scaleToUse = 8;
         int sizeBm = size.y * scaleToUse / 100;
         Bitmap bmResized = Bitmap.createScaledBitmap(ponerBordeImg(bitmap,15), sizeBm, sizeBm, true);
@@ -252,7 +252,7 @@ public class MostrarSubcategoria extends AppCompatActivity implements OnMapReady
                     //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
                     Display display = getWindowManager().getDefaultDisplay();
                     Point size = new Point();
-                    display.getSize(size);
+                    size.y = display.getHeight();
                     int scaleToUse = 20;
                     int sizeBm = size.y * scaleToUse / 100;
                     Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
