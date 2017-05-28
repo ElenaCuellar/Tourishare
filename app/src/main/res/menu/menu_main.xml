@@ -15,6 +15,18 @@
         android:title="@string/mnueva"
         app:showAsAction="always" />
     <item
+        android:id="@+id/menuwebh"
+        android:icon="@android:drawable/ic_menu_view"
+        android:orderInCategory="100"
+        android:title="@string/mhoteles"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menuwebv"
+        android:icon="@android:drawable/ic_menu_directions"
+        android:orderInCategory="100"
+        android:title="@string/mvuelos"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/menuprefs"
         android:icon="@android:drawable/ic_menu_manage"
         android:orderInCategory="100"

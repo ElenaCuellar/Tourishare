@@ -1,10 +1,14 @@
 package com.example.caxidy.tourishare;
 
+import android.*;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -24,6 +28,13 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
     private String ip_server;
     ConexionFtp conexFtp;
+
+    //Variables y constantes para pedir permisos de almacenamiento de imagenes
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] permisosAlmacenamiento = {
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +83,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Descargamos las fotos del FTP de forma temporal
-        descargaFotos();
+        //Pedimos permisos de escritura (necesario para versiones mayores a la 23)
+        boolean verificado = false;
+        while (!verificado) {
+            verificado = verificarPermisosAlmacenamiento(MainActivity.this);
+            if(verificado){
+                //Descargamos las fotos del FTP de forma temporal
+                descargaFotos();
+            }
+        }
+    }
+
+    public static boolean verificarPermisosAlmacenamiento(Activity activity) {
+        // Comprobamos si tenemos permisos de escritura
+        int permission = ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            //Si no tenemos permisos, le pedimos al usuario que los habilite
+            ActivityCompat.requestPermissions(
+                    activity,
+                    permisosAlmacenamiento,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
+
+        return true;
     }
 
     protected void verActividadSignup(){

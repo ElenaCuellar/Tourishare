@@ -258,6 +258,11 @@ public class MostrarMensaje {
                             opBd.borrarRegistroId(url,"items","IdItem",arrayItems.get(i));
                     }
                 }
+
+                //...se borra de ciudadesfav y de colaboradores
+                opBd.borrarRegistro(url, "ciudadesfav", "IdCiudad = " + id);
+
+                opBd.borrarRegistro(url, "colaboradores", "IdCiudad = " + id);
             }
 
             return null;

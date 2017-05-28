@@ -46,6 +46,8 @@
     <string name="mnueva">Nueva ciudad</string>
     <string name="mactu">Refrescar</string>
     <string name="mpref">Preferencias</string>
+    <string name="mhoteles">Ir a KAYAK</string>
+    <string name="mvuelos">Ir a Momondo</string>
 
     <!--cadenas de Mi perfil -->
     <string name="mipass">Cambiar contraseña</string>

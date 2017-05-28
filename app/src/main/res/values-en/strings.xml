@@ -150,4 +150,6 @@
     <string name="botonrespondermensajes">Reply message</string>
     <string name="opcancion">Play song</string>
     <string name="opcancionoff">Stop song</string>
+    <string name="mhoteles">Go to KAYAK</string>
+    <string name="mvuelos">Go to Momondo</string>
 </resources>

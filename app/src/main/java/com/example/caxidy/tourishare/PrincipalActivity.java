@@ -13,6 +13,7 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -193,6 +194,20 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
         else if (id == R.id.menuprefs){
             Intent i = new Intent(this,Preferencias.class);
             startActivity(i);
+        }
+
+        else if (id == R.id.menuwebh){
+            //Ir a la web de KAYAK
+            Uri uri = Uri.parse("https://www.kayak.es/");
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+        }
+
+        else if (id == R.id.menuwebv){
+            //Ir a la web de Momondo
+            Uri uri = Uri.parse("http://www.momondo.es/");
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
