@@ -152,4 +152,6 @@
     <string name="opcancionoff">Stop song</string>
     <string name="mhoteles">Go to KAYAK</string>
     <string name="mvuelos">Go to Momondo</string>
+    <string name="errorcargarfoto">Your photo could not be loaded.</string>
+    <string name="tituloerrorcargarfoto">Photo error</string>
 </resources>

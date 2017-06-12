@@ -56,16 +56,23 @@ public class AdaptadorSubcategoria extends BaseAdapter {
         @Override
         protected Bitmap doInBackground(Void... arg0) {
             //Descargar bitmap
+            File archivoImg;
+            Bitmap bm;
 
-            File archivoImg = new File(actividad.getExternalFilesDir(null) + "/" + lista.get(mPosition).getUrlfoto());
-
-            if (archivoImg.exists()) {
-                Bitmap bm = BitmapFactory.decodeFile(archivoImg.getAbsolutePath());
-                Bitmap bmResized = Bitmap.createScaledBitmap(bm, 120, 120, true);
-                return bmResized;
+            try {
+                archivoImg = new File(actividad.getExternalFilesDir(null) + "/" + lista.get(mPosition).getUrlfoto());
+            }catch(Exception e){
+                archivoImg = null;
             }
 
-            return null;
+            if (archivoImg != null && archivoImg.exists())
+                bm = BitmapFactory.decodeFile(archivoImg.getAbsolutePath());
+            else
+                bm = BitmapFactory.decodeResource(actividad.getResources(), R.mipmap.ic_launcher);
+
+            Bitmap bmResized = Bitmap.createScaledBitmap(bm, 120, 120, true);
+
+            return bmResized;
         }
 
         @Override

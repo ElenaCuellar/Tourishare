@@ -313,42 +313,51 @@ public class PrincipalActivity extends ListActivity implements AppCompatCallback
 
     public void setImagen(ImageView img){
         //Poner la imagen de usuario en el Navigation Drawer
+        File archivoImg;
+        Bitmap bm;
 
-        File archivoImg = new File(getExternalFilesDir(null) + "/" + miUsuario.getUrlfoto());
-
-        if (archivoImg.exists()) {
-            Bitmap bm = BitmapFactory.decodeFile(archivoImg.getAbsolutePath());
-            //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
-            Display display = getWindowManager().getDefaultDisplay();
-            Point size = new Point();
-            size.y = display.getHeight();
-            int scaleToUse = 12;
-            int sizeBm = size.y * scaleToUse / 100;
-            Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
-
-            //Redondear la foto de perfil
-            Bitmap output = Bitmap.createBitmap(bmResized.getWidth(),
-                    bmResized.getHeight(), Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(output);
-
-            final int color = 0xff424242;
-            final Paint paint = new Paint();
-            final Rect rect = new Rect(0, 0, bmResized.getWidth(), bmResized.getHeight());
-
-            paint.setAntiAlias(true);
-            canvas.drawARGB(0, 0, 0, 0);
-            paint.setColor(color);
-            canvas.drawCircle(bmResized.getWidth() / 2, bmResized.getHeight() / 2,
-                    bmResized.getWidth() / 2, paint);
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-            canvas.drawBitmap(bmResized, rect, rect, paint);
-
-            //Poner la foto en el imageView
-            if (img.getDrawingCache() != null)
-                img.destroyDrawingCache();
-            img.setImageBitmap(output);
-            img.setAdjustViewBounds(true);
+        try {
+            archivoImg = new File(getExternalFilesDir(null) + "/" + miUsuario.getUrlfoto());
+        }catch(Exception e){
+            archivoImg = null;
         }
+
+        if (archivoImg != null && archivoImg.exists())
+            bm = BitmapFactory.decodeFile(archivoImg.getAbsolutePath());
+
+        else
+            bm = BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher);
+
+        //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        size.y = display.getHeight();
+        int scaleToUse = 12;
+        int sizeBm = size.y * scaleToUse / 100;
+        Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
+
+        //Redondear la foto de perfil
+        Bitmap output = Bitmap.createBitmap(bmResized.getWidth(),
+                bmResized.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bmResized.getWidth(), bmResized.getHeight());
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawCircle(bmResized.getWidth() / 2, bmResized.getHeight() / 2,
+                bmResized.getWidth() / 2, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bmResized, rect, rect, paint);
+
+        //Poner la foto en el imageView
+        if (img.getDrawingCache() != null)
+            img.destroyDrawingCache();
+        img.setImageBitmap(output);
+        img.setAdjustViewBounds(true);
     }
 
     //Tarea asincrona para llenar la lista de ciudades

@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -286,22 +287,28 @@ public class CrearCiudad extends AppCompatActivity implements OnMapReadyCallback
         if (requestCode == TU_FOTO && resultCode == RESULT_OK) {
             fotoGaleria = data.getData();
             Bitmap bm;
+
+            //Ponemos la foto en el ImageView
             try {
-                //Ponemos la foto en el ImageView
                 bm = MediaStore.Images.Media.getBitmap(getContentResolver(), fotoGaleria);
-                //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
-                Display display = getWindowManager().getDefaultDisplay();
-                Point size = new Point();
-                size.y = display.getHeight(); //el no deprecated es display.getSize(size), pero prefiero getHeight por compat.
-                int scaleToUse = 20;
-                int sizeBm = size.y * scaleToUse / 100;
-                Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
-                if (imgCiudad.getDrawingCache() != null)
-                    imgCiudad.destroyDrawingCache();
-                imgCiudad.setImageBitmap(bmResized);
-                imgCiudad.setAdjustViewBounds(true);
-            } catch (IOException e) {
+            } catch (Exception e) {
+                bm = BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher);
+                new MostrarMensaje(this).mostrarMensaje(getString(R.string.errorcargarfoto),getString(R.string.tituloerrorcargarfoto),
+                        getString(R.string.aceptar));
             }
+
+            //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            size.y = display.getHeight(); //el no deprecated es display.getSize(size), pero prefiero getHeight por compat.
+            int scaleToUse = 20;
+            int sizeBm = size.y * scaleToUse / 100;
+            Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
+
+            if (imgCiudad.getDrawingCache() != null)
+                imgCiudad.destroyDrawingCache();
+            imgCiudad.setImageBitmap(bmResized);
+            imgCiudad.setAdjustViewBounds(true);
         }
         else if(requestCode == PLACE_AUTOCOMPLETE && resultCode == RESULT_OK){
             //Guardamos el sitio y lo situamos con un marcador en el mapa - borramos el marcador anterior, si lo hay

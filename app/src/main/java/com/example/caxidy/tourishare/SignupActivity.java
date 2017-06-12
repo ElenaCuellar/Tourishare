@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -160,22 +161,28 @@ public class SignupActivity extends AppCompatActivity {
         if (requestCode == TU_FOTO && resultCode == RESULT_OK) {
             fotoGaleria = data.getData();
             Bitmap bm;
+
             try {
                 //Ponemos la foto en el ImageView
                 bm = MediaStore.Images.Media.getBitmap(getContentResolver(), fotoGaleria);
-                //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
-                Display display = getWindowManager().getDefaultDisplay();
-                Point size = new Point();
-                size.y = display.getHeight();
-                int scaleToUse = 20;
-                int sizeBm = size.y * scaleToUse / 100;
-                Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
+            } catch (Exception e) {
+                bm = BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher);
+                new MostrarMensaje(this).mostrarMensaje(getString(R.string.errorcargarfoto),getString(R.string.tituloerrorcargarfoto),
+                        getString(R.string.aceptar));
+            }
 
-                if (tuFoto.getDrawingCache() != null)
-                    tuFoto.destroyDrawingCache();
-                tuFoto.setImageBitmap(bmResized);
-                tuFoto.setAdjustViewBounds(true);
-            } catch (IOException e) {}
+            //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            size.y = display.getHeight();
+            int scaleToUse = 20;
+            int sizeBm = size.y * scaleToUse / 100;
+            Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
+
+            if (tuFoto.getDrawingCache() != null)
+                tuFoto.destroyDrawingCache();
+            tuFoto.setImageBitmap(bmResized);
+            tuFoto.setAdjustViewBounds(true);
         }
     }
 

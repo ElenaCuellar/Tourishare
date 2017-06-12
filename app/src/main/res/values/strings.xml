@@ -147,6 +147,8 @@
     <string name="textomensajeborrado">El mensaje se ha borrado correctamente.</string>
     <string name="titulocerrarsesion">Cerrar sesión</string>
     <string name="textocerrarsesion">¿Está seguro de que quiere cerrar sesión?</string>
+    <string name="errorcargarfoto">No se pudo cargar la foto.</string>
+    <string name="tituloerrorcargarfoto">Error con la foto</string>
 
     <!--Login-->
     <string name="espereLogin">Entrando en la app. Espere, por favor ...</string>

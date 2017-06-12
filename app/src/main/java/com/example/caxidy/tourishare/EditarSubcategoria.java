@@ -112,20 +112,29 @@ public class EditarSubcategoria extends AppCompatActivity implements OnMapReadyC
             idC = extras.getInt("idCiu");
 
             //Ponemos la foto
-            File archivoImg = new File(getExternalFilesDir(null) + "/" + extras.getString("editurlfoto"));
+            File archivoImg;
+            Bitmap bm;
 
-            if (archivoImg.exists()) {
-                Bitmap bm = BitmapFactory.decodeFile(archivoImg.getAbsolutePath());
-                //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
-                Display display = getWindowManager().getDefaultDisplay();
-                Point size = new Point();
-                size.y = display.getHeight();
-                int scaleToUse = 20;
-                int sizeBm = size.y * scaleToUse / 100;
-                Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
-                imgSubcat.setImageBitmap(bmResized);
-                imgSubcat.setAdjustViewBounds(true);
+            try {
+                archivoImg = new File(getExternalFilesDir(null) + "/" + extras.getString("editurlfoto"));
+            }catch (Exception e){
+                archivoImg = null;
             }
+
+            if (archivoImg != null && archivoImg.exists())
+                bm = BitmapFactory.decodeFile(archivoImg.getAbsolutePath());
+            else
+                bm = BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher);
+
+            //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            size.y = display.getHeight();
+            int scaleToUse = 20;
+            int sizeBm = size.y * scaleToUse / 100;
+            Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
+            imgSubcat.setImageBitmap(bmResized);
+            imgSubcat.setAdjustViewBounds(true);
 
             //Ponemos el nombre y la descripcion
             txNombre.setText(extras.getString("editnombre"));
@@ -282,23 +291,28 @@ public class EditarSubcategoria extends AppCompatActivity implements OnMapReadyC
         if (requestCode == TU_FOTO && resultCode == RESULT_OK) {
             fotoGaleria = data.getData();
             Bitmap bm;
+
             try {
                 //Ponemos la foto en el ImageView
                 bm = MediaStore.Images.Media.getBitmap(getContentResolver(), fotoGaleria);
-                //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
-                Display display = getWindowManager().getDefaultDisplay();
-                Point size = new Point();
-                size.y = display.getHeight();
-                int scaleToUse = 20;
-                int sizeBm = size.y * scaleToUse / 100;
-                Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
-
-                if (imgSubcat.getDrawingCache() != null)
-                    imgSubcat.destroyDrawingCache();
-                imgSubcat.setImageBitmap(bmResized);
-                imgSubcat.setAdjustViewBounds(true);
-            } catch (IOException e) {
+            } catch (Exception e) {
+                bm = BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher);
+                new MostrarMensaje(this).mostrarMensaje(getString(R.string.errorcargarfoto),getString(R.string.tituloerrorcargarfoto),
+                        getString(R.string.aceptar));
             }
+
+            //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            size.y = display.getHeight();
+            int scaleToUse = 20;
+            int sizeBm = size.y * scaleToUse / 100;
+            Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
+
+            if (imgSubcat.getDrawingCache() != null)
+                imgSubcat.destroyDrawingCache();
+            imgSubcat.setImageBitmap(bmResized);
+            imgSubcat.setAdjustViewBounds(true);
         }
         else if(requestCode == PLACE_AUTOCOMPLETE && resultCode == RESULT_OK){
             //Guardamos el sitio y lo situamos con un marcador en el mapa - borramos el marcador anterior, si lo hay

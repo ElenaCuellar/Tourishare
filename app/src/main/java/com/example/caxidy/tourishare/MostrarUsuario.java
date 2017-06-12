@@ -175,20 +175,29 @@ public class MostrarUsuario extends AppCompatActivity {
 
             if(usu != null) {
                 //Mostramos los datos
-                File archivoImg = new File(getExternalFilesDir(null) + "/" + usu.getUrlfoto());
+                File archivoImg;
+                Bitmap bm;
 
-                if (archivoImg.exists()) {
-                    Bitmap bm = BitmapFactory.decodeFile(archivoImg.getAbsolutePath());
-                    //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
-                    Display display = getWindowManager().getDefaultDisplay();
-                    Point size = new Point();
-                    size.y = display.getHeight();
-                    int scaleToUse = 20;
-                    int sizeBm = size.y * scaleToUse / 100;
-                    Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
-                    foto.setImageBitmap(bmResized);
-                    foto.setAdjustViewBounds(true);
+                try {
+                    archivoImg = new File(getExternalFilesDir(null) + "/" + usu.getUrlfoto());
+                }catch(Exception e){
+                    archivoImg = null;
                 }
+
+                if (archivoImg != null && archivoImg.exists())
+                    bm = BitmapFactory.decodeFile(archivoImg.getAbsolutePath());
+                else
+                    bm = BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher);
+
+                //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
+                Display display = getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                size.y = display.getHeight();
+                int scaleToUse = 20;
+                int sizeBm = size.y * scaleToUse / 100;
+                Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
+                foto.setImageBitmap(bmResized);
+                foto.setAdjustViewBounds(true);
 
                 nombre.setText(usu.getNombre());
                 ciudad.setText(usu.getCiudad());

@@ -218,23 +218,28 @@ public class MiPerfil extends AppCompatActivity {
         if (requestCode == TU_FOTO && resultCode == RESULT_OK) {
             fotoGaleria = data.getData();
             Bitmap bm;
+
             try {
                 //Ponemos la foto en el ImageView
                 bm = MediaStore.Images.Media.getBitmap(getContentResolver(), fotoGaleria);
-                //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
-                Display display = getWindowManager().getDefaultDisplay();
-                Point size = new Point();
-                size.y = display.getHeight();
-                int scaleToUse = 20;
-                int sizeBm = size.y * scaleToUse / 100;
-                Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
-
-                if (foto.getDrawingCache() != null)
-                    foto.destroyDrawingCache();
-                foto.setImageBitmap(bmResized);
-                foto.setAdjustViewBounds(true);
-            } catch (IOException e) {
+            } catch (Exception e) {
+                bm = BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher);
+                new MostrarMensaje(this).mostrarMensaje(getString(R.string.errorcargarfoto),getString(R.string.tituloerrorcargarfoto),
+                        getString(R.string.aceptar));
             }
+
+            //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            size.y = display.getHeight();
+            int scaleToUse = 20;
+            int sizeBm = size.y * scaleToUse / 100;
+            Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
+
+            if (foto.getDrawingCache() != null)
+                foto.destroyDrawingCache();
+            foto.setImageBitmap(bmResized);
+            foto.setAdjustViewBounds(true);
         }
     }
 
@@ -343,20 +348,30 @@ public class MiPerfil extends AppCompatActivity {
 
             if(usu != null) {
                 //Mostramos los datos
-                File archivoImg = new File(getExternalFilesDir(null) + "/" + usu.getUrlfoto());
+                File archivoImg;
+                Bitmap bm;
 
-                if (archivoImg.exists()) {
-                    Bitmap bm = BitmapFactory.decodeFile(archivoImg.getAbsolutePath());
-                    //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
-                    Display display = getWindowManager().getDefaultDisplay();
-                    Point size = new Point();
-                    size.y = display.getHeight();
-                    int scaleToUse = 20;
-                    int sizeBm = size.y * scaleToUse / 100;
-                    Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
-                    foto.setImageBitmap(bmResized);
-                    foto.setAdjustViewBounds(true);
+                try {
+                    archivoImg = new File(getExternalFilesDir(null) + "/" + usu.getUrlfoto());
+                }catch(Exception e){
+                    archivoImg = null;
                 }
+
+                if (archivoImg != null && archivoImg.exists()) {
+                    bm = BitmapFactory.decodeFile(archivoImg.getAbsolutePath());
+                }
+                else
+                    bm = BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher);
+
+                //coger el ancho y alto para la imagen, dependiendo del tamaño de la pantalla
+                Display display = getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                size.y = display.getHeight();
+                int scaleToUse = 20;
+                int sizeBm = size.y * scaleToUse / 100;
+                Bitmap bmResized = Bitmap.createScaledBitmap(bm, sizeBm, sizeBm, true);
+                foto.setImageBitmap(bmResized);
+                foto.setAdjustViewBounds(true);
 
                 nombre.setText(usu.getNombre());
                 ciudad.setText(usu.getCiudad());
